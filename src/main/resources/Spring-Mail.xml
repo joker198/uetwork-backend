@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">-->
+        <!--<property name="host" value="uetmail.vnu.edu.vn" />-->
+        <!--<property name="port" value="25" />-->
+        <!--<property name="username" value="" />-->
+        <!--<property name="password" value="" />-->
+
+        <!--&lt;!&ndash;<property name="javaMailProperties">&ndash;&gt;-->
+            <!--&lt;!&ndash;<props>&ndash;&gt;-->
+                <!--&lt;!&ndash;<prop key="mail.smtp.auth">true</prop>&ndash;&gt;-->
+                <!--&lt;!&ndash;<prop key="mail.smtp.starttls.enable">true</prop>&ndash;&gt;-->
+            <!--&lt;!&ndash;</props>&ndash;&gt;-->
+        <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--<bean id="sendMail" class="uet.stereotype.SendMail">-->
+        <!--<property name="mailSender" ref="mailSender" />-->
+    <!--</bean>-->
+
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="uetmail.vnu.edu.vn"/>
+        <property name="port" value="25" />
+        <property name="username" value="" />
+        <property name="password" value="" />
+    </bean>
+
+    <!-- this is a template message that we can pre-load with default state -->
+    <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="carbc@vnu.edu.vn"/>
+        <property name="subject" value="Mat khau dang nhap"/>
+    </bean>
+
+    <bean id="sendMail" class="uet.stereotype.SendMail">
+        <property name="mailSender" ref="mailSender"/>
+        <!--<property name="templateMessage" ref="templateMessage"/>-->
+    </bean>
+</beans>
