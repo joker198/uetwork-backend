@@ -23,9 +23,13 @@ public class Notice {
     @JsonIgnore
     private Contract contract;
 
-    public Notice(){}
+    public Notice()
+    {
+        //
+    }
 
-    public Notice(String content, Contract contract){
+    public Notice(String content, Contract contract)
+    {
         this.content = content;
         this.contract = contract;
         this.lastUpdated = new Date();

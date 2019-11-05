@@ -22,7 +22,7 @@ public class User {
 
     @JsonIgnore
     private String password;
-//    @Enumerated(EnumType.STRING)
+
     private String role;
 
     private String token;
@@ -63,11 +63,13 @@ public class User {
     @JsonIgnore
     private List<ActivityLog> activityLog;
 
-    public User(){
+    public User()
+    {
         this.createdAt = new Date(System.currentTimeMillis() + 1000 * 60);
     }
 
-    public User(UnitName unitName) {
+    public User(UnitName unitName)
+    {
         this.unitName = unitName;
         this.createdAt = new Date(System.currentTimeMillis() + 1000 * 60);
     }

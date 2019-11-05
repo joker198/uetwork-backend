@@ -43,10 +43,6 @@ public class Partner {
     @JsonIgnore
     private List<Contract> contracts;
 
-//    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<CooperateActivity> cooperateActivities;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
@@ -65,10 +61,6 @@ public class Partner {
     @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Follow> follows;
-
-//    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<AnnualActivity> annualActivities;
 
     @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -260,14 +252,6 @@ public class Partner {
         this.contracts = contracts;
     }
 
-//    public List<CooperateActivity> getCooperateActivities() {
-//        return cooperateActivities;
-//    }
-//
-//    public void setCooperateActivities(List<CooperateActivity> cooperateActivities) {
-//        this.cooperateActivities = cooperateActivities;
-//    }
-
     public String getDescription() {
         return description;
     }
@@ -275,14 +259,6 @@ public class Partner {
     public void setDescription(String description) {
         this.description = description;
     }
-
-//    public List<AnnualActivity> getAnnualActivities() {
-//        return annualActivities;
-//    }
-//
-//    public void setAnnualActivities(List<AnnualActivity> annualActivities) {
-//        this.annualActivities = annualActivities;
-//    }
 
     public String getStatus() {
         return status;

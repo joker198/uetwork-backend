@@ -25,12 +25,9 @@ public interface PostRepository extends CrudRepository<Post, Integer>, PagingAnd
 
     List<Post> findByPartnerIdAndStatus(int partnerId, String status);
 
-
     Page<Post> findTop10ByOrderByIdDesc(Pageable pageable);
 
     Page<Post> findTop10ByStatusOrderByIdDesc(String status, Pageable pageable);
-
-//    List<Post> findTop10ByStatusOrderByIdDesc(String status);
 
     List<Post> findTop5ByOrderByIdDesc();
 

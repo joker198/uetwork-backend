@@ -27,17 +27,12 @@ public class Application {
     @Bean
     public FilterRegistrationBean corsFilter() {
         return new FilterRegistrationBean(new Filter() {
+            @Override
             public void doFilter(ServletRequest req, ServletResponse res,
                                  FilterChain chain) throws IOException, ServletException {
                 HttpServletRequest request = (HttpServletRequest) req;
                 HttpServletResponse response = (HttpServletResponse) res;
                 String method = request.getMethod();
-// this origin value could just as easily have come from a database
-//                if(request.getHeader("Origin").equals("http://localhost:8000")) {
-//                    response.setHeader("Access-Control-Allow-Origin", "http://localhost:8000");
-//                } else if(request.getHeader("Origin").equals("http://localhost:8100")){
-//                    response.setHeader("Access-Control-Allow-Origin", "http://localhost:8100");
-//                }
                 response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
                 response.setHeader("Access-Control-Allow-Methods",
                         "POST,GET,OPTIONS,DELETE,PUT");
@@ -56,9 +51,11 @@ public class Application {
                 }
             }
 
+            @Override
             public void init(FilterConfig filterConfig) {
             }
 
+            @Override
             public void destroy() {
             }
         });

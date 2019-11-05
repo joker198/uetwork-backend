@@ -44,7 +44,14 @@ public class PartnerContact {
 
     public PartnerContact(){}
 
-    public PartnerContact(String contactName, String phone, String email, String skype, String about, Partner partner) {
+    public PartnerContact(
+        String contactName,
+        String phone,
+        String email,
+        String skype,
+        String about,
+        Partner partner
+    ) {
         this.contactName = contactName;
         this.phone = phone;
         this.email = email;

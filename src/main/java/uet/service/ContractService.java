@@ -19,22 +19,14 @@ import java.util.*;
  */
 @Service
 public class ContractService {
-    private final
-    ContractRepository contractRepository;
-    private final
-    UetManRepository uetManRepository;
-    private final
-    UnitNameRepository unitNameRepository;
-    private final
-    PartnerContactRepository partnerContactRepository;
-    private final
-    PartnerRepository partnerRepository;
-    private final
-    CooperateActivityRepository cooperateActivityRepository;
-    private final
-    UserRepository userRepository;
-    private final
-    ActivityLogRepository activityLogRepository;
+    private final ContractRepository contractRepository;
+    private final UetManRepository uetManRepository;
+    private final UnitNameRepository unitNameRepository;
+    private final PartnerContactRepository partnerContactRepository;
+    private final PartnerRepository partnerRepository;
+    private final CooperateActivityRepository cooperateActivityRepository;
+    private final UserRepository userRepository;
+    private final ActivityLogRepository activityLogRepository;
     private final ContractShareRepository contractShareRepository;
     private final AnnualActivityRepository annualActivityRepository;
     private final NoticeRepository noticeRepository;
@@ -43,14 +35,22 @@ public class ContractService {
     private final ContractShareVnuRepository contractShareVnuRepository;
 
     @Autowired
-
-    public ContractService(ContractRepository contractRepository, UetManRepository uetManRepository,
-                           UnitNameRepository unitNameRepository, PartnerContactRepository partnerContactRepository,
-                           PartnerRepository partnerRepository,
-                           CooperateActivityRepository cooperateActivityRepository, UserRepository userRepository,
-                           ActivityLogRepository activityLogRepository, ContractShareRepository contractShareRepository,
-                           AnnualActivityRepository annualActivityRepository, NoticeRepository noticeRepository,
-                           CooperateActivityDetailRepository cooperateActivityDetailRepository, RolesAndSigningLevelRepository rolesAndSigningLevelRepository, ContractShareVnuRepository contractShareVnuRepository) {
+    public ContractService(
+        ContractRepository contractRepository,
+        UetManRepository uetManRepository,
+        UnitNameRepository unitNameRepository,
+        PartnerContactRepository partnerContactRepository,
+        PartnerRepository partnerRepository,
+        CooperateActivityRepository cooperateActivityRepository,
+        UserRepository userRepository,
+        ActivityLogRepository activityLogRepository,
+        ContractShareRepository contractShareRepository,
+        AnnualActivityRepository annualActivityRepository,
+        NoticeRepository noticeRepository,
+        CooperateActivityDetailRepository cooperateActivityDetailRepository,
+        RolesAndSigningLevelRepository rolesAndSigningLevelRepository,
+        ContractShareVnuRepository contractShareVnuRepository
+    ) {
         this.contractRepository = contractRepository;
         this.uetManRepository = uetManRepository;
         this.unitNameRepository = unitNameRepository;
@@ -67,7 +67,8 @@ public class ContractService {
         this.contractShareVnuRepository = contractShareVnuRepository;
     }
 
-    private String attachFile(ContractDTO contractDTO, ExcelContractDTO excelContractDTO, User user) throws IOException {
+    private String attachFile(ContractDTO contractDTO, ExcelContractDTO excelContractDTO, User user) throws IOException
+    {
         String fileFolder = UUID.randomUUID().toString();
         if (user != null) {
             String fileType = null, fileName = null, attachFile = null;
@@ -81,7 +82,6 @@ public class ContractService {
                 attachFile = excelContractDTO.getAttachFile();
             }
             if (fileType != null && fileName != null && attachFile != null) {
-//                System.out.print(attachFile);
                 String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + user.getUserName() + "/" +
                         fileFolder + "/";
                 File directory = new File(pathname);
@@ -107,23 +107,12 @@ public class ContractService {
     }
 
     public void createContract(ContractDTO contractDTO, String token) throws Exception {
-//        if ((contractDTO.getPartnerContactId() + contractDTO.getPartnerId() + contractDTO.getUetManId() +
-//                contractDTO.getUnitNameId()) != 0) {
-//            UetMan uetMan = uetManRepository.findById(contractDTO.getUetManId());
         List<UetMan> uetManList = contractDTO.getUetManList();
-//            if(uetManList.isEmpty()){
-//                uetManList =
-//            }
         User user = userRepository.findByToken(token);
         RolesAndSigningLevel rolesAndSigningLevel = null;
         if (user.getRole().equals(String.valueOf(Role.ADMIN_UNIT)) || user.getRole().equals(String.valueOf(Role.ADMIN_VNU))) {
             if (contractDTO.getRolesAndSigningLevelId() != 0) {
                 rolesAndSigningLevel = rolesAndSigningLevelRepository.findById(contractDTO.getRolesAndSigningLevelId());
-//                System.out.print("\n\n");
-//                if(rolesAndSigningLevel.getParent_id() != user.getRolesAndSigningLevel()){
-//                    throw new Exception("Cấp ký kết không đúng!");
-//                }
-////                rolesAndSigningLevel = user.getRolesAndSigningLevel().getChild();
             } else {
                 rolesAndSigningLevel = user.getRolesAndSigningLevel();
             }
@@ -154,16 +143,10 @@ public class ContractService {
         } else {
             contactPoint = partnerContactRepository.findById(contractDTO.getContactPointId());
         }
-//            TypeContract typeContract = typeContractRepository.findById(contractDTO.getTypeContractId());
-        if (
-//                    uetMan != null &&
-//                    unitName != null &&
-                partner != null && partnerContact != null) {
-
+        if (partner != null && partnerContact != null) {
             Contract contract = new Contract(partner, partnerContact, uetManList, rolesAndSigningLevel);
             String[] contentContract = contractDTO.getContentContract().split("<br />");
             List<CooperateActivity> setCooperateActivity = new ArrayList<CooperateActivity>();
-//                contract.setContentContract(contractDTO.getContentContract());
             contract.setContactPoint(contactPoint);
             contract.setFunding(contractDTO.getFunding());
             contract.setEndDate(contractDTO.getEndDate());
@@ -179,7 +162,6 @@ public class ContractService {
             }
             List<Contract> setContract = new ArrayList<Contract>();
             setContract.add(contract);
-
 
             partner.setContracts(setContract);
             partnerContact.setContract(setContract);
@@ -223,13 +205,6 @@ public class ContractService {
                             contractDTOList.add(contractDTO1);
                         }
                     }
-//                    if (unit != null) {
-//                        ContractDTO contractDTO1 = new ContractDTO();
-//                        contractDTO1.setUnitNameId(unit.getId());
-//                        contractDTO1.setId(contractId);
-//                        contractDTO1.setResult("true");
-//                        contractDTOList.add(contractDTO1);
-//                    }
                     if (!contractDTOList.isEmpty()) {
                         this.shareContractVnu(contractDTOList);
                     }
@@ -266,7 +241,6 @@ public class ContractService {
                 CooperateActivityDetail cooperateActivityDetail = new CooperateActivityDetail();
                 cooperateActivityDetailRepository.save(cooperateActivityDetail);
                 CooperateActivity cooperateActivity = new CooperateActivity(content,
-//                        partner,
                         contract, cooperateActivityDetail);
                 cooperateActivityRepository.save(cooperateActivity);
                 cooperateActivityDetail.setCooperateActivity(cooperateActivity);
@@ -274,7 +248,6 @@ public class ContractService {
                 setCooperateActivity.add(cooperateActivity);
             }
             contract.setCooperateActivity(setCooperateActivity);
-//            partner.setCooperateActivities(setCooperateActivity);
             partnerRepository.save(partner);
             if (user.getRole().equals(String.valueOf(Role.UNIT))) {
                 ActivityLog activityLog = new ActivityLog(user);
@@ -286,23 +259,15 @@ public class ContractService {
                 activityLog.setContractId(contract.getId());
                 activityLogRepository.save(activityLog);
             }
-//                return contract;
         } else {
             throw new Exception("Có lỗi xảy ra, kiểm tra lại các trường trong Hoạt động hợp tác!");
         }
-//        } else {
-//            throw new Exception("Có lỗi xảy ra, kiểm tra lại các trường trong Hoạt động hợp tác!");
-//        }
     }
 
     public List<ExcelContractDTO> importExcel(Set<ExcelContractDTO> List, String token) throws IOException {
         List<ExcelContractDTO> listContract = new ArrayList<ExcelContractDTO>();
         User user = userRepository.findByToken(token);
         for (ExcelContractDTO contractDTO : List) {
-//            if ((contractDTO.getPartnerContactId() + contractDTO.getPartnerId() + contractDTO.getUetManId() +
-//                    contractDTO.getUnitNameId()) != 0) {
-//                UetMan uetMan = uetManRepository.findById(contractDTO.getUetManId());
-//                UnitName unitName = unitNameRepository.findById(contractDTO.getUnitNameId());
             List<UetMan> uetManList = contractDTO.getUetManList();
             Partner partner = partnerRepository.findById(contractDTO.getPartnerId());
             PartnerContact partnerContact = partnerContactRepository.findById(contractDTO.getPartnerContactId());
@@ -310,14 +275,10 @@ public class ContractService {
             if(rolesAndSigningLevel == null){
                 rolesAndSigningLevel = user.getRolesAndSigningLevel();
             }
-//                TypeContract typeContract = typeContractRepository.findById(contractDTO.getTypeContractId());
-            if (
-//                        uetMan != null && unitName != null &&
-                    partner != null) {
+            if (partner != null) {
                 Contract contract = new Contract(partner, partnerContact, uetManList, rolesAndSigningLevel);
                 String[] contentContract = contractDTO.getContentContract().split("<br />");
                 List<CooperateActivity> setCooperateActivity = new ArrayList<CooperateActivity>();
-//                contract.setContentContract(contractDTO.getContentContract());
 
                 if(contractDTO.getContactPointId() != 0){
                     PartnerContact contactPoint = partnerContactRepository.findById(contractDTO.getContactPointId());
@@ -369,13 +330,6 @@ public class ContractService {
                                 contractDTOList.add(contractDTO1);
                             }
                         }
-//                    if (unit != null) {
-//                        ContractDTO contractDTO1 = new ContractDTO();
-//                        contractDTO1.setUnitNameId(unit.getId());
-//                        contractDTO1.setId(contractId);
-//                        contractDTO1.setResult("true");
-//                        contractDTOList.add(contractDTO1);
-//                    }
                         if (!contractDTOList.isEmpty()) {
                             this.shareContract(contractDTOList);
                         }
@@ -385,7 +339,6 @@ public class ContractService {
                     CooperateActivityDetail cooperateActivityDetail = new CooperateActivityDetail();
                     cooperateActivityDetailRepository.save(cooperateActivityDetail);
                     CooperateActivity cooperateActivity = new CooperateActivity(content,
-//                        partner,
                             contract, cooperateActivityDetail);
                     cooperateActivityRepository.save(cooperateActivity);
                     cooperateActivityDetail.setCooperateActivity(cooperateActivity);
@@ -393,7 +346,6 @@ public class ContractService {
                     setCooperateActivity.add(cooperateActivity);
                 }
                 contract.setCooperateActivity(setCooperateActivity);
-//                partner.setCooperateActivities(setCooperateActivity);
                 partnerRepository.save(partner);
                 if (user.getRole().equals(String.valueOf(Role.UNIT))) {
                     ActivityLog activityLog = new ActivityLog(user);
@@ -405,113 +357,12 @@ public class ContractService {
                     activityLog.setContractId(contract.getId());
                     activityLogRepository.save(activityLog);
                 }
-//                    return contract;
             } else {
                 listContract.add(contractDTO);
-//                    throw new NullPointerException("Có lỗi xảy ra, kiểm tra lại các trường trong Hoạt động hợp tác!");
             }
-//            } else {
-//                listContract.add(contractDTO);
-////                throw new NullPointerException("Có lỗi xảy ra, kiểm tra lại các trường trong Hoạt động hợp tác!");
-//            }
         }
         return listContract;
     }
-
-//    public List<ExcelContractDTO> importExcel(Set<ExcelContractDTO> List, String token) throws IOException {
-//        List<ExcelContractDTO> listContract = new ArrayList<ExcelContractDTO>();
-//        User user = userRepository.findByToken(token);
-//        for (ExcelContractDTO contractDTO : List) {
-////            if ((contractDTO.getPartnerContactId() + contractDTO.getPartnerId() + contractDTO.getUetManId() +
-////                    contractDTO.getUnitNameId()) != 0) {
-////                UetMan uetMan = uetManRepository.findById(contractDTO.getUetManId());
-////                UnitName unitName = unitNameRepository.findById(contractDTO.getUnitNameId());
-//            List<UetMan> uetManList = contractDTO.getUetManList();
-//            Partner partner = partnerRepository.findById(contractDTO.getPartnerId());
-//            PartnerContact partnerContact = partnerContactRepository.findById(contractDTO.getPartnerContactId());
-////                TypeContract typeContract = typeContractRepository.findById(contractDTO.getTypeContractId());
-//            if (
-////                        uetMan != null && unitName != null &&
-//                    partner != null && partnerContact != null) {
-//                Contract contract = new Contract(partner, partnerContact, uetManList);
-//                String[] contentContract = contractDTO.getContentContract().split("<br />");
-//                List<CooperateActivity> setCooperateActivity = new ArrayList<CooperateActivity>();
-////                contract.setContentContract(contractDTO.getContentContract());
-//                contract.setFunding(contractDTO.getFunding());
-//                contract.setEndDate(contractDTO.getEndDate());
-//                contract.setNotice(contractDTO.getNotice());
-//                contract.setNumber(contractDTO.getNumber());
-//                contract.setOrdinaryNumber(contractDTO.getOrdinaryNumber());
-//                contract.setStartDate(contractDTO.getStartDate());
-//                contract.setRenew(contractDTO.getRenew());
-//                contract.setResult(contractDTO.getResult());
-//                contract.setCreatedAt(new java.util.Date());
-//                if (contractDTO.getFileName() != null && contractDTO.getFileType() != null && contractDTO.getAttachFile() != null) {
-//                    contract.setAttachFileAdd(this.attachFile(null, contractDTO, user));
-//                }
-//                List<Contract> setContract = new ArrayList<Contract>();
-//                setContract.add(contract);
-//
-//
-//                partner.setContracts(setContract);
-//                partnerContact.setContract(setContract);
-//                contractRepository.save(contract);
-//                partnerContactRepository.save(partnerContact);
-//                int contractId = contract.getId();
-//                if (!contractDTO.getUnitNames().isEmpty()) {
-//                    List<ContractDTO> contractDTOList = new ArrayList<ContractDTO>();
-//
-//                    for (UnitName unitName : contractDTO.getUnitNames()) {
-//                        ContractDTO contractDTO1 = new ContractDTO();
-//                        contractDTO1.setId(contractId);
-//                        if (unitName.getId() != 0) {
-//                            contractDTO1.setUnitNameId(unitName.getId());
-//                            contractDTO1.setId(contractId);
-//                            contractDTO1.setResult("true");
-//                            contractDTOList.add(contractDTO1);
-//                        }
-//                    }
-////                    if (unit != null) {
-////                        ContractDTO contractDTO1 = new ContractDTO();
-////                        contractDTO1.setUnitNameId(unit.getId());
-////                        contractDTO1.setId(contractId);
-////                        contractDTO1.setResult("true");
-////                        contractDTOList.add(contractDTO1);
-////                    }
-//                    if (!contractDTOList.isEmpty()) {
-//                        this.shareContract(contractDTOList);
-//                    }
-//                }
-//                for (String content : contentContract) {
-//                    CooperateActivity cooperateActivity = new CooperateActivity(content, partner, contract);
-//                    cooperateActivityRepository.save(cooperateActivity);
-//                    setCooperateActivity.add(cooperateActivity);
-//                }
-//                contract.setCooperateActivity(setCooperateActivity);
-//                partner.setCooperateActivities(setCooperateActivity);
-//                partnerRepository.save(partner);
-//                if (user.getRole().equals(Role.UNIT)) {
-//                    ActivityLog activityLog = new ActivityLog(user);
-//                    userRepository.save(user);
-//                    activityLog.setActivityType("createContract");
-//                    activityLog.setAcvtivity(user.getUnitName().getUnitName() + " tạo Hoạt động hợp tác cho đối tác: " +
-//                            partner.getPartnerName() + " vào lúc " + activityLog.getTimestamp());
-//                    activityLog.setStatus("NEW");
-//                    activityLog.setContractId(contract.getId());
-//                    activityLogRepository.save(activityLog);
-//                }
-////                    return contract;
-//            } else {
-//                listContract.add(contractDTO);
-////                    throw new NullPointerException("Có lỗi xảy ra, kiểm tra lại các trường trong Hoạt động hợp tác!");
-//            }
-////            } else {
-////                listContract.add(contractDTO);
-//////                throw new NullPointerException("Có lỗi xảy ra, kiểm tra lại các trường trong Hoạt động hợp tác!");
-////            }
-//        }
-//        return listContract;
-//    }
 
     public void editContract(ContractDTO contractDTO, int contractId, String token) throws IOException {
         Contract contract = contractRepository.findById(contractId);
@@ -527,15 +378,10 @@ public class ContractService {
                     }
                     Notice notice = new Notice(contract.getNotice(), contract);
                     contract.setNotice(contractDTO.getNotice());
-                    //notice ở trong contract là mới nhất, vì vậy khi tạo lịch sử notice
-                    //nếu chưa có notice nào thì lấy thời gian chỉnh sửa ở thời gian tạo contract
-                    //nếu mà có chỉnh sửa r thì lấy thời gian updated ở notice mới nhất
-                    //vì updated là thời gian mà notice trc đó được tạo (notice trong contract)
                     if (emptyNotice) {
                         notice.setCreated(contract.getCreatedAt());
                     } else {
                         Notice notice1 = noticeRepository.findTopByContractIdOrderByCreatedDesc(contractId);
-//                        System.out.print(notice1.getId() + "\n\n\n");
                         notice.setCreated(notice1.getLastUpdated());
                     }
                     if(user.getRole().equals(String.valueOf(Role.ADMIN_VNU)) || user.getRole().equals(String.valueOf(Role.ADMIN_UNIT))){
@@ -553,14 +399,12 @@ public class ContractService {
             contract.setResult(contractDTO.getResult());
             if (contractDTO.getCooperateActivityValue() != null) {
                 Partner partner = contract.getPartner();
-//                contract.setContentContract(contract.getContentContract() + "<br />" + contractDTO.getCooperateActivityValue());
                 String[] cooperateActivity = contractDTO.getCooperateActivityValue().split("<br />");
                 List<CooperateActivity> setCooperateActivity = new ArrayList<CooperateActivity>();
                 for (String content : cooperateActivity) {
                     CooperateActivityDetail cooperateActivityDetail = new CooperateActivityDetail();
                     cooperateActivityDetailRepository.save(cooperateActivityDetail);
                     CooperateActivity cooperateActivity1 = new CooperateActivity(content,
-//                        partner,
                             contract, cooperateActivityDetail);
                     cooperateActivityRepository.save(cooperateActivity1);
                     cooperateActivityDetail.setCooperateActivity(cooperateActivity1);
@@ -568,12 +412,10 @@ public class ContractService {
                     setCooperateActivity.add(cooperateActivity1);
                 }
                 contract.setCooperateActivity(setCooperateActivity);
-//                partner.setCooperateActivities(setCooperateActivity);
                 partnerRepository.save(partner);
             }
             if (contractDTO.getAttachFileAdd() != null) {
                 if (contractDTO.getAttachFileAdd().equals("edited")) {
-//                System.out.print("\n" + contractDTO.getFileName() + "\n");
                     contract.setAttachFileAdd(this.attachFile(contractDTO, null, user));
                 }
             }
@@ -601,13 +443,6 @@ public class ContractService {
                 activityLog.setContractId(contract.getId());
                 activityLogRepository.save(activityLog);
             }
-//            if (contractDTO.getUetManId() != 0){
-//                uet
-//                if ( != null){
-//
-//                }
-//            }
-            // hien tai chua viet sua partner, partner contact, uetman, unit man vi hoi luoi
         } else {
             throw new NullPointerException("Không tìm thấy Hoạt động hợp tác này hãy thử lại!");
         }
@@ -626,7 +461,6 @@ public class ContractService {
                 activityLog.setAcvtivity(user.getUnitName().getUnitName() + " xóa Hoạt động hợp tác của đối tác: " +
                         contract.getPartner().getPartnerName() + " vào lúc " + activityLog.getTimestamp());
                 activityLog.setStatus("NEW");
-//                activityLog.setContractId(contract.getId());
                 activityLogRepository.save(activityLog);
             }
         } else {
@@ -642,15 +476,11 @@ public class ContractService {
         User user = userRepository.findByToken(token);
         if (user != null) {
             if (user.getRolesAndSigningLevel() != null) {
-//                System.out.print(user.getRolesAndSigningLevel().getId() + "\n\n");
-//                return contractRepository.findByRolesSigningLevelId(user.getRolesAndSigningLevel().getId());
                 List<Contract> response = new ArrayList<>();
                 if (user.getRole().equals(String.valueOf(Role.ADMIN_UNIT))) {
                     List<Contract> adminUnitContractList = user.getRolesAndSigningLevel().getContractList();
-//                    List<Contract> unitContractList = user.getRolesAndSigningLevel().getChild().getContractList();
                     for (RolesAndSigningLevel rolesAndSigningLevel : user.getRolesAndSigningLevel().getChild()) {
                         adminUnitContractList.addAll(rolesAndSigningLevel.getContractList());
-
                     }
                     if(!user.getRolesAndSigningLevel().getContractShareVnus().isEmpty()){
                         List<Contract> contracts = new ArrayList<Contract>();
@@ -673,8 +503,6 @@ public class ContractService {
             throw new HTTPException(401);
         }
     }
-
-//    public List
 
     public CheckContractDTO checkContract(CheckContractDTO checkContractDTO) {
         int countPartner = 0;
@@ -739,9 +567,7 @@ public class ContractService {
         if (cooperateActivity != null) {
             if (cooperateActivityDTO.getCooperateActivity() != null) {
                 Contract contract = cooperateActivity.getContract();
-//                contract.setContentContract(contract.getContentContract() + "<br />" + cooperateActivityDTO.getCooperateActivity());
                 cooperateActivity.setCooperateActivity(cooperateActivityDTO.getCooperateActivity());
-//                System.out.print(cooperateActivityDTO.getCooperateActivity() + "\n");
                 cooperateActivityRepository.save(cooperateActivity);
                 User user = userRepository.findByToken(token);
                 if (user.getRole().equals(String.valueOf(Role.UNIT))) {
@@ -792,7 +618,6 @@ public class ContractService {
                 CooperateActivityDetail cooperateActivityDetail = new CooperateActivityDetail();
                 cooperateActivityDetailRepository.save(cooperateActivityDetail);
                 CooperateActivity cooperateActivity1 = new CooperateActivity(content,
-//                        partner,
                         contract, cooperateActivityDetail);
                 cooperateActivityRepository.save(cooperateActivity1);
                 cooperateActivityDetail.setCooperateActivity(cooperateActivity1);
@@ -800,7 +625,6 @@ public class ContractService {
                 setCooperateActivity.add(cooperateActivity1);
             }
             contract.setCooperateActivity(setCooperateActivity);
-//            partner.setCooperateActivities(setCooperateActivity);
             partnerRepository.save(partner);
             contractRepository.save(contract);
             User user = userRepository.findByToken(token);
@@ -837,24 +661,6 @@ public class ContractService {
         }
     }
 
-//    public Map<String, Object> getContractOfUnit(String token) {
-//        User user = userRepository.findByToken(token);
-//        if (user != null) {
-//            if (user.getUnitName() != null) {
-//                return contractRepository.findAllContractOfUnit(user.getUnitName().getId());
-////                List<Contract> contracts = new ArrayList<Contract>();
-////                for (ContractShare contractShare : user.getUnitName().getContractShares()) {
-////                    contracts.add(contractShare.getContract());
-////                }
-////                return contracts;
-//            } else {
-//                throw new HTTPException(404);
-//            }
-//        } else {
-//            throw new HTTPException(401);
-//        }
-//    }
-
     public List<Contract> getAllContractOfPartner(int partnerId) {
         return partnerRepository.findById(partnerId).getContracts();
     }
@@ -862,13 +668,10 @@ public class ContractService {
     public void shareContract(List<ContractDTO> contractDTOList) {
         if (!contractDTOList.isEmpty()) {
             for (ContractDTO contractDTO : contractDTOList) {
-////                System.out.print("\n" + contractDTO.getUnitNameId() + "\n" + contractDTO.getId() + "\n");
                 if (contractDTO.getId() != 0 && contractDTO.getUnitNameId() != 0) {
-//                    System.out.print("\n" + contractDTO.getUnitNameId() + "\n" + contractDTO.getId());
                     ContractShare contractShare1 = contractShareRepository.findByUnitNameIdAndContractId(contractDTO.getUnitNameId(),
                             contractDTO.getId());
                     if (contractShare1 == null) {
-//                        System.out.print("\n"+contractDTO.getResult()+"\n");
                         if (contractDTO.getResult().equals("true")) {
                             Contract contract = contractRepository.findById(contractDTO.getId());
                             UnitName unitName = unitNameRepository.findById(contractDTO.getUnitNameId());
@@ -892,13 +695,10 @@ public class ContractService {
     public void shareContractVnu(List<ContractDTO> contractDTOList) {
         if (!contractDTOList.isEmpty()) {
             for (ContractDTO contractDTO : contractDTOList) {
-////                System.out.print("\n" + contractDTO.getUnitNameId() + "\n" + contractDTO.getId() + "\n");
                 if (contractDTO.getId() != 0 && contractDTO.getRolesAndSigningLevelId() != 0) {
-//                    System.out.print("\n" + contractDTO.getUnitNameId() + "\n" + contractDTO.getId());
                     ContractShareVnu contractShareVnu = contractShareVnuRepository.findByRolesSigningLevelIdAndContractId(contractDTO.getRolesAndSigningLevelId(),
                             contractDTO.getId());
                     if (contractShareVnu == null) {
-//                        System.out.print("\n"+contractDTO.getResult()+"\n");
                         if (contractDTO.getResult().equals("true")) {
                             Contract contract = contractRepository.findById(contractDTO.getId());
                             RolesAndSigningLevel rolesAndSigningLevel = rolesAndSigningLevelRepository.findById(contractDTO.getRolesAndSigningLevelId());
@@ -950,18 +750,6 @@ public class ContractService {
         }
     }
 
-//    public AnnualActivity addAnnualActivity(AnnualActivityDTO annualActivityDTO) throws Exception {
-////        Partner partner = partnerRepository.findById(annualActivityDTO.getPartnerId());
-//        Contract contract = contractRepository.findById(annualActivityDTO.getContractId());
-//        if (contract != null) {
-//            AnnualActivity annualActivity = new AnnualActivity(contract, annualActivityDTO.getActivityName(),
-//                    annualActivityDTO.getFunding(), annualActivityDTO.getDate(), annualActivityDTO.getContent());
-//            return annualActivityRepository.save(annualActivity);
-//        } else {
-//            throw new Exception("Không tìm thấy Hoạt động hợp tác!");
-//        }
-//    }
-
     public void editAnnualActivity(AnnualActivityDTO annualActivityDTO) throws Exception {
         AnnualActivity annualActivity = annualActivityRepository.findById(annualActivityDTO.getId());
         if (annualActivity != null) {
@@ -983,14 +771,6 @@ public class ContractService {
             throw new Exception("Không tìm thấy hoạt động");
         }
     }
-
-//    public List<AnnualActivity> getAllAnnualActivityOfPartner(int partnerId) {
-//        return partnerRepository.findById(partnerId).getAnnualActivities();
-//    }
-
-//    public List<AnnualActivity> getAllAnnualActivityOfContract(int contractId) {
-//        return contractRepository.findById(contractId).getAnnualActivities();
-//    }
 
     public List<AnnualActivity> getAllAnnualActivity() {
         return annualActivityRepository.findAll();
@@ -1037,7 +817,6 @@ public class ContractService {
             contract.setNumber(contractDTO.getNumber());
             contract.setOrdinaryNumber(contractDTO.getOrdinaryNumber());
             contract.setStartDate(contractDTO.getStartDate());
-//            contract.setRenew(contractDTO.getRenew());
             contract.setResult(contractDTO.getResult());
             contractRepository.save(contract);
             List<CooperateActivity> setCooperateActivity = new ArrayList<CooperateActivity>();
@@ -1059,7 +838,6 @@ public class ContractService {
                     CooperateActivityDetail cooperateActivityDetail = new CooperateActivityDetail();
                     cooperateActivityDetailRepository.save(cooperateActivityDetail);
                     CooperateActivity cooperateActivity1 = new CooperateActivity(content,
-//                        partner,
                             contract, cooperateActivityDetail);
                     cooperateActivityRepository.save(cooperateActivity1);
                     cooperateActivityDetail.setCooperateActivity(cooperateActivity1);
@@ -1097,9 +875,6 @@ public class ContractService {
                 contactPoint = partnerContactRepository.findById(contractDTO.getContactPointId());
             }
             contract.setContactPoint(contactPoint);
-//            List<UetMan> uetManList = new ArrayList<>();
-//            uetManList.addAll(oldContract.getUetMan());
-//            contract.setUetMan(uetManList);
             int contractId = contract.getId();
             UnitName unit = user.getUnitName();
             if(!user.getRole().equals(String.valueOf(Role.ADMIN_VNU))){
@@ -1139,13 +914,6 @@ public class ContractService {
                             contractDTOList.add(contractDTO1);
                         }
                     }
-//                    if (unit != null) {
-//                        ContractDTO contractDTO1 = new ContractDTO();
-//                        contractDTO1.setUnitNameId(unit.getId());
-//                        contractDTO1.setId(contractId);
-//                        contractDTO1.setResult("true");
-//                        contractDTOList.add(contractDTO1);
-//                    }
                     if (!contractDTOList.isEmpty()) {
                         this.shareContractVnu(contractDTOList);
                     }
@@ -1162,13 +930,6 @@ public class ContractService {
                 activityLog.setContractId(contract.getId());
                 activityLogRepository.save(activityLog);
             }
-//            if (contractDTO.getUetManId() != 0){
-//                uet
-//                if ( != null){
-//
-//                }
-//            }
-            // hien tai chua viet sua partner, partner contact, uetman, unit man vi hoi luoi
         } else {
             throw new NullPointerException("Không tìm thấy Hoạt động hợp tác này hãy thử lại!");
         }

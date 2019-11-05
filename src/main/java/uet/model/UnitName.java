@@ -18,9 +18,6 @@ public class UnitName {
     private String unitName;
     private String roles;
     private String abbreviation;
-//    @OneToMany(mappedBy = "unitName")
-//    @JsonIgnore
-//    private List<Contract> contract;
 
     @OneToMany(mappedBy = "unitName")
     @JsonIgnore
@@ -32,7 +29,6 @@ public class UnitName {
 
     @OneToOne
     @JoinColumn(name="roles_signing_level_id")
-//    @JsonIgnore
     private RolesAndSigningLevel rolesSigningLevel;
 
     public UnitName(){
@@ -58,15 +54,6 @@ public class UnitName {
     public void setUnitName(String unitName) {
         this.unitName = unitName;
     }
-
-//    public List<Contract> getContract() {
-//        return contract;
-//    }
-//
-//    public void setContract(List<Contract> contract) {
-//        this.contract = contract;
-//    }
-
 
     public User getUser() {
         return user;

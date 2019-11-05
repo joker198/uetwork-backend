@@ -30,83 +30,145 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //Show all user, ham nay chi de chạy thu khi test code, khong co trong he thong
-//    @NoAuthentication
+    /**
+     * Get all users
+     *
+     * @param pageable
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value="/user",method = RequestMethod.GET)
     public Page<User> getAllUser(org.springframework.data.domain.Pageable pageable){
         return userService.getUsers(pageable);
     }
 
-    //signup
+    /**
+     * Sign up
+     * 
+     * @param userDTO
+     * @throws NoSuchAlgorithmException
+     * @throws uet.service.UserService.ErrorMessage 
+     */
     @NoAuthentication
     @RequestMapping(value="/signup",method = RequestMethod.PUT)
     public void createUser(@RequestBody UserDTO userDTO) throws NoSuchAlgorithmException, UserService.ErrorMessage {
         userService.createUser(userDTO);
     }
 
-    //reset pass word
+    /**
+     * Reset Password
+     *
+     * @param infoBySchoolDTO
+     * @throws NoSuchAlgorithmException
+     * @throws uet.service.UserService.ErrorMessage 
+     */
     @NoAuthentication
     @RequestMapping(value="/resetPass",method = RequestMethod.PUT)
     public void resetPass(@RequestBody InfoBySchoolDTO infoBySchoolDTO) throws NoSuchAlgorithmException, UserService.ErrorMessage {
         userService.resetPass(infoBySchoolDTO);
     }
 
-    //create folder
+    /**
+     * Create folder
+     */
     @NoAuthentication
     @RequestMapping(value="/createFolder", method = RequestMethod.POST)
     public void createFolder() {
         userService.createFolder();
     }
 
-    //create multi student
+    /**
+     * Create students
+     *
+     * @param List
+     * @return
+     * @throws NoSuchAlgorithmException 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value="/createStudent", method = RequestMethod.POST)
     public List<CreateStudentDTO> createStudent(@RequestBody List<CreateStudentDTO> List) throws NoSuchAlgorithmException {
         return userService.createStudent(List);
     }
-    // change pass send email
+
+    /**
+     * Change Password and send mail
+     *
+     * @param startId
+     * @throws NoSuchAlgorithmException 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "changePass/email/{startId}", method = RequestMethod.POST)
     public void changePassAndSendMail(@PathVariable("startId") int startId) throws NoSuchAlgorithmException {
         userService.changePassAndSendMail(startId);
     }
-    // delete loop userchangePassAndSendMail
+
+    /**
+     * 
+     * @param infoBySchoolDTO 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "delete/loop", method = RequestMethod.POST)
     public void deleteLoop(@RequestBody InfoBySchoolDTO infoBySchoolDTO){
         userService.deleteLoop(infoBySchoolDTO);
     }
 
-    //create multi lecturers
+    /**
+     * Create Lecturers
+     *
+     * @param list
+     * @return
+     * @throws NoSuchAlgorithmException 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "createLecturers", method = RequestMethod.POST)
     public List<UserDTO> createLecturers(@RequestBody List<UserDTO> list) throws NoSuchAlgorithmException {
         return userService.createLecturers(list);
     }
 
-    //create Account
+    /**
+     * Create Account
+     *
+     * @param userDTO
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value="/createAccount",method = RequestMethod.POST)
     public User createAccount(@RequestBody UserDTO userDTO) {
         return userService.createAccount(userDTO);
     }
 
-    //login
+    /**
+     * Login
+     *
+     * @param userDTO
+     * @return
+     * @throws Exception 
+     */
     @NoAuthentication
     @RequestMapping(value="/login", method = RequestMethod.POST)
     public Map<String, Object> Login(@RequestBody UserDTO userDTO) throws Exception {
         return userService.Login(userDTO);
     }
 
-    //admin login
+    /**
+     * Administrator Login
+     *
+     * @param userDTO
+     * @return
+     * @throws Exception 
+     */
     @NoAuthentication
     @RequestMapping(value="admin/login", method = RequestMethod.POST)
     public Map<String, Object> adminLogin(@RequestBody UserDTO userDTO) throws Exception {
         return userService.adminLogin(userDTO);
     }
 
-    //logout
+    /**
+     * Logout
+     *
+     * @param request
+     * @return 
+     */
     @NoAuthentication
     @RequestMapping(value="/logout", method = RequestMethod.GET)
     public User Logout(HttpServletRequest request){
@@ -114,7 +176,14 @@ public class UserController {
         return userService.Logout(token);
     }
 
-    //editUser
+    /**
+     * Edit User
+     *
+     * @param id
+     * @param userDTO
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN,Role.STUDENT, Role.VIP_PARTNER})
     @RequestMapping(value="user/{id}", method = RequestMethod.PUT)
     public User editUser(@PathVariable("id") int id, @RequestBody UserDTO userDTO, HttpServletRequest request) {
@@ -122,29 +191,51 @@ public class UserController {
         return userService.editUser(id, userDTO, token);
     }
 
-    // change password
-//    @RequiredRoles({Role.ADMIN,Role.STUDENT, Role.VIP_PARTNER})
+    /**
+     * Change Password
+     *
+     * @param changePasswordDTO
+     * @param request
+     * @return
+     * @throws Exception 
+     */
     @RequestMapping(value="changePassword", method = RequestMethod.PUT)
     public User changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, HttpServletRequest request) throws Exception {
         String token = request.getHeader("auth-token");
         return userService.changePassword(changePasswordDTO, token);
     }
 
-    //activate/deactivate
+    /**
+     * Change User Status
+     *
+     * @param id
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value="user/{id}/status", method = RequestMethod.PUT)
     public User changeUserStatus(@PathVariable("id") int id) {
         return userService.changeUserStatus(id);
     }
 
-    //deleteUser
+    /**
+     * Delete User
+     *
+     * @param id 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value="user/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable("id") int id){
         userService.deleteUser(id);
     }
 
-    //create unit account
+    /**
+     * Create Unit Account
+     *
+     * @param userDTO
+     * @param unitNameId
+     * @param request
+     * @throws Exception 
+     */ 
     @RequiredRoles({Role.ADMIN_UNIT, Role.ADMIN_VNU})
     @RequestMapping(value = "unit/{unitNameId}/account/create", method = RequestMethod.POST)
     public void createUnitAccount(@RequestBody UserDTO userDTO, @PathVariable("unitNameId") int unitNameId,
@@ -153,21 +244,36 @@ public class UserController {
         userService.createUnitAccount(userDTO, unitNameId, token);
     }
 
-    //check all activity log
+    /**
+     * Check All Activity Log
+     *
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "activityLog", method = RequestMethod.GET)
     public List<ActivityLog> getAllActiviYyLog(){
         return userService.getAllActiviYyLog();
     }
 
-    //get acivity log one user
+    /**
+     * Get Activity Log One User
+     * 
+     * @param userId
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "activityLog/{userId}", method = RequestMethod.GET)
     public List<ActivityLog> getActivityLogOfUser(@PathVariable("userId") int userId){
         return userService.getActivityLogOfUser(userId);
     }
 
-    //search user
+    /**
+     * Search User
+     *
+     * @param userName
+     * @return
+     * @throws Exception 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "user/search/{userName}", method = RequestMethod.GET)
     public List<User> findUserByUserNameContaining(@PathVariable("userName") String userName) throws Exception {

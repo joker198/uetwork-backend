@@ -32,19 +32,10 @@ public class TokenAuthenticationInterceptor extends HandlerInterceptorAdapter {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             if (handlerMethod.getMethodAnnotation(NoAuthentication.class) != null) {
-                // No required authentication
-//                System.out.print("No required authentication \n \n \n");
-                return true; // by  ss
+                return true;
             } else if (token == null) {
                 throw new Exception("UNAUTHORIZED");
             }
-//            if (userService.isUser(token)){
-//                 role = "login";
-//            }
-
-            // 1. Find user by token
-            // If user doesn't exist, mean token is invalid
-            // Else check the role for user is match with method in controller
             User user = userRepository.findByToken(token);
             String role = user.getRole();
             RequiredRoles requiredRoles = handlerMethod.getMethodAnnotation(RequiredRoles.class);

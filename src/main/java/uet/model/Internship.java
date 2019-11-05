@@ -27,7 +27,6 @@ public class Internship {
 
     @ManyToOne
     @JoinColumn(name = "student_id")
-//    @JsonIgnore
     private Student student;
 
     @ManyToOne
@@ -37,27 +36,33 @@ public class Internship {
 
     @ManyToOne
     @JoinColumn(name="lecturers_id")
-//    @JsonIgnore
     private Lecturers  lecturers;
-//
+
     @ManyToOne
     @JoinColumn(name="internship_term_id")
-//    @JsonIgnore
     private InternshipTerm internshipTerm;
 
     @OneToMany(mappedBy = "internship", cascade = CascadeType.ALL)
-//    @JsonIgnore
     private List<Follow> follows;
 
-    public Internship() {
+    public Internship()
+    {
+        //
     }
 
-    public Internship(Partner partner, Student student) {
+    public Internship(
+        Partner partner,
+        Student student
+    ) {
         this.partner = partner;
         this.student = student;
     }
 
-    public Internship(InternshipTerm internshipTerm, Student student, Date date){
+    public Internship(
+        InternshipTerm internshipTerm,
+        Student student,
+        Date date
+    ) {
         this.internshipTerm = internshipTerm;
         this.student = student;
         this.createdAt = date;
@@ -87,14 +92,6 @@ public class Internship {
         this.partner = partner;
     }
 
-//    public String getCompany() {
-//        return company;
-//    }
-//
-//    public void setCompany(String company) {
-//        this.company = company;
-//    }
-
     public Date getStartDate() {
         return startDate;
     }
@@ -110,30 +107,6 @@ public class Internship {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-//    public String getSupervisor() {
-//        return supervisor;
-//    }
-//
-//    public void setSupervisor(String supervisor) {
-//        this.supervisor = supervisor;
-//    }
-
-//    public Lecturers getLecturers() {
-//        return lecturers;
-//    }
-//
-//    public void setLecturers(Lecturers lecturers) {
-//        this.lecturers = lecturers;
-//    }
-//
-//    public InternshipTerm getInternshipTerm() {
-//        return internshipTerm;
-//    }
-//
-//    public void setInternshipTerm(InternshipTerm internshipTerm) {
-//        this.internshipTerm = internshipTerm;
-//    }
 
     public String getInternshipType() {
         return internshipType;

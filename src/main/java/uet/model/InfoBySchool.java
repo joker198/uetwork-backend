@@ -9,7 +9,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="InfoBySchool")
-public class InfoBySchool {
+public class InfoBySchool
+{
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,91 +31,113 @@ public class InfoBySchool {
     private String graduationYear;
     private String studentName;
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public Student getStudent() {
+    public Student getStudent()
+    {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(Student student)
+    {
         this.student = student;
     }
 
-    public Integer getStudentCode() {
+    public Integer getStudentCode()
+    {
         return studentCode;
     }
 
-    public void setStudentCode(Integer studentCode) {
+    public void setStudentCode(Integer studentCode)
+    {
         this.studentCode = studentCode;
     }
 
-    public String getMajor() {
+    public String getMajor()
+    {
         return major;
     }
 
-    public void setMajor(String major) {
+    public void setMajor(String major)
+    {
         this.major = major;
     }
 
-    public Double getGPA() {
+    public Double getGPA()
+    {
         return GPA;
     }
 
-    public void setGPA(Double GPA) {
+    public void setGPA(Double GPA)
+    {
         this.GPA = GPA;
     }
 
-    public String getDiploma() {
+    public String getDiploma()
+    {
         return diploma;
     }
 
-    public void setDiploma(String diploma) {
+    public void setDiploma(String diploma)
+    {
         this.diploma = diploma;
     }
 
-    public String getGrade() {
+    public String getGrade()
+    {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(String grade)
+    {
         this.grade = grade;
     }
 
-    public String getGraduationYear() {
+    public String getGraduationYear()
+    {
         return graduationYear;
     }
 
-    public void setGraduationYear(String graduationYear) {
+    public void setGraduationYear(String graduationYear)
+    {
         this.graduationYear = graduationYear;
     }
 
-    public String getStudentClass() {
+    public String getStudentClass()
+    {
         return studentClass;
     }
 
-    public void setStudentClass(String studentClass) {
+    public void setStudentClass(String studentClass)
+    {
         this.studentClass = studentClass;
     }
 
-    public String getStudentName() {
+    public String getStudentName()
+    {
         return studentName;
     }
 
-    public void setStudentName(String studentName) {
+    public void setStudentName(String studentName)
+    {
         this.studentName = studentName;
     }
 
-    public String getEmailvnu() {
+    public String getEmailvnu()
+    {
         return emailvnu;
     }
 
-    public void setEmailvnu(String emailvnu) {
+    public void setEmailvnu(String emailvnu)
+    {
         this.emailvnu = emailvnu;
     }
 }

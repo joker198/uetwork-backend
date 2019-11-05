@@ -1,6 +1,7 @@
 package uet.model;
 
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 /**
@@ -8,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "AdminNotification")
-public class AdminNotification {
+public class AdminNotification implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,63 +21,79 @@ public class AdminNotification {
     private String userName;
     private String notificationType;
 
-    public AdminNotification() {
+    public AdminNotification()
+    {
+        //
     }
 
-    public String getIssue() {
+    public String getIssue()
+    {
         return issue;
     }
 
-    public void setIssue(String issue) {
+    public void setIssue(String issue)
+    {
         this.issue = issue;
     }
 
-    public int getStudentId() {
+    public int getStudentId()
+    {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(int studentId)
+    {
         this.studentId = studentId;
     }
 
-    public int getPartnetId() {
+    public int getPartnetId()
+    {
         return partnerId;
     }
 
-    public void setPartnetId(int partnetId) {
+    public void setPartnetId(int partnetId)
+    {
         this.partnerId = partnetId;
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         this.status = status;
     }
 
 
-    public String getUserName() {
+    public String getUserName()
+    {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName(String userName)
+    {
         this.userName = userName;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getNotificationType() {
+    public String getNotificationType()
+    {
         return notificationType;
     }
 
-    public void setNotificationType(String notificationType) {
+    public void setNotificationType(String notificationType)
+    {
         this.notificationType = notificationType;
     }
 }

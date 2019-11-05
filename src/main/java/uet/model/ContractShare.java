@@ -7,7 +7,8 @@ import java.util.Date;
 
 @Entity
 @Table(name="ContractShare")
-public class ContractShare {
+public class ContractShare
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -19,48 +20,61 @@ public class ContractShare {
 
     @ManyToOne
     @JoinColumn(name="unit_name_id")
-//    @JsonIgnore
     private UnitName unitName;
 
     private Date created;
-//    private
-    public ContractShare (){};
 
-    public ContractShare(Contract contract, UnitName unitName){
+    public ContractShare ()
+    {
+        //
+    };
+
+    public ContractShare(
+        Contract contract,
+        UnitName unitName
+    ) {
         this.contract = contract;
         this.unitName = unitName;
         this.created = new Date();
     }
 
-    public Contract getContract() {
+    public Contract getContract()
+    {
         return contract;
     }
 
-    public void setContract(Contract contract) {
+    public void setContract(Contract contract)
+    {
         this.contract = contract;
     }
 
-    public UnitName getUnitName() {
+    public UnitName getUnitName()
+    {
         return unitName;
     }
 
-    public void setUnitName(UnitName unitName) {
+    public void setUnitName(UnitName unitName)
+    {
         this.unitName = unitName;
     }
 
-    public Date getCreated() {
+    public Date getCreated()
+    {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(Date created)
+    {
         this.created = created;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 }

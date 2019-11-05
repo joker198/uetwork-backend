@@ -8,7 +8,8 @@ import uet.model.StudentClass;
  * Created by nhkha on 6/16/2017.
  */
 @Repository
-public interface StudentClassRepository  extends CrudRepository<StudentClass, Integer> {
+public interface StudentClassRepository  extends CrudRepository<StudentClass, Integer>
+{
     StudentClass findByStudentClass(String s);
     StudentClass findById(int id);
 }

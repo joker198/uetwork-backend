@@ -26,9 +26,4 @@ public interface StudentRepository extends CrudRepository<Student, Integer>, Pag
     List<Student> findByFullNameContaining(String studentName);
 
     Page<Student> findAllByOrderByIdDesc(Pageable pageable);
-//    List<Student> findByLecturersIdIsNull ();
-//    List<Student> findByLecturersIdIsNullAndInternshipTermId(int id);
-//    List<Student> findByLecturersIdIsNotNullAndInternshipTermId(int id);
-//    List<Student> findByInternshipTermIdIsNull();
-//    List<Student> findByLecturersIdAndInternshipTermId(int lecturersId, int internshipTermId);
 }

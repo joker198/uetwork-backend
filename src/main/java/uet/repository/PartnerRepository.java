@@ -17,7 +17,6 @@ import java.util.List;
 public interface PartnerRepository extends JpaRepository<Partner,Integer>, PagingAndSortingRepository<Partner, Integer> {
     String FIND_PARTNER_ID = "SELECT p.id, p.partner_name FROM partner p";
     String FIND_PARTNER_ID_OTHER = "SELECT p.id, p.partner_name FROM partner p where p.partner_type='OTHER'";
-
     String FIND_PARTNER_ID_FIT = "SELECT p.id, p.partner_name FROM partner p where p.partner_type='FIT'";
 
     @Query(value = FIND_PARTNER_ID, nativeQuery = true)

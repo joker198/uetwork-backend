@@ -17,7 +17,6 @@ import java.util.List;
 public interface InternshipRepository extends CrudRepository<Internship,Integer>, PagingAndSortingRepository<Internship, Integer> {
     Internship findById(int id);
     Internship findByStudentId(int studentId);
-//    Internship findByStudentIdAndIn
     Internship findByStudentIdAndInternshipTerm(int student, InternshipTerm internshipTerm);
     List<Internship> findByInternshipTermAndLecturersId(InternshipTerm internshipTerm, int lecturers);
 }

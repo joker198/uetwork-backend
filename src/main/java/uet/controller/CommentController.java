@@ -7,7 +7,6 @@ import uet.model.Comment;
 import uet.model.Role;
 import uet.service.CommentService;
 import uet.stereotype.RequiredRoles;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -20,21 +19,37 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    //show all comments
+    /**
+     * Show All Comments
+     *
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.ADMIN})
     @RequestMapping(value="/showAllComment", method = RequestMethod.GET)
     public List<HashMap<String, String>> showAllComment(){
         return (List<HashMap<String, String>>) commentService.showAllComment();
     }
 
-    //show all comments of a partner
+    /**
+     * Show All Comments Of A Partner
+     *
+     * @param partnerId
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.ADMIN})
     @RequestMapping(value="/showAllCommentOfOnePartner/{partnerId}", method = RequestMethod.GET)
     public List<Comment> showAllCommentOfOnePartner(@PathVariable("partnerId") int partnerId) {
         return commentService.showAllCommentOfOnePartner(partnerId);
     }
 
-    //comment a partner
+    /**
+     * Comment A Partner
+     *
+     * @param partnerId
+     * @param commentDTO
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT})
     @RequestMapping(value="writeComment/partner/{partnerId}", method = RequestMethod.POST)
     public Comment writeComment(@PathVariable("partnerId") int partnerId,
@@ -43,21 +58,36 @@ public class CommentController {
         return commentService.writeComment(partnerId, commentDTO, token);
     }
 
-    //show 5 comments to homepage which are filtered by admin ( filter field != null )
+    /**
+     * Show 5 Comments To Homepage Which Are Filtered By Admin ( filter field != null )
+     * 
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN, Role.VIP_PARTNER, Role.STUDENT, Role.NORMAL_PARTNER, Role.OTHER_PARTNER})
     @RequestMapping(value="/showTopComment", method = RequestMethod.GET)
     public List<Comment> showTopComment(){
         return commentService.showTopComment();
     }
 
-    //admin change filter field in order to add comment to homepage
+    /**
+     * Admin Change Filter Field In Order To Add Comment To Homepage
+     *
+     * @param commentId
+     * @param commentDTO
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value="/changeFilterValue/{commentId}", method = RequestMethod.PUT)
     public Comment changeFilterValue(@PathVariable("commentId") int commentId, @RequestBody CommentDTO commentDTO){
         return commentService.changeFilterValue(commentId, commentDTO);
     }
 
-    //check comment
+    /**
+     * Check Comment
+     *
+     * @param studentId
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.ADMIN})
     @RequestMapping(value="/student/{studentId}/checkComment", method = RequestMethod.GET)
     public Comment checkComment(@PathVariable("studentId") int studentId){

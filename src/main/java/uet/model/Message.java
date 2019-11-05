@@ -40,7 +40,6 @@ public class Message {
     private Message message;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
-//    @JsonIgnore
     private List<Message> messages;
 
     @ManyToOne
@@ -48,11 +47,19 @@ public class Message {
     @JsonIgnore
     private User user;
 
-    public Message(){
-
+    public Message()
+    {
+        //
     }
 
-    public Message (String title, String content, String status, String senderName, MessageType messageType, String receiverName){
+    public Message (
+        String title,
+        String content,
+        String status,
+        String senderName,
+        MessageType messageType,
+        String receiverName
+    ) {
         this.content = content;
         this.title = title;
         this.status = status;
@@ -62,124 +69,154 @@ public class Message {
         this.receiverName = receiverName;
     }
 
-    public String getContent() {
+    public String getContent() 
+    {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(String content) 
+    {
         this.content = content;
     }
 
-    public MessageType getMessageType() {
+    public MessageType getMessageType() 
+    {
         return messageType;
     }
 
-    public void setMessageType(MessageType messageType) {
+    public void setMessageType(MessageType messageType) 
+    {
         this.messageType = messageType;
     }
 
-    public String getStatus() {
+    public String getStatus() 
+    {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status) 
+    {
         this.status = status;
     }
 
-    public Message getMessage() {
+    public Message getMessage() 
+    {
         return message;
     }
 
-    public void setMessage(Message message) {
+    public void setMessage(Message message) 
+    {
         this.message = message;
     }
 
-    public List<Message> getMessages() {
+    public List<Message> getMessages() 
+    {
         return messages;
     }
 
-    public void setMessages(List<Message> messages) {
+    public void setMessages(List<Message> messages)
+    {
         this.messages = messages;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public User getUser() {
+    public User getUser()
+    {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(User user)
+    {
         this.user = user;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public String getSenderName() {
+    public String getSenderName()
+    {
         return senderName;
     }
 
-    public void setSenderName(String senderName) {
+    public void setSenderName(String senderName)
+    {
         this.senderName = senderName;
     }
 
-    public Date getSendDate() {
+    public Date getSendDate()
+    {
         return sendDate;
     }
 
-    public void setSendDate(Date sendDate) {
+    public void setSendDate(Date sendDate)
+    {
         this.sendDate = sendDate;
     }
 
-    public String getReceiverName() {
+    public String getReceiverName()
+    {
         return receiverName;
     }
 
-    public void setReceiverName(String receiverName) {
+    public void setReceiverName(String receiverName)
+    {
         this.receiverName = receiverName;
     }
 
-    public String getAttachFileAdd() {
+    public String getAttachFileAdd()
+    {
         return attachFileAdd;
     }
 
-    public void setAttachFileAdd(String attachFileAdd) {
+    public void setAttachFileAdd(String attachFileAdd)
+    {
         this.attachFileAdd = attachFileAdd;
     }
 
-    public String getFileName() {
+    public String getFileName()
+    {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(String fileName)
+    {
         this.fileName = fileName;
     }
 
 
-    public Integer getParentId() {
+    public Integer getParentId()
+    {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Integer parentId)
+    {
         this.parentId = parentId;
     }
 
-    public Date getLastUpdated() {
+    public Date getLastUpdated()
+    {
         return lastUpdated;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(Date lastUpdated)
+    {
         this.lastUpdated = lastUpdated;
     }
 }

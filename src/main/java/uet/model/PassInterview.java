@@ -7,7 +7,6 @@ import javax.persistence.*;
 /**
  * Created by nhkha on 17/05/2017.
  */
-//pass interview không cần thiết, nhưng đã lỡ làm rồi nên lười sửa
 @Entity
 @Table(name = "passInterview")
 public class PassInterview {
@@ -27,7 +26,8 @@ public class PassInterview {
 
     public PassInterview(){}
 
-    public PassInterview(Partner partner, Student student, String comfirmationLink){
+    public PassInterview(Partner partner, Student student, String comfirmationLink)
+    {
         this.partner = partner;
         this.student = student;
         this.comfirmationLink = comfirmationLink;

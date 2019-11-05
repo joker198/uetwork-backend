@@ -23,13 +23,14 @@ public class AnnualActivity {
     private String content;
     private String partnerName;
 
-//    @OneToOne(mappedBy = "annualActivity",cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private CooperateActivity cooperateActivity;
-
     public AnnualActivity (){}
 
-    public AnnualActivity(String activityName, String funding, String date, String content){
+    public AnnualActivity(
+        String activityName,
+        String funding,
+        String date,
+        String content
+    ) {
         this.activityName = activityName;
         this.funding = funding;
         this.date = date;
@@ -75,13 +76,4 @@ public class AnnualActivity {
     public void setContent(String content) {
         this.content = content;
     }
-
-
-//    public String getPartnerName() {
-//        return partnerName;
-//    }
-//
-//    public void setPartnerName(String partnerName) {
-//        this.partnerName = partnerName;
-//    }
 }

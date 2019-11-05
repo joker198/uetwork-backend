@@ -23,20 +23,22 @@ import java.util.UUID;
  */
 @Service
 public class MessageService {
-    final
-    UserRepository userRepository;
-    private final
-    MessageRepository messageRepository;
-    private final
-    StudentRepository studentRepository;
-    private final
-    InternshipService internshipService;
-    private final
-    FollowRepository followRepository;
+    final UserRepository userRepository;
+    private final MessageRepository messageRepository;
+    private final StudentRepository studentRepository;
+    private final InternshipService internshipService;
+    private final FollowRepository followRepository;
     private final InternshipTermRepository internshipTermRepository;
 
     @Autowired
-    public MessageService(UserRepository userRepository, MessageRepository messageRepository, StudentRepository studentRepository, InternshipService internshipService, FollowRepository followRepository, InternshipTermRepository internshipTermRepository) {
+    public MessageService(
+        UserRepository userRepository,
+        MessageRepository messageRepository,
+        StudentRepository studentRepository,
+        InternshipService internshipService,
+        FollowRepository followRepository,
+        InternshipTermRepository internshipTermRepository
+    ) {
         this.userRepository = userRepository;
         this.messageRepository = messageRepository;
         this.studentRepository = studentRepository;
@@ -46,7 +48,8 @@ public class MessageService {
     }
 
 
-    private String attachFileMessage(MessageDTO messageDTO) throws IOException {
+    private String attachFileMessage(MessageDTO messageDTO) throws IOException
+    {
         String fileFolder = UUID.randomUUID().toString();
         String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + messageDTO.getSenderName() + "/report/" +
                 fileFolder + "/";
@@ -55,7 +58,6 @@ public class MessageService {
             directory.mkdir();
         }
         String directoryName = "/users_data/" + messageDTO.getSenderName() + "/report/" + fileFolder + "/";
-//        System.out.print(messageDTO.getAttachFile());
         if(messageDTO.getFileType().equals("doc") || messageDTO.getFileType().equals("docx")){
             String fileName = messageDTO.getFileName();
             byte[] btDataFile = DatatypeConverter.parseBase64Binary(messageDTO.getAttachFile());
@@ -67,17 +69,14 @@ public class MessageService {
         return directoryName + messageDTO.getFileName();
     }
 
-    public void createPassInterviewMessage(List<MessageDTO> listMessageDTO, String token) {
+    public void createPassInterviewMessage(List<MessageDTO> listMessageDTO, String token)
+    {
         User user = userRepository.findByToken(token);
         for (MessageDTO messageDTO : listMessageDTO) {
             if (messageDTO.getMessageType().equals(MessageType.PassInterview)) {
                 if (user.getRole().equals(String.valueOf(Role.ADMIN)) || user.getRole().equals(String.valueOf(Role.VIP_PARTNER))) {
                     Student student = studentRepository.findById(messageDTO.getReceiverId());
-//                    PassInterview passInterview = internshipService.createPassinterviewLink(messageDTO.getReceiverId(),
-//                            messageDTO.getPartnerId());
                     messageDTO.setContent(messageDTO.getContent() + "<br />" +
-//                            "Bạn có thể click vào link sau để lựa chọn nơi" +
-//                            " thực tập: <br />http://128.199.155.163:8000/#/confirmationLink/" + passInterview.getComfirmationLink() + "" +
                             "<br />Kiểm tra danh sách công ty đã đăng ký để chọn nơi thực tập.");
                     Message message = new Message(messageDTO.getTitle(), messageDTO.getContent(), "NEW", user.getUserName(),
                             MessageType.PassInterview, student.getUser().getUserName());
@@ -91,7 +90,6 @@ public class MessageService {
                     } else {
                         follow = followRepository.findByStudentIdAndPostIdAndInternshipTerm(messageDTO.getReceiverId(), messageDTO.getPostId(), internshipTerm.getId());
                     }
-
                     follow.setStatus("PASS");
                     followRepository.save(follow);
                 }
@@ -99,10 +97,10 @@ public class MessageService {
         }
     }
 
-    public void createFailInterview(List<MessageDTO> listMessageDTO, String token) {
+    public void createFailInterview(List<MessageDTO> listMessageDTO, String token)
+    {
         User user = userRepository.findByToken(token);
         for (MessageDTO messageDTO : listMessageDTO) {
-//            if (messageDTO.getMessageType().equals(MessageType.PassInterview)) {
             if (user.getRole().equals(String.valueOf(Role.ADMIN)) || user.getRole().equals(String.valueOf(Role.VIP_PARTNER))) {
                 Student student = studentRepository.findById(messageDTO.getReceiverId());
                 Message message = new Message(messageDTO.getTitle(), messageDTO.getContent(), "NEW", user.getUserName(),
@@ -120,41 +118,12 @@ public class MessageService {
                 follow.setStatus("FAIL");
                 followRepository.save(follow);
             }
-//            }
         }
     }
-//        if(messageDTO.getReceiverRole().equals(Role.STUDENT)){
-//            User user = studentRepository.findById(messageDTO.getReceiverId()).getUser();
-//            if(user != null){
-//                Message message = new Message(messageDTO.getTitle(), messageDTO.getContent(), "NEW",
-//                        messageDTO.getSenderName(), messageDTO.getMessageType(),
-//                        messageDTO.getReceiverRole(), messageDTO.getSenderRole(), messageDTO.getReceiverId(),
-//                        messageDTO.getSenderId());
-//                if(messageDTO.getMessageId() != 0){
-//                    Message message1 = messageRepository.findById(messageDTO.getMessageId());
-//                    if(message1 != null){
-//                        message.setMessage(message1);
-//                        message.setMessageType(MessageType.Reply);
-//                    }
-//                }
-//                else {
-//                    message.setUser(user);
-//                }
 
-//            } else {
-//                throw new NullPointerException("User not found!");
-//            }
-//        } else{
-//            throw new NullPointerException("LOI");
-//        }
-//        User user = userRepository.findById(messageDTO.getUserId());
-
-//    }
-
-
-    public Page<Message> getMessage(String token, Pageable pageable, Date lastUpdated) {
+    public Page<Message> getMessage(String token, Pageable pageable, Date lastUpdated)
+    {
         User user = userRepository.findByToken(token);
-//        Integer last = Integer.valueOf(lastUpdated);
         if(lastUpdated != null){
             return messageRepository.findByUserIdAndMessageTypeNotLikeAndLastUpdatedLessThanOrderByLastUpdatedDesc(user.getId(),
                     MessageType.Reply, lastUpdated, pageable);
@@ -162,18 +131,16 @@ public class MessageService {
             return messageRepository.findByUserIdAndMessageTypeNotLikeOrderByLastUpdatedDesc(user.getId(),
                     MessageType.Reply, pageable);
         }
-//        if(pageable.getPageSize() > messagesNew.getNumberOfElements()){
-//            pageable.set
-//        }
-//        return user.getMessages();
     }
 
-    public List<Message> getNewMessage(String token, Pageable pageable) {
+    public List<Message> getNewMessage(String token, Pageable pageable)
+    {
         User user = userRepository.findByToken(token);
         return messageRepository.findByUserIdAndStatusOrderByIdDesc(user.getId(), "NEW");
     }
 
-    public void markMessageAsSeen(int messageId, String token) {
+    public void markMessageAsSeen(int messageId, String token)
+    {
         User user = userRepository.findByToken(token);
         int userId = user.getId();
         Message message = messageRepository.findByUserIdAndId(userId, messageId);
@@ -185,16 +152,8 @@ public class MessageService {
         }
     }
 
-//    public List<Message> getPassInterviewMessage(String token, MessageType messageType) {
-//        User user = userRepository.findByToken(token);
-//        if (user.getStudent() != null) {
-//            return messageRepository.findByUserIdAndMessageType(user.getId(), messageType);
-//        } else {
-//            throw new NullPointerException("No permission!");
-//        }
-//    }
-
-    public Message writeMessage(MessageDTO messageDTO, String token) throws IOException {
+    public Message writeMessage(MessageDTO messageDTO, String token) throws IOException
+    {
         User user = userRepository.findByToken(token);
         if(user.getUserName().equals(messageDTO.getReceiverName())){
             throw new NullPointerException("Cannot send message to yourself!");
@@ -216,7 +175,6 @@ public class MessageService {
                         } else {
                             if(!message1.getSenderName().equals(user.getUserName())){
                                 Message message2 = messageRepository.findByMessageTypeAndMessageId(MessageType.Inbox, messageDTO.getMessageId());
-//                                if(message2 != null){
                                 message2.setStatus("NEW");
                                 message2.setLastUpdated(new Date());
                                 messageRepository.save(message2);
@@ -268,14 +226,6 @@ public class MessageService {
                         } else {
                             email = user1.getPartner().getEmail();
                         }
-//                        ApplicationContext context =
-//                                new ClassPathXmlApplicationContext("Spring-Mail.xml");
-//                        SendMail mm = (SendMail) context.getBean("sendMail");
-//
-//                        mm.sendMail("carbc@vnu.edu.vn",
-//                                email,
-//                                messageDTO.getTitle(),
-//                                messageDTO.getContent());
                     }
                     return messageRepository.save(message);
                 } else {
@@ -285,7 +235,8 @@ public class MessageService {
         }
     }
 
-    public Message getOneMessage(int messageId, String token) {
+    public Message getOneMessage(int messageId, String token)
+    {
         User user = userRepository.findByToken(token);
         Message message = messageRepository.findById(messageId);
         if (message.getUser().equals(user)) {
@@ -299,7 +250,8 @@ public class MessageService {
         }
     }
 
-    public Message getParentMessage(int messageId, String token) {
+    public Message getParentMessage(int messageId, String token)
+    {
         User user = userRepository.findByToken(token);
         Message message = messageRepository.findById(messageId);
         if (message.getUser().equals(user)) {
@@ -309,18 +261,21 @@ public class MessageService {
         }
     }
 
-    public void createNotificationMessage(MessageDTO messageDTO) {
+    public void createNotificationMessage(MessageDTO messageDTO)
+    {
         Message message = new Message();
         message.setContent(messageDTO.getContent());
         message.setMessageType(MessageType.Notification);
         messageRepository.save(message);
     }
 
-    public List<Message> getNotificationMessage() {
+    public List<Message> getNotificationMessage()
+    {
         return messageRepository.findByMessageType(MessageType.Notification);
     }
 
-    public void deleteNotificationMessage(int messageId) {
+    public void deleteNotificationMessage(int messageId)
+    {
         Message message = messageRepository.findByIdAndMessageType(messageId, MessageType.Notification);
         if (message != null) {
             messageRepository.delete(message);

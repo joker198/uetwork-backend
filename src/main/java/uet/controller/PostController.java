@@ -28,7 +28,13 @@ public class PostController {
         this.postService = postService;
     }
 
-    //show all post with pagination
+    /**
+     * Show All Post With Pagination
+     *
+     * @param request
+     * @param pageable
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN, Role.STUDENT})
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     public Page<Post> getAllPosts(HttpServletRequest request, Pageable pageable) {
@@ -36,7 +42,13 @@ public class PostController {
         return postService.getAllPosts(token, pageable);
     }
 
-    //Show list post of a partner
+    /**
+     * Show List Post Of A Partner
+     *
+     * @param partnerId
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN, Role.STUDENT, Role.VIP_PARTNER})
     @RequestMapping(value = "/partner/{partnerId}/post", method = RequestMethod.GET)
     public List<Post> showAllPost(@PathVariable("partnerId") int partnerId, HttpServletRequest request) {
@@ -44,21 +56,40 @@ public class PostController {
         return postService.showAllPost(partnerId, token);
     }
 
-    // show research post
+    /**
+     * Show Research Post
+     *
+     * @param pageable
+     * @param postType
+     * @return 
+     */
     @RequestMapping(value = "post/postType/{postType}", method = RequestMethod.GET)
     public Page<Post> getResearchPost(Pageable pageable, @PathVariable("postType") PostType postType) {
         return postService.getResearchPost(postType, pageable);
     }
 
 
-    //Show a post
+    /**
+     * Show A Post
+     * 
+     * @param postId
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN, Role.VIP_PARTNER, Role.STUDENT})
     @RequestMapping(value = "/post/{postId}", method = RequestMethod.GET)
     public Post showPost(@PathVariable("postId") int postId) {
         return postService.showPost(postId);
     }
 
-    //Create post
+    /**
+     * Create Post
+     *
+     * @param partnerId
+     * @param postDTO
+     * @param request
+     * @return
+     * @throws Exception 
+     */
     @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER, Role.ADMIN})
     @RequestMapping(value = "/partner/{partnerId}/post", method = RequestMethod.POST)
     public Post createPost(@PathVariable("partnerId") int partnerId, @RequestBody PostDTO postDTO, HttpServletRequest request) throws Exception {
@@ -66,15 +97,15 @@ public class PostController {
         return postService.createPost(partnerId, postDTO, token);
     }
 
-    //upload image for post
-//    @RequiredRoles({Role.VIP_PARTNER})
-//    @RequestMapping(value="/partner/{partnerId}/post/image",method = RequestMethod.POST)
-//    public Post uploadImage(@PathVariable("partnerId") int partnerId , @RequestBody PostDTO postDTO, HttpServletRequest request) throws IOException {
-//        String token = request.getHeader("auth-token");
-//        return postService.uploadImage(partnerId, postDTO, token);
-//    }
-
-    //Edit post
+    /**
+     * Edit Post
+     *
+     * @param postId
+     * @param postDTO
+     * @param request
+     * @return
+     * @throws IOException 
+     */
     @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER, Role.ADMIN})
     @RequestMapping(value = "/post/{postId}", method = RequestMethod.PUT)
     public Post editPost(@PathVariable("postId") int postId, @RequestBody PostDTO postDTO, HttpServletRequest request) throws IOException {
@@ -82,7 +113,12 @@ public class PostController {
         return postService.editPost(postId, postDTO, token);
     }
 
-    //Delete post
+    /**
+     * Delete Post
+     *
+     * @param postId
+     * @param request 
+     */
     @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER, Role.ADMIN})
     @RequestMapping(value = "/post/{postId}", method = RequestMethod.DELETE)
     public void deletePost(@PathVariable("postId") int postId, HttpServletRequest request) {
@@ -90,29 +126,36 @@ public class PostController {
         postService.deletePost(postId, token);
     }
 
-    //    //change post status
+    /**
+     * Change Post Status
+     *
+     * @param postId
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "post/{postId}/status", method = RequestMethod.PUT)
     public Post changeStatus(@PathVariable("postId") int postId) {
         return postService.changeStatus(postId);
     }
 
-    // get all tag
+    /**
+     * Get All Tag
+     *
+     * @return 
+     */
     @RequestMapping(value = "hashtag")
     public List<Hashtag> getAllHashtags() {
         return postService.getAllHashtags();
     }
 
-    //get post by internship term
+    /**
+     * Get Post By Internship Term
+     *
+     * @param internshipTermId
+     * @return 
+     */
     @RequestMapping(value = "post/internshipTerm/{internshipTermId}", method = RequestMethod.GET)
     public List<Post> getAllPostByInternshipTerm(@PathVariable("internshipTermId") int internshipTermId) {
         return postService.getAllPostByInternshipTerm(internshipTermId);
     }
-
-    //change postType
-//    @RequiredRoles(Role.ADMIN)
-//    @RequestMapping(value = "post/changePostType/postType", method = RequestMethod.GET)
-//    public void changePostType(){
-//        postService.changePostType();
-//    }
 }

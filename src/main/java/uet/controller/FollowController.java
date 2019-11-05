@@ -8,7 +8,6 @@ import uet.model.Follow;
 import uet.model.Role;
 import uet.service.FollowService;
 import uet.stereotype.RequiredRoles;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -26,35 +25,60 @@ public class FollowController {
         this.followService = followService;
     }
 
-    //show all follow
+    /**
+     * Show All Follow
+     *
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "follows", method = RequestMethod.GET)
     public List<Follow> getAllFollow(){
         return followService.getAllFollow();
     }
 
-    // show all wait interview follow
+    /**
+     * Show All Wait Interview Follow
+     *
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "follow/waitInterview", method = RequestMethod.GET)
     public List<Follow> getWaitInterviewFollow(){
         return followService.getWaitInterviewFollow();
     }
 
-    //show all follow of partner
+    /**
+     * Show All Follow Of Partner
+     *
+     * @param partnerId
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN, Role.VIP_PARTNER})
     @RequestMapping(value = "/follow/partner/{partnerId}", method = RequestMethod.GET)
     public List<Follow> getAllFollowBypartner(@PathVariable("partnerId") int partnerId){
         return followService.getAllFollowBypartner(partnerId);
     }
 
-//    getAllFollowByInternshipTerm
-@RequiredRoles(Role.ADMIN)
-@RequestMapping(value = "follow/internshipTerm", method = RequestMethod.GET)
-public List<Follow> getAllFollowByInternshipTerm() throws Exception {
-    return followService.getAllFollowByInternshipTerm();
-}
+    /**
+     * Get All Follow By Internship Term
+     *
+     * @return
+     * @throws Exception 
+     */
+    @RequiredRoles(Role.ADMIN)
+    @RequestMapping(value = "follow/internshipTerm", method = RequestMethod.GET)
+    public List<Follow> getAllFollowByInternshipTerm() throws Exception {
+        return followService.getAllFollowByInternshipTerm();
+    }
 
-    // show all follows of student
+    /**
+     * Show All Follows Of Student
+     *
+     * @param studentId
+     * @param request
+     * @return
+     * @throws Exception 
+     */
     @RequiredRoles({Role.STUDENT, Role.ADMIN})
     @RequestMapping(value="student/{studentId}/follow",method = RequestMethod.GET)
     public List<Follow> showAllFollowsOfStudent(@PathVariable("studentId") int studentId, HttpServletRequest request) throws Exception {
@@ -62,7 +86,13 @@ public List<Follow> getAllFollowByInternshipTerm() throws Exception {
         return followService.showAllFollowsOfStudent(studentId, token);
     }
 
-    // show all follows of post
+    /**
+     * Show All Follows Of Post
+     *
+     * @param postId
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.VIP_PARTNER,Role.ADMIN})
     @RequestMapping(value="post/{postId}/follow",method = RequestMethod.GET)
     public List<Follow> showAllFollowsOfPost(@PathVariable("postId") int postId, HttpServletRequest request){
@@ -70,7 +100,14 @@ public List<Follow> getAllFollowByInternshipTerm() throws Exception {
         return followService.showAllFollowsOfPost(postId, token);
     }
 
-    //check follow
+    /**
+     * Check Follow
+     *
+     * @param postId
+     * @param request
+     * @param followDTO
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.VIP_PARTNER})
     @RequestMapping(value="/post/{postId}/checkFollow",method = RequestMethod.PUT)
     public FollowDTO checkFollow(@PathVariable("postId") int postId, HttpServletRequest request, @RequestBody FollowDTO followDTO){
@@ -78,7 +115,14 @@ public List<Follow> getAllFollowByInternshipTerm() throws Exception {
         return followService.checkFollow(token, followDTO);
     }
 
-    //follow a post
+    /**
+     * Follow A Post
+     *
+     * @param postId
+     * @param followDTO
+     * @param request
+     * @throws Exception 
+     */
     @RequiredRoles({Role.STUDENT})
     @RequestMapping(value="/post/{postId}/follow",method = RequestMethod.PUT)
     public void createFollow(@PathVariable("postId") int postId, @RequestBody FollowDTO followDTO, HttpServletRequest request) throws Exception {
@@ -86,6 +130,14 @@ public List<Follow> getAllFollowByInternshipTerm() throws Exception {
         followService.createFollow(postId , token, followDTO);
     }
 
+    /**
+     * Create Follow
+     *
+     * @param partnerId
+     * @param emailVNU
+     * @param request
+     * @throws Exception 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value="/partner/{partnerId}/follownew",method = RequestMethod.POST)
     public void createFollowNew(@PathVariable("partnerId") int partnerId, @RequestBody String emailVNU, HttpServletRequest request) throws Exception {
@@ -93,7 +145,13 @@ public List<Follow> getAllFollowByInternshipTerm() throws Exception {
         followService.createFollowNew(partnerId , emailVNU, token);
     }
 
-//    follow nckh
+    /**
+     * Follow nckh
+     *
+     * @param lecturersId
+     * @param request
+     * @throws Exception 
+     */
     @RequiredRoles(Role.STUDENT)
     @RequestMapping(value = "follow/research/{lecturersId}", method = RequestMethod.PUT)
     public void followResearch(@PathVariable("lecturersId") int lecturersId, HttpServletRequest request) throws Exception {
@@ -101,7 +159,13 @@ public List<Follow> getAllFollowByInternshipTerm() throws Exception {
         followService.followResearch(lecturersId, token);
     }
 
-    //Add follow by students
+    /**
+     * Add Follow By Students
+     *
+     * @param followDTO
+     * @param request
+     * @throws Exception 
+     */
     @RequiredRoles(Role.STUDENT)
     @RequestMapping(value = "/addFollowByStudent", method = RequestMethod.POST)
     public void addFollowByStudent(@RequestBody FollowDTO followDTO, HttpServletRequest request) throws Exception {
@@ -109,29 +173,35 @@ public List<Follow> getAllFollowByInternshipTerm() throws Exception {
         followService.addFollowByStudent(followDTO, token);
     }
 
-    //unfollow
+    /**
+     * Unfollow
+     *
+     * @param postId
+     * @param request
+     * @param followDTO 
+     */
     @RequestMapping(value="/post/{postId}/student/unfollow", method = RequestMethod.DELETE)
     @RequiredRoles({Role.STUDENT,Role.ADMIN})
     public void deleteJs(@PathVariable("postId") int postId, HttpServletRequest request, @RequestBody FollowDTO followDTO){
         String token = request.getHeader("auth-token");
-        followService.unfollow(postId,token, followDTO);
+        followService.unfollow(postId, token, followDTO);
     }
 
-    //change post tittle trong follow thanh post type
+    /**
+     * Change Post Tittle trong follow thanh post type
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "change/follow/postType", method = RequestMethod.GET)
     public void changeFollow(){
         followService.changeFollow();
     }
 
-    //send mail thuc tap ngoai
+    /**
+     * Send Mail Recruitment Other (Out side partner list)
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "recruitment/sendmail", method = RequestMethod.PUT)
     public void sendMailRecruitmentOther(){
         followService.sendMailRecruitmentOther();
     }
-
-    //get follow cty ngoai cua 1 sinh vien
-
-//    @RequestMapping(value = "")
 }

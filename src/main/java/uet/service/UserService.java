@@ -26,27 +26,30 @@ import java.util.*;
  * Created by Tu on 02-May-16.
  */
 @Service
-public class UserService {
-    private final
-    StudentRepository studentRepository;
+public class UserService
+{
+    private final StudentRepository studentRepository;
     private final UserRepository userRepository;
-    private final
-    InfoBySchoolRepository infoBySchoolRepository;
-    private final
-    PartnerRepository partnerRepository;
-    private final
-    LecturersRepository lecturersRepository;
+    private final InfoBySchoolRepository infoBySchoolRepository;
+    private final PartnerRepository partnerRepository;
+    private final LecturersRepository lecturersRepository;
     private final UnitNameRepository unitNameRepository;
     private final ActivityLogRepository activityLogRepository;
     private final PartnerType partnerType;
     private final NationRepository nationRepository;
 
     @Autowired
-
-    public UserService(StudentRepository studentRepository, UserRepository userRepository,
-                       InfoBySchoolRepository infoBySchoolRepository, PartnerRepository partnerRepository,
-                       LecturersRepository lecturersRepository, UnitNameRepository unitNameRepository,
-                       ActivityLogRepository activityLogRepository, PartnerType partnerType, NationRepository nationRepository) {
+    public UserService (
+        StudentRepository studentRepository,
+        UserRepository userRepository,
+        InfoBySchoolRepository infoBySchoolRepository,
+        PartnerRepository partnerRepository,
+        LecturersRepository lecturersRepository,
+        UnitNameRepository unitNameRepository,
+        ActivityLogRepository activityLogRepository,
+        PartnerType partnerType,
+        NationRepository nationRepository
+    ) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         this.infoBySchoolRepository = infoBySchoolRepository;
@@ -58,23 +61,25 @@ public class UserService {
         this.nationRepository = nationRepository;
     }
 
-    public void createFolder() {
+    public void createFolder()
+    {
         List<User> userList = (List<User>) userRepository.findAll();
         for(User user : userList){
-                String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + user.getUserName() + "/";
-                File directory = new File(pathname);
-                if (!directory.exists()) {
-                    directory.mkdir();
-                }
-                pathname = GlobalConfig.sourceAddress + "/app/users_data/" + user.getUserName() + "/report";
-                directory = new File(pathname);
-                if (!directory.exists()) {
-                    directory.mkdir();
-                }
+            String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + user.getUserName() + "/";
+            File directory = new File(pathname);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            pathname = GlobalConfig.sourceAddress + "/app/users_data/" + user.getUserName() + "/report";
+            directory = new File(pathname);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
         }
     }
 
-    public List<User> findUserByUserNameContaining(String userName) throws Exception {
+    public List<User> findUserByUserNameContaining(String userName) throws Exception
+    {
         if(userName != null){
             return userRepository.findByUserNameContaining(userName);
         } else {
@@ -83,24 +88,19 @@ public class UserService {
     }
 
 
-    public class ErrorMessage extends Exception {
-
+    public class ErrorMessage extends Exception
+    {
         public ErrorMessage(String message) {
             super(message);
         }
-
     }
 
-
-    public static boolean isInteger(String str) {
-        if (str == null) {
+    public static boolean isInteger(String str)
+    {
+        if (str == null || str.length() == 0) {
             return false;
         }
-        int length = str.length();
-        if (length == 0) {
-            return false;
-        }
-        int i = 0;
+        int length = str.length(), i = 0;
         if (str.charAt(0) == '-') {
             if (length == 1) {
                 return false;
@@ -116,7 +116,8 @@ public class UserService {
         return true;
     }
 
-    private Map<String, Object> login(UserDTO userDTO, User user) throws Exception {
+    private Map<String, Object> login(UserDTO userDTO, User user) throws Exception
+    {
         if (userDTO.getPassword().equals(user.getPassword())) {
             if (user.getToken() == null) {
                 user.setToken(UUID.randomUUID().toString());
@@ -149,25 +150,19 @@ public class UserService {
         }
     }
 
-    //Show all user
-    public Page<User> getUsers(Pageable pageable) {
+    public Page<User> getUsers(Pageable pageable)
+    {
         return userRepository.findAllByOrderByIdDesc(pageable);
-//        return userRepository.findAll();
     }
 
-    //signup
-    public void createUser(UserDTO userDTO) throws NoSuchAlgorithmException, ErrorMessage {
+    public void createUser(UserDTO userDTO) throws NoSuchAlgorithmException, ErrorMessage
+    {
         if (userDTO.getFullName() != null) {
             if (userDTO.getEmailvnu() != null) {
                 if (userDTO.getEmailvnu().contains("@vnu.edu.vn")) {
                     String userName = userDTO.getEmailvnu().replace("@vnu.edu.vn", "");
-//                    if (isInteger(studentCode)) {
                     InfoBySchool infoBySchool1 = infoBySchoolRepository.findByEmailvnu(userDTO.getEmailvnu());
                     if (infoBySchool1 == null) {
-//                                    studentCode = Integer.valueOf(studentCode);
-
-
-//                            String userName = userDTO.getUserName();
                         String vnuEmail = userDTO.getEmailvnu();
                         String[] parts = UUID.randomUUID().toString().split("-");
                         String password = parts[0];
@@ -185,7 +180,6 @@ public class UserService {
                         user.setStudent(student);
                         student.setUser(user);
                         student.setFullName(userDTO.getFullName());
-                        //create InfoByschool
                         InfoBySchool infoBySchool = new InfoBySchool();
                         infoBySchool.setStudentName(userDTO.getFullName());
                         if (isInteger(userName)) {
@@ -220,7 +214,6 @@ public class UserService {
                         throw new ErrorMessage("email existed!");
                     }
 
-
                 } else {
                     throw new ErrorMessage("Wrong vnu email!");
                 }
@@ -230,15 +223,10 @@ public class UserService {
         } else {
             throw new ErrorMessage("Missing information!");
         }
-//            } else {
-//                throw new NullPointerException("Username not match.");
-//            }
-
     }
 
-
-    //createAccount
-    public User createAccount(UserDTO userDTO) {
+    public User createAccount(UserDTO userDTO)
+    {
         User user1 = userRepository.findByUserName(userDTO.getUserName());
         if (user1 == null) {
             if (userDTO.getUserName() != null && userDTO.getPassword() != null && userDTO.getRole() != null) {
@@ -284,8 +272,6 @@ public class UserService {
                     userRepository.save(user);
                 }
                 if (user.getRole().equals(String.valueOf(Role.LECTURERS))) {
-//                    Faculty faculty = facultyRepository.findById(userDTO.getFacultyId());
-//                    if(faculty != null){
                     Lecturers lecturers = new Lecturers(null);
                     user.setLecturers(lecturers);
                     lecturers.setUser(user);
@@ -294,15 +280,11 @@ public class UserService {
                     lecturers.setFullName(userDTO.getFullName());
                     lecturers.setSubject(userDTO.getSubject());
                     lecturersRepository.save(lecturers);
-//                    } else {
-//                        throw new NullPointerException("Faculty not found!");
-//                    }
                 }
                 if (user.getRole().equals(String.valueOf(Role.STUDENT))) {
                     Student student = new Student();
                     user.setStudent(student);
                     student.setUser(user);
-                    //create InfoByschool
                     InfoBySchool infoBySchool = new InfoBySchool();
                     student.setInfoBySchool(infoBySchool);
                     infoBySchool.setStudent(student);
@@ -320,8 +302,8 @@ public class UserService {
         }
     }
 
-    //login
-    public Map<String, Object> Login(UserDTO userDTO) throws Exception {
+    public Map<String, Object> Login(UserDTO userDTO) throws Exception
+    {
         User user = userRepository.findByUserName(userDTO.getUserName());
         if (user != null) {
             Map<String, Object> user1 = new HashMap<>();
@@ -330,23 +312,10 @@ public class UserService {
             } else if (user.getStatus().equals("A")) {
                 user1 = this.login(userDTO, user);
                 user1.put("id", String.valueOf(user.getId()));
-//                user1.put("role", String.valueOf(user.getRole()));
-//                user1.put("token", user.getToken());
-//                user1.put("userName", user.getUserName());
-//            user1.put("expiryTime")
                 if (user.getRole().equals(String.valueOf(Role.VIP_PARTNER)) || user.getRole().equals(String.valueOf(Role.NORMAL_PARTNER))) {
                     user1.put("partnerId", String.valueOf(user.getPartner().getId()));
                 } else if (user.getRole().equals(String.valueOf(Role.STUDENT))) {
                     user1.put("studentId", String.valueOf(user.getStudent().getId()));
-//                    Internship internship = user.getStudent().getInternship();
-//                    if (internship != null) {
-//                        user1.put("internId", String.valueOf(internship.getId()));
-////                    if (internship.getLecturers() != null) {
-////                        user1.put("lecturersName", internship.getLecturers().getFullName());
-////                        user1.put("lecturersId", String.valueOf(internship.getLecturers().getUser().getId()));
-////                    }
-//                    }
-//                user1.put("studentInfoId", String.valueOf(user.getStudent().getId()));
                     user1.put("infoBySchoolId", String.valueOf(user.getStudent().getInfoBySchool().getId()));
                 }
             } else if (userDTO.getStatus().equals("D")) {
@@ -358,8 +327,8 @@ public class UserService {
         }
     }
 
-    //admin login
-    public Map<String, Object> adminLogin(UserDTO userDTO) throws Exception {
+    public Map<String, Object> adminLogin(UserDTO userDTO) throws Exception
+    {
         User user = userRepository.findByUserNameAndPassword(userDTO.getUserName(), userDTO.getPassword());
         if(user != null){
             if (user.getRole().equals(String.valueOf(Role.ADMIN)) || user.getRole().equals(String.valueOf(Role.LECTURERS))
@@ -367,18 +336,11 @@ public class UserService {
                     || user.getRole().equals(String.valueOf(Role.ADMIN_VNU))) {
                 return this.login(userDTO, user);
             } else {
-//                try {
-//                    Files.write(Paths.get("log-login-admin.txt"), "the text".getBytes(), StandardOpenOption.APPEND);
-//                }catch (IOException e) {
-//                    //exception handling left as an exercise for the reader
-//                    throw new Exception("No permission");
-//                }
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HH:mm:ss").format(Calendar.getInstance().getTime());
                 try (Writer fileWriter = new FileWriter("log-login-admin.txt", true)){
                     fileWriter.write("\r\n" + timeStamp + " username: " + userDTO.getUserName() + " | pass: " + userDTO.getPassword());
                 } catch (IOException e) {
                     System.out.println("Problem occurs when deleting the directory : " + "log-login-admin.txt");
-                    e.printStackTrace();
                 }
                 throw new Exception("No permission");
             }
@@ -388,22 +350,21 @@ public class UserService {
                 fileWriter.write("\r\n" + timeStamp + " username: " + userDTO.getUserName() + " | pass: " + userDTO.getPassword());
             } catch (IOException e) {
                 System.out.println("Problem occurs when deleting the directory : " + "log-login-admin.txt");
-                e.printStackTrace();
             }
             throw new Exception("Username not found");
         }
     }
 
-    //logout
-    public User Logout(String token) {
+    public User Logout(String token)
+    {
         User user = userRepository.findByToken(token);
         user.setToken(null);
         user.setExpiryTime(null);
         return userRepository.save(user);
     }
 
-    //editUser
-    public User editUser(int id, UserDTO userDTO, String token) {
+    public User editUser(int id, UserDTO userDTO, String token)
+    {
         User user = userRepository.findOne(id);
         if (user.getToken().equals(token)) {
             if (user.getRole().equals(String.valueOf(Role.ADMIN)) || user.getRole().equals(String.valueOf(Role.STUDENT))) {
@@ -415,8 +376,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    //activate/deactivate
-    public User changeUserStatus(int id) {
+    public User changeUserStatus(int id)
+    {
         User user = userRepository.findOne(id);
         if (user.getStatus().equals("A")) {
             user.setStatus("D");
@@ -431,16 +392,12 @@ public class UserService {
         userRepository.delete(id);
     }
 
-    //create multi students
-    public List<CreateStudentDTO> createStudent(List<CreateStudentDTO> List) throws NoSuchAlgorithmException {
+    public List<CreateStudentDTO> createStudent(List<CreateStudentDTO> List) throws NoSuchAlgorithmException
+    {
         for (CreateStudentDTO createStudentDTO : List) {
-            //check if user existed
             String emailvnu = createStudentDTO.getEmailvnu();
-//            int studentCode = createStudentDTO.getStudentCode();
             User checkIfExisted = userRepository.findByUserName(emailvnu);
             if (checkIfExisted == null) {
-//                InfoBySchool checkInfoBySchool = infoBySchoolRepository.findByStudentCode(createStudentDTO.getStudentCode());
-//                if (checkInfoBySchool == null) {
                 String password = String.valueOf(createStudentDTO.getStudentCode());
                 MessageDigest md = MessageDigest.getInstance("MD5");
                 md.update(password.getBytes());
@@ -472,23 +429,15 @@ public class UserService {
                 infoBySchool.setStudent(student);
                 infoBySchoolRepository.save(infoBySchool);
                 userRepository.save(user);
-//              });
-//                } else {
-//                    createStudentDTO.setStatus("studentCodeExisted");
-//                }
             } else {
                 createStudentDTO.setStatus("userNameExisted");
-//                AdminNotification adminNotification = new AdminNotification();
-//                adminNotification.setIssue("User existed: ");
-//                adminNotification.setUserName(emailvnu);
-//                adminNotification.setStatus("NEW");
-//                adminNotificationRepository.save(adminNotification);
             }
         }
         return List;
     }
 
-    public User changePassword(ChangePasswordDTO changePasswordDTO, String token) throws Exception {
+    public User changePassword(ChangePasswordDTO changePasswordDTO, String token) throws Exception
+    {
         User user = userRepository.findByToken(token);
         if(user.getRole().equals(String.valueOf(Role.ADMIN))){
             User user1 = userRepository.findById(changePasswordDTO.getUserId());
@@ -506,12 +455,11 @@ public class UserService {
                 throw new Exception("Old password is not equal!");
             }
         }
-
-
     }
 
     //create multi lecturers
-    public List<UserDTO> createLecturers(List<UserDTO> list) throws NoSuchAlgorithmException {
+    public List<UserDTO> createLecturers(List<UserDTO> list) throws NoSuchAlgorithmException
+    {
         for (UserDTO userDTO : list) {
             User user = userRepository.findByUserName(userDTO.getUserName());
             if (user == null) {
@@ -542,11 +490,11 @@ public class UserService {
         return list;
     }
 
-    public void deleteLoop(InfoBySchoolDTO infoBySchoolDTO) {
+    public void deleteLoop(InfoBySchoolDTO infoBySchoolDTO)
+    {
         InfoBySchool infoBySchool = infoBySchoolRepository.findTopByStudentCodeOrderByIdAsc(infoBySchoolDTO.getStudentCode());
         if (infoBySchool != null) {
             List<InfoBySchool> infoBySchoolList = infoBySchoolRepository.findByStudentCodeAndIdGreaterThan(infoBySchoolDTO.getStudentCode(), infoBySchool.getId());
-//            return  infoBySchoolList;
             for (InfoBySchool infoBySchool1 : infoBySchoolList) {
                 userRepository.delete(infoBySchool1.getStudent().getUser());
             }
@@ -555,7 +503,8 @@ public class UserService {
         }
     }
 
-    public void resetPass(InfoBySchoolDTO infoBySchoolDTO) throws NoSuchAlgorithmException, ErrorMessage {
+    public void resetPass(InfoBySchoolDTO infoBySchoolDTO) throws NoSuchAlgorithmException, ErrorMessage
+    {
         InfoBySchool infoBySchool = infoBySchoolRepository.findByEmailvnu(infoBySchoolDTO.getEmailVNU());
         if (infoBySchool != null) {
             String[] parts = UUID.randomUUID().toString().split("-");
@@ -570,19 +519,17 @@ public class UserService {
             ApplicationContext context =
                     new ClassPathXmlApplicationContext("Spring-Mail.xml");
             SendMail mm = (SendMail) context.getBean("sendMail");
-            mm.sendMail("carbc@vnu.edu.vn",
-                    infoBySchoolDTO.getEmailVNU(),
-                    "Mat khau he thong dang ki thuc tap",
-                    "" +
-                            "Tai khoan cua ban la: Username: " + user.getUserName() + ", Password: " + password);
-
+            mm.sendMail("carbc@vnu.edu.vn", infoBySchoolDTO.getEmailVNU(),
+                    "Mat khau he thong dang ki thuc tap", "Tai khoan cua ban la: Username: "
+                    + user.getUserName() + ", Password: " + password);
             userRepository.save(user);
         } else {
             throw new ErrorMessage("Email not found!");
         }
     }
 
-    public void changePassAndSendMail(int startId) throws NoSuchAlgorithmException {
+    public void changePassAndSendMail(int startId) throws NoSuchAlgorithmException
+    {
         List<User> userList = userRepository.findByIdGreaterThanAndRole(startId, String.valueOf(Role.STUDENT));
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("Spring-Mail.xml");
@@ -606,8 +553,9 @@ public class UserService {
         }
     }
 
-    public void createUnitAccount(UserDTO userDTO, int unitNameId, String token) throws Exception {
-        if(userDTO.getPassword() != null && userDTO.getUserName() != null){
+    public void createUnitAccount(UserDTO userDTO, int unitNameId, String token) throws Exception
+    {
+        if(userDTO.getPassword() != null && userDTO.getUserName() != null) {
             UnitName unitName = unitNameRepository.findById(unitNameId);
             if(unitName != null){
                 User user1 = userRepository.findByUserName(userDTO.getUserName());
@@ -634,8 +582,6 @@ public class UserService {
                 } else{
                     throw new Exception("Tên tài khoản đã tồn tại!");
                 }
-
-//                userRepository.save(user);
             } else {
                 throw new NullPointerException("Không tìm thấy đơn vị cần tạo tài khoản!");
             }
@@ -644,11 +590,13 @@ public class UserService {
         }
     }
 
-    public List<ActivityLog> getAllActiviYyLog() {
+    public List<ActivityLog> getAllActiviYyLog()
+    {
         return activityLogRepository.findAll();
     }
 
-    public List<ActivityLog> getActivityLogOfUser(int userId) {
+    public List<ActivityLog> getActivityLogOfUser(int userId)
+    {
         User user = userRepository.findById(userId);
         if (user != null){
             return user.getActivityLog();
@@ -656,26 +604,4 @@ public class UserService {
             throw new NullPointerException("Không tìm thấy user!");
         }
     }
-
-//    str= str.toLowerCase();
-//    str= str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
-//    str= str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
-//    str= str.replace(/ì|í|ị|ỉ|ĩ/g,"i");
-//    str= str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
-//    str= str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
-//    str= str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
-//    str= str.replace(/đ/g,"d");
-//    str.replaceAll("[a-zA-Z]
-//   return str;
-
-//    public String locDau(String str){
-//        str = str.toLowerCase();
-//        str.replaceAll("[àáạảãâầấậẩẫăằắặẳẵ]", "");
-//    }
-
-//    public User changeUserName(int userId){
-//        User user = userRepository.findById(userId);
-//        String fullName = user.getStudent().getFullName();
-//
-//    }
 }

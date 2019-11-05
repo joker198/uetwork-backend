@@ -14,13 +14,10 @@ import java.util.List;
  * Created by nhkha on 26/03/2017.
  */
 @Service
-public class UnitService {
-    private final
-    UnitNameRepository unitNameRepository;
-
-    private final
-    ContractRepository contractRepository;
-
+public class UnitService
+{
+    private final UnitNameRepository unitNameRepository;
+    private final ContractRepository contractRepository;
     private final UserRepository userRepository;
     private final RolesAndSigningLevelRepository rolesAndSigningLevelRepository;
     private final ContractShareRepository contractShareRepository;
@@ -28,7 +25,15 @@ public class UnitService {
     private final ActivityLogRepository activityLogRepository;
 
     @Autowired
-    public UnitService(UnitNameRepository unitNameRepository, ContractRepository contractRepository, UserRepository userRepository, RolesAndSigningLevelRepository rolesAndSigningLevelRepository, ContractShareRepository contractShareRepository, UetManRepository uetManRepository, ActivityLogRepository activityLogRepository) {
+    public UnitService(
+        UnitNameRepository unitNameRepository,
+        ContractRepository contractRepository,
+        UserRepository userRepository,
+        RolesAndSigningLevelRepository rolesAndSigningLevelRepository,
+        ContractShareRepository contractShareRepository,
+        UetManRepository uetManRepository,
+        ActivityLogRepository activityLogRepository
+    ) {
         this.unitNameRepository = unitNameRepository;
         this.contractRepository = contractRepository;
         this.userRepository = userRepository;
@@ -38,12 +43,12 @@ public class UnitService {
         this.activityLogRepository = activityLogRepository;
     }
 
-    public UnitName createUnit(UnitNameDTO unitNameDTO, String token) {
+    public UnitName createUnit(UnitNameDTO unitNameDTO, String token)
+    {
         if(unitNameDTO.getUnitName() != null && unitNameDTO.getAbbreviation() != null){
             User user = userRepository.findByToken(token);
             RolesAndSigningLevel rolesAndSigningLevel = user.getRolesAndSigningLevel();
             if(user.getRole().equals(String.valueOf(Role.ADMIN_UNIT))){
-//!rolesAndSigningLevel.getChild().isEmpty()
                 Boolean checkUnitName = true;
                 for(RolesAndSigningLevel rolesAndSigningLevel1 : rolesAndSigningLevel.getChild()){
                     if(unitNameDTO.getUnitName().equals(rolesAndSigningLevel1.getUnitName().getUnitName())){
@@ -66,21 +71,19 @@ public class UnitService {
                     rolesAndSigningLevelRepository.save(rolesAndSigningLevel1);
                     unitName.setRolesAndSigningLevel(rolesAndSigningLevel1);
                     return unitNameRepository.save(unitName);
-//                    return user.getRolesAndSigningLevel();
                 } else {
                     throw new NullPointerException("Đơn vị này đã tồn tại!");
                 }
-
             } else {
                 throw new NullPointerException("Có lỗi xảy ra khi tạo đơn vị!");
             }
         } else {
             throw new NullPointerException("Có lỗi xảy ra khi tạo đơn vị!");
         }
-
     }
 
-    public void editUnit(UnitNameDTO unitNameDTO){
+    public void editUnit(UnitNameDTO unitNameDTO)
+    {
         UnitName unit = unitNameRepository.findOne(unitNameDTO.getId());
         if (unit != null){
             if (unitNameDTO.getUnitName() != null){
@@ -95,11 +98,11 @@ public class UnitService {
         }
     }
 
-    public void deleteUnit(int unitId) throws Exception {
+    public void deleteUnit(int unitId) throws Exception
+    {
         UnitName unitName = unitNameRepository.findById(unitId);
         if (unitName != null){
             if (!contractShareRepository.findByUnitNameId(unitId).isEmpty()){
-//                return contractRepository.findByUnitNameId(unitId);
                 throw new Exception("Không thể xóa đơn vị, đơn vị này đang theo dõi 1 số hoạt động hợp tác!");
             } else {
                 System.out.print("\n\n\n");
@@ -118,19 +121,19 @@ public class UnitService {
                 if(unitName.getRolesAndSigningLevel() != null){
                     rolesAndSigningLevelRepository.delete(unitName.getRolesAndSigningLevel());
                 }
-//                unitNameRepository.delete(unitName);
             }
-        }
-        else {
+        } else {
             throw new NullPointerException("Không tồn tại đơn vị này!");
         }
     }
 
-    public List<UnitName> getAll() {
+    public List<UnitName> getAll()
+    {
         return (List<UnitName>) unitNameRepository.findAll();
     }
 
-    public List<UnitName> getUnitNameByRolesAndSigningLevel(String token){
+    public List<UnitName> getUnitNameByRolesAndSigningLevel(String token)
+    {
         User user = userRepository.findByToken(token);
         if(user != null){
             int rolesAndSigningLevel = 0;
@@ -146,8 +149,8 @@ public class UnitService {
                 roles = user.getUnitName().getRoles();
             }
             return unitNameRepository.findByRoles(roles);
-        } else
+        } else {
             throw new HTTPException(500);
+        }
     }
-    //create
 }

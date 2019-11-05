@@ -17,21 +17,20 @@ import java.util.List;
  * Created by nhkha on 27/03/2017.
  */
 @Service
-public class UetManService {
-    private final
-    UetManRepository uetManRepository;
-
-    private final
-    ContractRepository contractRepository;
-
-    private final
-    UserRepository userRepository;
-
-    private final
-    ActivityLogRepository activityLogRepository;
+public class UetManService
+{
+    private final UetManRepository uetManRepository;
+    private final ContractRepository contractRepository;
+    private final UserRepository userRepository;
+    private final ActivityLogRepository activityLogRepository;
 
     @Autowired
-    public UetManService(UetManRepository uetManRepository, ContractRepository contractRepository, UserRepository userRepository, ActivityLogRepository activityLogRepository) {
+    public UetManService(
+        UetManRepository uetManRepository,
+        ContractRepository contractRepository,
+        UserRepository userRepository,
+        ActivityLogRepository activityLogRepository
+    ) {
         this.uetManRepository = uetManRepository;
         this.contractRepository = contractRepository;
         this.userRepository = userRepository;
@@ -49,7 +48,6 @@ public class UetManService {
                 rolesSigningLevelId = rolesAndSigningLevel.getId();
             }
         } else if(user.getUnitName().getRolesAndSigningLevel() != null){
-//            uetMan1.setRolesAndSigningLevel(user.getUnitName().getRolesAndSigningLevel().getParent_id());
             rolesSigningLevelId = user.getUnitName().getRolesAndSigningLevel().getParent_id().getId();
         }
         UetMan uetMan = uetManRepository.findByUetManNameAndRolesSigningLevelId(uetManDTO.getUetManName(), rolesSigningLevelId);
@@ -61,7 +59,6 @@ public class UetManService {
                     uetManDTO.setAbout(" ");
                 }
                 uetMan1.setAbout(uetManDTO.getAbout());
-//                RolesAndSigningLevel rolesAndSigningLevel = user.getRolesAndSigningLevel();
                 if(rolesAndSigningLevel != null){
                     if(rolesAndSigningLevel.getName().equals("VNU")){
                         uetMan1.setRolesAndSigningLevel(rolesAndSigningLevel);
@@ -84,13 +81,13 @@ public class UetManService {
             } else {
                 throw new NullPointerException("Tên Người ký (VNU-UET) trống");
             }
-
         } else {
             throw new NullPointerException("Người ký (VNU-UET) đã tồn tại!");
         }
     }
 
-    public void editUetMan(UetManDTO uetManDTO, String token) {
+    public void editUetMan(UetManDTO uetManDTO, String token)
+    {
         UetMan uetMan = uetManRepository.findOne(uetManDTO.getId());
         if (uetMan != null){
             if (uetManDTO.getUetManName() != null){
@@ -118,39 +115,30 @@ public class UetManService {
         }
     }
 
-    public void deleteUetMan(int uetManId, String token) throws Exception {
+    public void deleteUetMan(int uetManId, String token) throws Exception
+    {
         UetMan uetMan = uetManRepository.findById(uetManId);
         if (uetMan != null){
             if (!uetMan.getContract().isEmpty()){
                 throw new Exception("Không thể xóa Người ký này vì đang nằm trong 1 số hợp đồng!");
             } else {
                 uetManRepository.delete(uetManId);
-//                User user = userRepository.findByToken(token);
-//                if(user.getRole().equals(Role.UNIT)){
-//                    ActivityLog activityLog = new ActivityLog(user);
-//                    userRepository.save(user);
-//                    activityLog.setActivityType("deleteUetMan");
-//                    activityLog.setAcvtivity(user.getUnitName().getUnitName() + " xóa Người kí (VNU-UET) " +
-//                            uetManRepository.findOne(uetManId).getUetManName() + " vào lúc " + activityLog.getTimestamp());
-//                    activityLog.setStatus("NEW");
-//                    activityLogRepository.save(activityLog);
-//                }
             }
-        }
-        else {
+        } else {
             throw new NullPointerException("Không tồn tại Người ký (VNU-UET) này!");
         }
     }
 
-    public List<UetMan> getAll() {
+    public List<UetMan> getAll()
+    {
         return (List<UetMan>) uetManRepository.findAll();
     }
 
-    public List<UetMan> getAllUetManRolesAndSigningLevel(String token){
+    public List<UetMan> getAllUetManRolesAndSigningLevel(String token)
+    {
         User user = userRepository.findByToken(token);
         if(user != null){
             if(user.getRole().equals(String.valueOf(Role.ADMIN_UNIT)) || user.getRole().equals(String.valueOf(Role.ADMIN_VNU))){
-                //neu nhu vào trong if này tức là tk admin_vnu hoặc là admin_unit
                 RolesAndSigningLevel rolesAndSigningLevel = user.getRolesAndSigningLevel();
                 List<UetMan> uetManList = uetManRepository.findByRolesSigningLevelId(rolesAndSigningLevel.getId());
                 if(!rolesAndSigningLevel.getChild().isEmpty()){
@@ -159,14 +147,7 @@ public class UetManService {
                     }
                 }
                 return uetManList;
-//                if(rolesAndSigningLevel.getParent_id() == null){
-//                    return uetManRepository.findByRolesSigningLevelId(rolesAndSigningLevel.getId());
-//                } else {
-//                    return null;
-//                }
             } else if(user.getRole().equals(String.valueOf(Role.UNIT))){
-                // nếu vào if này là tk unit
-//                System.out.print("Khanh\n\n\n");
                     return uetManRepository.findByRolesSigningLevelId(user.getUnitName().getRolesAndSigningLevel().getId());
             } else {
                 throw new HTTPException(404);

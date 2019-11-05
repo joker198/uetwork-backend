@@ -25,7 +25,13 @@ public class UnitController {
         this.unitService = unitService;
     }
 
-    //create Unit
+    /**
+     * Create Unit
+     *
+     * @param unitNameDTO
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN_UNIT, Role.ADMIN_VNU})
     @RequestMapping(value = "unit/create", method = RequestMethod.POST)
     public UnitName createUnit(@RequestBody UnitNameDTO unitNameDTO, HttpServletRequest request){
@@ -33,27 +39,45 @@ public class UnitController {
         return unitService.createUnit(unitNameDTO, token);
     }
 
-    //edit Unit
-    //edit Unit
+    /**
+     * Edit Unit
+     *
+     * @param unitNameDTO 
+     */
     @RequiredRoles({Role.ADMIN_UNIT, Role.ADMIN_VNU})
     @RequestMapping(value = "unit/edit", method = RequestMethod.PUT)
     public void editTypeContract(@RequestBody UnitNameDTO unitNameDTO){
         unitService.editUnit(unitNameDTO);
     }
 
-    //delete unit
+    /**
+     * Delete Unit
+     *
+     * @param unitId
+     * @throws Exception 
+     */
     @RequiredRoles({Role.ADMIN_UNIT, Role.ADMIN_VNU})
     @RequestMapping(value = "unit/{unitId}/delete", method = RequestMethod.DELETE)
     public void deleteUnit(@PathVariable("unitId") int unitId) throws Exception {
         unitService.deleteUnit(unitId);
     }
 
-    //show all unit getUnitNameByRolesAndSigningLevel
+    /**
+     * Show All Unit
+     *
+     * @return 
+     */
     @RequestMapping(value = "unit", method = RequestMethod.GET)
     public List<UnitName> getAll(){
         return unitService.getAll();
     }
 
+    /**
+     * Get Unit Name By Roles And Signing Level
+     *
+     * @param request
+     * @return 
+     */
     @RequestMapping(value = "unit/rolesAndSigningLevel", method = RequestMethod.GET)
     public List<UnitName> getUnitNameByRolesAndSigningLevel(HttpServletRequest request){
         String token = request.getHeader("auth-token");

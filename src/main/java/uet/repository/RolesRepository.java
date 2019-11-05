@@ -1,4 +1,6 @@
 package uet.repository;
 
-public interface RolesRepository {
+public interface RolesRepository
+{
+    //
 }

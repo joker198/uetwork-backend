@@ -10,7 +10,6 @@ import uet.model.AdminNotification;
 import uet.model.User;
 import uet.repository.AdminNotificationRepository;
 import uet.repository.UserRepository;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -79,11 +78,9 @@ public class AdminService {
         String clientPath = path + "/qly_sv_backup_" + date + "_" + uid + ".sql";
         System.out.print("\n clientPath: " + clientPath + "\n");
         String url = "/users_data/" + token + "/qly_sv_backup_" + date + "_" + uid + ".sql";
-//        String command = "mysqldump -u root -p " + GlobalConfig.dbName + " > " + path;
 
         Process p = new ProcessBuilder("mysqldump", "-u", "root", "-p", GlobalConfig.dbName).start();
         ByteArrayOutputStream dmp = new ByteArrayOutputStream();
-        // Use FileOutputStream dmp = ... in real cases.
         InputStream inputStream = p.getInputStream();
         Thread t1 = copyStreamsInBackground(inputStream, dmp);
         ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -101,7 +98,6 @@ public class AdminService {
             return messageDTO;
         } else {
             System.out.println("Exit code: " + exitCode);
-//            File targetFile = new File(path);
             String dumps = new String(dmp.toByteArray(), Charset.forName("utf-8"));
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(backupPath))) {
                 bw.write(dumps);
@@ -114,37 +110,19 @@ public class AdminService {
                 e.printStackTrace();
             }
             deleteFile(clientPath);
-//            Files.copy(source.toPath(), dest.toPath());
             MessageDTO messageDTO = new MessageDTO();
             messageDTO.setAttachFileAdd(url);
-//            messageDTO.setContent("");
             p.destroy();
             return messageDTO;
-//            System.out.println(dumps);
         }
-
-
-
     }
 
     public File[] getAllFileInFolder(){
-//        File directory = new File("./backup-sql/");
-//        if (!directory.exists()) {
-//            directory.mkdir();
-//        }
         File folder = new File("./backup-sql/");
         if (!folder.exists()) {
             folder.mkdir();
         }
         File[] listOfFiles = folder.listFiles();
-
-//        for (int i = 0; i < listOfFiles.length; i++) {
-////            if (listOfFiles[i].isFile()) {
-////                System.out.println("File " + listOfFiles[i].getName());
-////            } else if (listOfFiles[i].isDirectory()) {
-////                System.out.println("Directory " + listOfFiles[i].getName());
-////            }
-////        }
         return listOfFiles;
     }
 
@@ -156,10 +134,7 @@ public class AdminService {
                     Path path = Paths.get(filePath);
                     TimeUnit.SECONDS.sleep(20);
                     Files.delete(path);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (IOException | InterruptedException e) {
                 }
             }
         });
@@ -174,8 +149,7 @@ public class AdminService {
                 try {
                     IOUtils.copy(is, os);
                     os.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } catch (IOException ex) {
                     throw new IllegalStateException(ex);
                 }
             }
@@ -183,9 +157,4 @@ public class AdminService {
         t.start();
         return t;
     }
-
-//    public void getClass(){
-//        Partner partner = new Partner();
-//        return partner.get
-//    }
 }

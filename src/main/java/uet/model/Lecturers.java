@@ -37,7 +37,6 @@ public class Lecturers {
 
     @ManyToOne
     @JoinColumn(name="faculty_id")
-//    @JsonIgnore
     private Faculty faculty; //khoa
 
     @OneToMany(mappedBy = "lecturers")
@@ -120,14 +119,6 @@ public class Lecturers {
         this.subject = subject;
     }
 
-//    public List<Internship> getInternships() {
-//        return internships;
-//    }
-//
-//    public void setInternships(List<Internship> internships) {
-//        this.internships = internships;
-//    }
-
     public Faculty getFaculty() {
         return faculty;
     }
@@ -140,16 +131,8 @@ public class Lecturers {
         return internships;
     }
 
-    public void setInternships(List<Internship> internships) {
+    public void setInternships(List<Internship> internships)
+    {
         this.internships = internships;
     }
-
-//    public List<Student> getStudents() {
-//        return students;
-//    }
-//
-//    public void setStudents(List<Student> students) {
-//        this.students = students;
-//    }
-
 }

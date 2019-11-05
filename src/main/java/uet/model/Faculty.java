@@ -10,7 +10,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "Faculty")
-public class Faculty {
+public class Faculty
+{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,35 +23,43 @@ public class Faculty {
 
     private String facultyName;
 
-    public Faculty(){
-
+    public Faculty()
+    {
+        //
     }
 
-    public Faculty(String facultyName){
+    public Faculty(String facultyName)
+    {
         this.facultyName = facultyName;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public List<Lecturers> getLecturers() {
+    public List<Lecturers> getLecturers()
+    {
         return lecturers;
     }
 
-    public void setLecturers(List<Lecturers> lecturers) {
+    public void setLecturers(List<Lecturers> lecturers)
+    {
         this.lecturers = lecturers;
     }
 
-    public String getFacultyName() {
+    public String getFacultyName()
+    {
         return facultyName;
     }
 
-    public void setFacultyName(String facultyName) {
+    public void setFacultyName(String facultyName)
+    {
         this.facultyName = facultyName;
     }
 }

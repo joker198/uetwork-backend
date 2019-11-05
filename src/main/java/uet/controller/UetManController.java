@@ -24,7 +24,13 @@ public class UetManController {
         this.uetManService = uetManService;
     }
 
-    //create uet man
+    /**
+     * Create UET Man
+     *
+     * @param uetManDTO
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN_VNU, Role.ADMIN_UNIT, Role.UNIT})
     @RequestMapping(value = "uetMan/create", method = RequestMethod.POST)
     public UetMan createUnit(@RequestBody UetManDTO uetManDTO, HttpServletRequest request){
@@ -32,8 +38,11 @@ public class UetManController {
         return uetManService.createUetMan(uetManDTO, token);
     }
 
-    //edit Unit
-    //edit uet man
+    /**
+     * Edit Unit, UET Man
+     * @param uetManDTO
+     * @param request 
+     */
     @RequiredRoles({Role.ADMIN_VNU, Role.ADMIN_UNIT, Role.UNIT})
     @RequestMapping(value = "uetMan/edit", method = RequestMethod.PUT)
     public void editTypeContract(@RequestBody UetManDTO uetManDTO, HttpServletRequest request){
@@ -41,7 +50,13 @@ public class UetManController {
         uetManService.editUetMan(uetManDTO, token);
     }
 
-    //delete unit
+    /**
+     * Delete unit
+     *
+     * @param uetManId
+     * @param request
+     * @throws Exception 
+     */
     @RequiredRoles({Role.ADMIN_VNU, Role.ADMIN_UNIT, Role.UNIT})
     @RequestMapping(value = "uetMan/{uetManId}/delete", method = RequestMethod.DELETE)
     public void deleteUnit(@PathVariable("uetManId") int uetManId, HttpServletRequest request) throws Exception {
@@ -49,14 +64,23 @@ public class UetManController {
         uetManService.deleteUetMan(uetManId, token);
     }
 
-    //show all uet man
+    /**
+     * Show All UET Man
+     *
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN_VNU, Role.ADMIN_UNIT, Role.UNIT})
     @RequestMapping(value = "uetMan", method = RequestMethod.GET)
     public List<UetMan> getAll(){
         return uetManService.getAll();
     }
 
-    //getAllUetManRolesAndSigningLevel get người kí theo RolesAndSigningLevel
+    /**
+     * Get All UET Man Roles And Signing Level
+     *
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN_VNU, Role.ADMIN_UNIT, Role.UNIT})
     @RequestMapping(value = "uetMan/rolesAndSigningLevel", method = RequestMethod.GET)
     public List<UetMan> getAllUetManRolesAndSigningLevel(HttpServletRequest request){

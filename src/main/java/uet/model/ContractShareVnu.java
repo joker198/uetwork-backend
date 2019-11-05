@@ -1,13 +1,13 @@
 package uet.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name="contractShareVnu")
-public class ContractShareVnu {
+public class ContractShareVnu
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -19,14 +19,19 @@ public class ContractShareVnu {
 
     @ManyToOne
     @JoinColumn(name="roles_signing_level_id")
-//    @JsonIgnore
     private RolesAndSigningLevel rolesSigningLevel;
 
     private Date created;
 
-    public ContractShareVnu(){}
+    public ContractShareVnu()
+    {
+        //
+    }
 
-    public ContractShareVnu(Contract contract, RolesAndSigningLevel rolesAndSigningLevel) {
+    public ContractShareVnu(
+        Contract contract,
+        RolesAndSigningLevel rolesAndSigningLevel
+    ) {
         this.contract = contract;
         this.rolesSigningLevel = rolesAndSigningLevel;
         this.created = new Date();

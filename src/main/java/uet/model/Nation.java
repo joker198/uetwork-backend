@@ -18,22 +18,24 @@ public class Nation {
 
     @ManyToOne
     @JoinColumn(name = "continent_id")
-//    @JsonIgnore
     private Continent continent;
 
     @OneToMany(mappedBy = "nation")
     @JsonIgnore
     private Set<Partner> partner;
 
-    public Nation(){
-
+    public Nation()
+    {
+        //
     }
 
-    public Nation(String nationName){
+    public Nation(String nationName)
+    {
         this.nationName = nationName;
     }
 
-    public Nation(String nationName, Continent continent){
+    public Nation(String nationName, Continent continent)
+    {
         this.nationName = nationName;
         this.continent = continent;
     }

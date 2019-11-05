@@ -23,14 +23,24 @@ public class RolesAndSigningLevelController {
         this.rolesAndSigningLevelService = rolesAndSigningLevelService;
     }
 
-    //tạo tài khoản cho trường trong vnu
+    /**
+     * Create Account For University
+     *
+     * @param userDTO
+     * @throws Exception 
+     */
     @RequiredRoles(Role.ADMIN_VNU)
     @RequestMapping(value="/account/university/create",method = RequestMethod.POST)
     public void createAccountForUniversity(@RequestBody UserDTO userDTO) throws Exception {
         rolesAndSigningLevelService.createAccountForUniversity(userDTO);
     }
 
-    //get
+    /**
+     * Get All Roles And Signing Level
+     *
+     * @return
+     * @throws Exception 
+     */
     @RequiredRoles(Role.ADMIN_VNU)
     @RequestMapping(value="/rolesAndSigningLevel",method = RequestMethod.GET)
     public List<RolesAndSigningLevel> getAllRolesAndSigningLevel() throws Exception {

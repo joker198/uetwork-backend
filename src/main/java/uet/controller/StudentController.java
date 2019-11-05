@@ -25,7 +25,13 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-    //Show all student information by school
+
+    /**
+     * Show All Student Info By School
+     *
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.VIP_PARTNER,Role.ADMIN})
     @RequestMapping(value="/student", method = RequestMethod.GET)
     public List<HashMap<String, String>> getAllInfo(HttpServletRequest request){
@@ -33,19 +39,17 @@ public class StudentController {
         return (List<HashMap<String, String>>) studentService.getAllInfo(token);
     }
 
-    //show all student
+    /**
+     * Show All Student
+     *
+     * @param pageable
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "student/all", method = RequestMethod.GET)
     public Page<Student> getAllStudent(Pageable pageable){
         return studentService.getAllStudent(pageable);
     }
-
-    //show all student no lectutrers
-//    @RequiredRoles(Role.ADMIN)
-//    @RequestMapping(value = "student/no/lectutrers", method = RequestMethod.GET)
-//    public List<Student> getAllStudentNoLecturers(){
-//        return studentService.getAllStudentNoLecturers();
-//    }
 
     //get student bu internship term
     @RequestMapping(value = "student/internshipTerm/{internshipTermId}", method = RequestMethod.GET)
@@ -53,7 +57,13 @@ public class StudentController {
         return studentService.getStudentByInternshipTerm(internshipTermId);
     }
 
-    //get student by lecterersId and last internship term
+    /**
+     * Get Student By LecterersId And Last Internship Term
+     *
+     * @param httpServletRequest
+     * @return
+     * @throws Exception 
+     */
     @RequiredRoles({Role.ADMIN, Role.LECTURERS})
     @RequestMapping(value = "lecturers/student", method = RequestMethod.GET)
     public List<Internship> getStudentByLecturersId(HttpServletRequest httpServletRequest) throws Exception {
@@ -61,38 +71,24 @@ public class StudentController {
         return studentService.getStudentByLecturersId(token);
     }
 
-    //get student by internship term no lecturers
-//    @RequestMapping(value = "student/internshipTerm/no/lecturers", method = RequestMethod.GET)
-//    public List<Student> getAllStudentByInternshipTermAndNOLecturers(){
-//        return studentService.getAllStudentByInternshipTermAndNOLecturers();
-//    }
-
-    //getCountStudentNoFollow
-//    @RequestMapping(value = "getCountStudentNoFollow", method = RequestMethod.GET)
-//    public StudentDTO getCountStudentNoFollow(){
-//        return studentService.getCountStudentNoFollow();
-//    }
-
-    //get student no internship term
-//    @RequestMapping(value = "student/no/internshipTerm", method = RequestMethod.GET)
-//    public List<Student> getStudentNoInternshipTerm(){
-//        return studentService.getStudentNoInternshipTerm();
-//    }
-
-    //delete student
+    /**
+     * Delete Student
+     * 
+     * @param studentId 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "student/delete/{studentId}", method = RequestMethod.DELETE)
     public void deleteStudent(@PathVariable("studentId") int studentId){
         studentService.deleteStudent(studentId);
     }
-//    //Create
-//    @RequiredRoles({Role.STUDENT,Role.ADMIN})
-//    @RequestMapping(value="/user/{userId}/student", method = RequestMethod.POST)
-//    public Student createStudent(@PathVariable("userId") int userId, @RequestBody StudentDTO studentDTO){
-//        return studentService.createStudent(userId, studentDTO);
-//    }
 
-    //Show a student
+    /**
+     * Show A Student
+     *
+     * @param studentId
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT,Role.VIP_PARTNER,Role.ADMIN})
     @RequestMapping(value="student/{studentId}",method = RequestMethod.GET)
     public Student findStudent(@PathVariable("studentId") int studentId, HttpServletRequest request) {
@@ -100,40 +96,59 @@ public class StudentController {
         return studentService.findStudent(studentId, token);
     }
 
-    //get student by student code
+    /**
+     * Get Student By Student Code
+     *
+     * @param infoBySchoolDTO
+     * @return 
+     */
     @RequestMapping(value = "student/studentCode", method = RequestMethod.POST)
     public List<InfoBySchool> findStudentByStudentCode(@RequestBody InfoBySchoolDTO infoBySchoolDTO){
         return studentService.findStudentByStudentCode(infoBySchoolDTO);
     }
 
-//    @RequiredRoles(Role.ADMIN)
-//    @RequestMapping(value = "internshipTerm/add/student", method = RequestMethod.PUT)
-//    public void addAllStudentToInternshipTerm(){
-//        studentService.addAllStudentToInternshipTerm();
-//    }
-
-    //Student search partner
+    /**
+     * Search partner
+     *
+     * @param partnerDTO
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.ADMIN})
     @RequestMapping(value="searchPartner", method = RequestMethod.POST)
     public List<Partner> searchPartner(@RequestBody PartnerDTO partnerDTO){
         return studentService.searchPartner(partnerDTO);
     }
 
-    //Student search post description
+    /**
+     * Search Post Description
+     *
+     * @param postDTO
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.ADMIN})
     @RequestMapping(value="searchDescription", method = RequestMethod.POST)
     public List<Post> searchDescription(@RequestBody PostDTO postDTO){
         return studentService.searchDescription(postDTO);
     }
 
-    //Student search post by content
+    /**
+     * Search Post By Content
+     *
+     * @param postDTO
+     * @return 
+     */
     @RequiredRoles({Role.STUDENT, Role.ADMIN})
     @RequestMapping(value="searchContent", method = RequestMethod.POST)
     public List<Post> searchContent(@RequestBody PostDTO postDTO){
         return studentService.searchContent(postDTO);
     }
 
-    //show info of a student
+    /**
+     * Show Info Of A Student
+     *
+     * @param request
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN,Role.STUDENT,Role.VIP_PARTNER})
     @RequestMapping(value = "/studentInfo",method = RequestMethod.GET)
     public Student getStudentInfo(HttpServletRequest request){
@@ -141,14 +156,27 @@ public class StudentController {
         return studentService.getStudentInfo(token);
     }
 
-    //get student info, infobyschool, internship by user id
+    /**
+     * Get Student Info
+     *
+     * @param userId
+     * @return
+     * @throws Exception 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "/student/user/{userId}",method = RequestMethod.GET)
     public StudentDTO getStudentInformationByUserId(@PathVariable("userId") int userId) throws Exception {
         return studentService.getStudentInformationByUserId(userId);
     }
 
-    //edit info of a student
+    /**
+     * Edit Student Info
+     *
+     * @param studentDTO
+     * @param request
+     * @return
+     * @throws IOException 
+     */
     @RequiredRoles(Role.STUDENT)
     @RequestMapping(value = "/studentInfo",method = RequestMethod.PUT)
     public Student editStudentInfo(@RequestBody StudentDTO studentDTO, HttpServletRequest request) throws IOException {
@@ -156,19 +184,17 @@ public class StudentController {
         return studentService.editStudentInfo(studentDTO,token);
     }
 
-    //change avatar
+    /**
+     * Change Avatar
+     *
+     * @param studentInfoDTO
+     * @param request
+     * @throws IOException 
+     */
     @RequiredRoles(Role.STUDENT)
     @RequestMapping(value = "changeAva", method = RequestMethod.PUT)
     public void changeAva(@RequestBody StudentDTO studentInfoDTO, HttpServletRequest request) throws IOException {
         String token = request.getHeader("auth-token");
         studentService.changeAva(studentInfoDTO, token);
     }
-
-    //delete info of a student
-//    @RequiredRoles({Role.STUDENT,Role.ADMIN})
-//    @RequestMapping(value = "/studentInfo/{id}",method = RequestMethod.DELETE)
-//    public void deleteStudentInfo(@PathVariable("id") int id, HttpServletRequest request){
-//        String token = request.getHeader("auth-token");
-//        studentService.deleteStudentInfo(id, token);
-//    }
 }

@@ -15,6 +15,5 @@ public interface InternshipTermRepository extends CrudRepository<InternshipTerm,
     InternshipTerm findById(int id);
     InternshipTerm findTopByOrderByIdDesc();
     InternshipTerm findByTermAndYear(int term, String year);
-//    InternshipTerm findByYear(String year);
     List<InternshipTerm> findByYear(String year);
 }

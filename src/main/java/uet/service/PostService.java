@@ -27,27 +27,24 @@ import static uet.model.PostType.*;
  */
 @Service
 public class PostService {
-    final
-    UserRepository userRepository;
-
-    private final
-    PartnerRepository partnerRepository;
-
+    final UserRepository userRepository;
+    private final PartnerRepository partnerRepository;
     private final PostRepository postRepository;
-
     private final HashtagRepository hashtagRepository;
-
-    private final
-    PartnerContactRepository partnerContactRepository;
-
-    private final
-    InternshipTermRepository internshipTermRepository;
-
-    private final
-    FollowRepository followRepository;
+    private final PartnerContactRepository partnerContactRepository;
+    private final InternshipTermRepository internshipTermRepository;
+    private final FollowRepository followRepository;
 
     @Autowired
-    public PostService(UserRepository userRepository, PartnerRepository partnerRepository, PostRepository postRepository, HashtagRepository hashtagRepository, PartnerContactRepository partnerContactRepository, InternshipTermRepository internshipTermRepository, FollowRepository followRepository) {
+    public PostService(
+        UserRepository userRepository,
+        PartnerRepository partnerRepository,
+        PostRepository postRepository,
+        HashtagRepository hashtagRepository,
+        PartnerContactRepository partnerContactRepository,
+        InternshipTermRepository internshipTermRepository,
+        FollowRepository followRepository
+    ) {
         this.userRepository = userRepository;
         this.partnerRepository = partnerRepository;
         this.postRepository = postRepository;
@@ -58,12 +55,10 @@ public class PostService {
     }
 
     private Post createPost(Post post, PostDTO postDTO, Partner partner, User user) throws IOException {
-//        Post post = new Post();
         InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();
         if(internshipTerm != null){
             post.setContent(postDTO.getContent());
             post.setDatePost(postDTO.getDatePost());
-//        post.setDescribePost(postDTO.getDescribePost());
             post.setTitle(postDTO.getTitle());
             post.setExpiryTime(postDTO.getExpiryTime());
             post.setDurationTime(postDTO.getDurationTime());
@@ -76,20 +71,11 @@ public class PostService {
             } else if (Objects.equals(user.getRole(), String.valueOf(Role.NORMAL_PARTNER))) {
                 post.setStatus("D");
             }
-//            if(postDTO.getPostType() != null){
-//                if(postDTO.getPostType() .equals(PostType.Normal) || postDTO.getPostType() .equals(PostType.Recruitment)
-//                        || postDTO.getPostType() .equals(PostType.Research)){
-//                    post.setPostType(postDTO.getPostType());
-//                }
-//            }
-//            partner.getPost().add(post);
             if(postDTO.getPartnerContactId() != null){
                 if (postDTO.getPartnerContactId() != 0) {
                     PartnerContact partnerContact = partnerContactRepository.findById(postDTO.getPartnerContactId());
                     if(partnerContact != null){
                         if (partnerContact.getPartner().equals(partner)) {
-//                    List<Post> listPost = new HashList<>();
-//                    partnerContact.setPosts(post);
                             post.setPartnerContact(partnerContact);
                         }
                     } else {
@@ -120,9 +106,6 @@ public class PostService {
                 List<HashtagDTO> hashtagDTOS = postDTO.getHashtagDTO();
                 createHashtag(post.getId(), hashtagDTOS);
             }
-//        String username = partner.getUser().getUserName();
-//        post = this.uploadImage(username, post, postDTO);
-
             internshipTerm.getPosts().add(post);
             int postCount = internshipTerm.getPostCount() + 1;
             internshipTerm.setPostCount(postCount);
@@ -135,7 +118,8 @@ public class PostService {
 
     }
 
-    private Post uploadImage(String username, Post post, PostDTO postDTO) throws IOException {
+    private Post uploadImage(String username, Post post, PostDTO postDTO) throws IOException
+    {
         String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + username + "/post/";
         File directory = new File(pathname);
         if (!directory.exists()) {
@@ -158,7 +142,8 @@ public class PostService {
         return post;
     }
 
-    private void createHashtag(int postId, List<HashtagDTO> List) {
+    private void createHashtag(int postId, List<HashtagDTO> List)
+    {
         Post post = postRepository.findById(postId);
         List<Hashtag> hashtags = (List<Hashtag>) hashtagRepository.findAll();
         for (HashtagDTO hashtagDTO : List) {
@@ -180,8 +165,8 @@ public class PostService {
         }
     }
 
-    //show all post
-    public Page<Post> getAllPosts(String token, Pageable pageable) {
+    public Page<Post> getAllPosts(String token, Pageable pageable)
+    {
         User user = userRepository.findByToken(token);
         if (user.getRole().equals(String.valueOf(Role.ADMIN))) {
             return postRepository.findAllByOrderByIdDesc(pageable);
@@ -195,8 +180,8 @@ public class PostService {
         }
     }
 
-    //show list post of a partner
-    public List<Post> showAllPost(int partnerId, String token) {
+    public List<Post> showAllPost(int partnerId, String token)
+    {
         User user = userRepository.findByToken(token);
         if (user.getRole().equals(String.valueOf(Role.ADMIN))) {
             Partner partner = partnerRepository.findById(partnerId);
@@ -208,13 +193,13 @@ public class PostService {
         }
     }
 
-    //show a post
-    public Post showPost(int postId) {
+    public Post showPost(int postId)
+    {
         return postRepository.findOne(postId);
     }
 
-    //create a post
-    public Post createPost(int partnerId, PostDTO postDTO, String token) throws Exception {
+    public Post createPost(int partnerId, PostDTO postDTO, String token) throws Exception
+    {
         User user = userRepository.findByToken(token);
         if(postDTO.getPostType().equals(PostType.Research)){
             InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();
@@ -254,12 +239,10 @@ public class PostService {
                 }
             }
         }
-
-
     }
 
-    //edit a post
-    public Post editPost(int postId, PostDTO postDTO, String token) throws IOException {
+    public Post editPost(int postId, PostDTO postDTO, String token) throws IOException
+    {
         User user = userRepository.findByToken(token);
         Post post = postRepository.findById(postId);
         if (user.getRole().equals(String.valueOf(Role.ADMIN)) || post.getPartner().equals(user.getPartner())) {
@@ -278,9 +261,6 @@ public class PostService {
             if (postDTO.getDatePost() != null) {
                 post.setDatePost(postDTO.getDatePost());
             }
-//            if (postDTO.getDescribePost() != null) {
-//                post.setDescribePost(postDTO.getDescribePost());
-//            }
             if (postDTO.getHashtagDTO() != null) {
                 List<HashtagDTO> hashtagDTOS = postDTO.getHashtagDTO();
                 post.getHashtags().clear();
@@ -307,17 +287,14 @@ public class PostService {
             if(postDTO.getExpiryTime() != null){
                 post.setExpiryTime(postDTO.getExpiryTime());
             }
-//            if (postDTO.getImage() != null) {
-//                post = this.uploadImage(user.getUserName(), post, postDTO);
-//            }
             return postRepository.save(post);
         } else {
             throw new NullPointerException("User doesn't match with Partner.");
         }
     }
 
-    //delete a post
-    public void deletePost(int postId, String token) {
+    public void deletePost(int postId, String token)
+    {
         User user = userRepository.findByToken(token);
         Post post = postRepository.findById(postId);
         if (user.getRole().equals(String.valueOf(Role.ADMIN)) || post.getPartner().equals(user.getPartner())) {
@@ -334,9 +311,8 @@ public class PostService {
         }
     }
 
-
-    // change status post
-    public Post changeStatus(int postId) {
+    public Post changeStatus(int postId)
+    {
         Post post = postRepository.findOne(postId);
         if (post.getStatus().equals("A")) {
             post.setStatus("D");
@@ -346,11 +322,13 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public List<Hashtag> getAllHashtags() {
+    public List<Hashtag> getAllHashtags()
+    {
         return (List<Hashtag>) hashtagRepository.findAll();
     }
 
-    public List<Post> getAllPostByInternshipTerm(int internshipTermId) {
+    public List<Post> getAllPostByInternshipTerm(int internshipTermId)
+    {
         InternshipTerm internshipTerm = internshipTermRepository.findById(internshipTermId);
         if (internshipTerm != null) {
             return internshipTerm.getPosts();
@@ -359,7 +337,8 @@ public class PostService {
         }
     }
 
-    public Page<Post> getResearchPost(PostType postType, Pageable pageable) {
+    public Page<Post> getResearchPost(PostType postType, Pageable pageable)
+    {
         InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();
         return postRepository.findByPostTypeAndInternshipTermIdOrderByIdDesc(postType, internshipTerm.getId(), pageable);
     }

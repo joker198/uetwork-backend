@@ -12,7 +12,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "contract")
-public class Contract {
+public class Contract
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -30,8 +31,6 @@ public class Contract {
     private String attachFileAdd;
     private java.util.Date createdAt;
     private String uetManName;
-//    @Column(name = "contact_point", length  = 2800000)
-//    private String contactPoint;
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
@@ -45,266 +44,268 @@ public class Contract {
     @JoinColumn(name = "partner_contact_id")
     private PartnerContact partnerContact;
 
-//    @ManyToOne
-//    @JoinColumn(name = "uet_man_id")
-//    private UetMan uetMan;
-
     @ManyToMany
     @JoinTable(name = "contract_uet_man", joinColumns = @JoinColumn(name = "contract_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "uet_man_id", referencedColumnName = "id"))
     private List<UetMan> uetMan;
-//    public List<UetMan> getPublishers() {
-//        return publishers;
-//    }
-
-//    @ManyToOne
-//    @JoinColumn(name = "unit_name_id")
-//    private UnitName unitName;
 
     @Column(name = "contentContract", length  = 2800000)
     private String contentContract;
-
-//    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<AnnualActivity> annualActivities;
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private List<CooperateActivity> cooperateActivity;
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-//    @JsonIgnore
     private List<ContractShare> contractShares;
 
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-//    @JsonIgnore
     private List<ContractShareVnu> contractShareVnus;
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-//    @JsonIgnore
     private List<Notice> notices;
 
     @ManyToOne
     @JoinColumn(name="roles_signing_level_id")
-//    @JsonIgnore
     private RolesAndSigningLevel rolesSigningLevel;
 
-    public Contract(){
-
+    public Contract()
+    {
+        //
     }
 
-    public Contract(Partner partner, PartnerContact partnerContact, List<UetMan> uetMans, RolesAndSigningLevel rolesSigningLevel){
+    public Contract(
+        Partner partner,
+        PartnerContact partnerContact,
+        List<UetMan> uetMans,
+        RolesAndSigningLevel rolesSigningLevel
+    ) {
         this.partner = partner;
-//        this.typeContract = typeContract;
         this.partnerContact = partnerContact;
         this.uetMan = uetMans;
-//        this.unitName = unitName;
         this.rolesSigningLevel = rolesSigningLevel;
     }
 
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getResult() {
+    public String getResult()
+    {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(String result)
+    {
         this.result = result;
     }
 
-    public Boolean getRenew() {
+    public Boolean getRenew()
+    {
         return renew;
     }
 
-    public void setRenew(Boolean renew) {
+    public void setRenew(Boolean renew)
+    {
         this.renew = renew;
     }
 
-    public String getNotice() {
+    public String getNotice()
+    {
         return notice;
     }
 
-    public void setNotice(String notice) {
+    public void setNotice(String notice)
+    {
         this.notice = notice;
     }
 
-    public String getFunding() {
+    public String getFunding()
+    {
         return funding;
     }
 
-    public void setFunding(String funding) {
+    public void setFunding(String funding)
+    {
         this.funding = funding;
     }
 
-    public Date getStartDate() {
+    public Date getStartDate()
+    {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Date startDate)
+    {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Date getEndDate()
+    {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Date endDate)
+    {
         this.endDate = endDate;
     }
 
-    public int getOrdinaryNumber() {
+    public int getOrdinaryNumber()
+    {
         return ordinaryNumber;
     }
 
-    public void setOrdinaryNumber(int ordinaryNumber) {
+    public void setOrdinaryNumber(int ordinaryNumber)
+    {
         this.ordinaryNumber = ordinaryNumber;
     }
 
-    public int getNumber() {
+    public int getNumber()
+    {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(int number)
+    {
         this.number = number;
     }
 
 
-    public Partner getPartner() {
+    public Partner getPartner()
+    {
         return partner;
     }
 
-    public void setPartner(Partner partner) {
+    public void setPartner(Partner partner)
+    {
         this.partner = partner;
     }
 
-
-//    public TypeContract getTypeContract() {
-//        return typeContract;
-//    }
-//
-//    public void setTypeContract(TypeContract typeContract) {
-//        this.typeContract = typeContract;
-//    }
-
-
-    public List<UetMan> getUetMan() {
+    public List<UetMan> getUetMan()
+    {
         return uetMan;
     }
 
-    public void setUetMan(List<UetMan> uetMans) {
+    public void setUetMan(List<UetMan> uetMans)
+    {
         this.uetMan = uetMans;
     }
 
-
-//    public UnitName getUnitName() {
-//        return unitName;
-//    }
-//
-//    public void setUnitName(UnitName unitName) {
-//        this.unitName = unitName;
-//    }
-
-    public String getContentContract() {
+    public String getContentContract()
+    {
         return contentContract;
     }
 
-    public void setContentContract(String contentContract) {
+    public void setContentContract(String contentContract)
+    {
         this.contentContract = contentContract;
     }
 
 
-    public PartnerContact getPartnerContact() {
+    public PartnerContact getPartnerContact()
+    {
         return partnerContact;
     }
 
-    public void setPartnerContact(PartnerContact partnerContact) {
+    public void setPartnerContact(PartnerContact partnerContact)
+    {
         this.partnerContact = partnerContact;
     }
 
 
-    public List<CooperateActivity> getCooperateActivity() {
+    public List<CooperateActivity> getCooperateActivity()
+    {
         return cooperateActivity;
     }
 
-    public void setCooperateActivity(List<CooperateActivity> cooperateActivity) {
+    public void setCooperateActivity(List<CooperateActivity> cooperateActivity)
+    {
         this.cooperateActivity = cooperateActivity;
     }
 
-    public String getAttachFileAdd() {
+    public String getAttachFileAdd()
+    {
         return attachFileAdd;
     }
 
-    public void setAttachFileAdd(String attachFileAdd) {
+    public void setAttachFileAdd(String attachFileAdd)
+    {
         this.attachFileAdd = attachFileAdd;
     }
 
-    public java.util.Date getCreatedAt() {
+    public java.util.Date getCreatedAt()
+    {
         return createdAt;
     }
 
-    public void setCreatedAt(java.util.Date createdAt) {
+    public void setCreatedAt(java.util.Date createdAt)
+    {
         this.createdAt = createdAt;
     }
 
-    public List<ContractShare> getContractShares() {
+    public List<ContractShare> getContractShares()
+    {
         return contractShares;
     }
 
-    public void setContractShares(List<ContractShare> contractShares) {
+    public void setContractShares(List<ContractShare> contractShares)
+    {
         this.contractShares = contractShares;
     }
 
-    public String getUetManName() {
+    public String getUetManName()
+    {
         return uetManName;
     }
 
-    public void setUetManName(String uetManName) {
+    public void setUetManName(String uetManName)
+    {
         this.uetManName = uetManName;
     }
 
-//    public List<AnnualActivity> getAnnualActivities() {
-//        return annualActivities;
-//    }
-//
-//    public void setAnnualActivities(List<AnnualActivity> annualActivities) {
-//        this.annualActivities = annualActivities;
-//    }
-
-    public List<Notice> getNotices() {
+    public List<Notice> getNotices()
+    {
         return notices;
     }
 
-    public void setNotices(List<Notice> notices) {
+    public void setNotices(List<Notice> notices)
+    {
         this.notices = notices;
     }
 
-    public RolesAndSigningLevel getRolesAndSigningLevel() {
+    public RolesAndSigningLevel getRolesAndSigningLevel()
+    {
         return rolesSigningLevel;
     }
 
-    public void setRolesAndSigningLevel(RolesAndSigningLevel rolesSigningLevel) {
+    public void setRolesAndSigningLevel(RolesAndSigningLevel rolesSigningLevel)
+    {
         this.rolesSigningLevel = rolesSigningLevel;
     }
 
-    public PartnerContact getContactPoint() {
+    public PartnerContact getContactPoint()
+    {
         return contactPoint;
     }
 
-    public void setContactPoint(PartnerContact contactPoint) {
+    public void setContactPoint(PartnerContact contactPoint)
+    {
         this.contactPoint = contactPoint;
     }
 
-    public List<ContractShareVnu> getContractShareVnus() {
+    public List<ContractShareVnu> getContractShareVnus()
+    {
         return contractShareVnus;
     }
 
-    public void setContractShareVnus(List<ContractShareVnu> contractShareVnus) {
+    public void setContractShareVnus(List<ContractShareVnu> contractShareVnus)
+    {
         this.contractShareVnus = contractShareVnus;
     }
 }
