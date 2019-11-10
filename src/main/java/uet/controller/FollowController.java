@@ -71,6 +71,18 @@ public class FollowController {
         return followService.getAllFollowByInternshipTerm();
     }
 
+     /**
+     * Get All Follow By Internship Term
+     *
+     * @return
+     * @throws Exception 
+     */
+    @RequiredRoles(Role.ADMIN)
+    @RequestMapping(value = "follow/internshipTerm/research", method = RequestMethod.GET)
+    public List<Follow> studentsResearch() throws Exception {
+        return followService.getAllFollowByInternshipTerm();
+    }
+
     /**
      * Show All Follows Of Student
      *

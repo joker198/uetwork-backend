@@ -26,11 +26,11 @@ public class FollowService {
     private final PartnerRepository partnerRepository;
     private final StudentRepository studentRepository;
     private final PostRepository postRepository;
-    private InfoBySchoolRepository infoBySchoolRepository;
-    private MessageRepository messageRepository;
-    private InternshipTermRepository internshipTermRepository;
-    private LecturersRepository lecturersRepository;
-    private InternshipService internshipService;
+    private final InfoBySchoolRepository infoBySchoolRepository;
+    private final MessageRepository messageRepository;
+    private final InternshipTermRepository internshipTermRepository;
+    private final LecturersRepository lecturersRepository;
+    private final InternshipService internshipService;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final InternshipRepository internshipRepository;
     private final PartnerType partnerType;
@@ -114,8 +114,6 @@ public class FollowService {
             Date yesterday = this.yesterday();
             if (post.getExpiryTime().after(yesterday)) {
                 Student student = user.getStudent();
-                int studentId = student.getId();
-                InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();
                 Internship internship = internshipService.createInternship(token);
                 if (followRepository.findByInternshipIdAndPostId(internship.getId(), postId) == null) {
                     if (!isBlank(student.getFullName()) && !isBlank(student.getEmail()) && !isBlank(student.getPhoneNumber())) {
@@ -128,11 +126,13 @@ public class FollowService {
                         follow.setStudentName(followDTO.getStudentName());
                         follow.setStatus("WAIT");
                         Partner partner = post.getPartner();
-                        follow.setPartner(partner);
-                        follow.setPartnerId(partner.getId());
-                        follow.setPartnerName(partner.getPartnerName());
-                        follow.setInternshipTerm(internshipTermRepository.findTopByOrderByIdDesc().getId());
-                        followRepository.save(follow);
+                        if (partner != null) {
+                            follow.setPartner(partner);
+                            follow.setPartnerId(partner.getId());
+                            follow.setPartnerName(partner.getPartnerName());
+                            follow.setInternshipTerm(internshipTermRepository.findTopByOrderByIdDesc().getId());
+                            followRepository.save(follow);
+                        }
                     } else {
                         throw new NullPointerException("Please fill all your information in profile!");
                     }
@@ -181,15 +181,14 @@ public class FollowService {
                         MessageType.PassInterview, student.getUser().getUserName());
                 message.setUser(student.getUser());
                 message.setLastUpdated(new Date());
-                ApplicationContext context =
-                        new ClassPathXmlApplicationContext("Spring-Mail.xml");
+                ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Mail.xml");
                 SendMail mm = (SendMail) context.getBean("sendMail");
 
                 mm.sendMail("carbc@vnu.edu.vn",
                         student.getEmail(),
                         messageDTO.getTitle(),
-                        "Bạn có thể chọn " + partner.getPartnerName() + " để làm thực tập. " +
-                                "Vui lòng kiểm tra danh sách thực tập để chọn nơi thực tập.");
+                        "Bạn có thể chọn " + partner.getPartnerName() + " để làm thực tập. "+
+                        "Vui lòng kiểm tra danh sách thực tập để chọn nơi thực tập.");
                 messageRepository.save(message);
             }
         }
@@ -198,8 +197,8 @@ public class FollowService {
     public void sendMessage(User user, Student student) {
     }
 
-    public void addFollowByStudent(FollowDTO followDTO, String token) throws Exception {
-
+    public void addFollowByStudent(FollowDTO followDTO, String token) throws Exception
+    {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         if (followDTO.getPartner() != null) {
@@ -220,32 +219,28 @@ public class FollowService {
                             follow.setStatus("WAIT");
                             if(partner.getUser() == null){
                                 follow.setPostTitle("Recruitment_other");
-                                if(partner.getStatus() != null){
-                                    switch (partner.getStatus()) {
-                                        case "ACCEPTED":
-                                            follow.setStatus("PASS");
-                                            break;
-                                        case "WAIT":
-                                            follow.setStatus("WAIT");
-                                            break;
-                                        case "NOT_ACCEPTED":
-                                            Message message = new Message();
-                                            message.setTitle("Thông báo đăng ký công ty thực tập không được chấp nhận");
-                                            message.setContent("Đăng kí thực tập tại " + partner.getPartnerName() + " không được chấp nhận." + "<br />" + "");
-                                            message.setStatus("NEW");
-                                            message.setSendDate(new Date());
-                                            message.setSenderName("pdt");
-                                            message.setReceiverName(user.getUserName());
-                                            message.setMessageType(MessageType.Normal);
-                                            message.setLastUpdated(new Date());
-                                            message.setUser(student.getUser());
-                                            messageRepository.save(message);
-                                            simpMessagingTemplate.convertAndSend("/user/" + message.getReceiverName() + "/**", message);
-                                            throw new Exception("NOT_ACCEPTED");
+                                if(partner.getStatus() != Status.NOTHING.getValue()){
+                                    if (partner.getStatus() == Status.ACCEPTED_PARTNER.getValue()) {
+                                        follow.setStatus("PASS");
+                                    } else if (partner.getStatus() == Status.WAIT_PARTNER.getValue()) {
+                                        follow.setStatus("WAIT");
+                                    } else if (partner.getStatus() == Status.WAIT_PARTNER.getValue()) {
+                                        Message message = new Message();
+                                        message.setTitle("Thông báo đăng ký công ty thực tập không được chấp nhận");
+                                        message.setContent("Đăng kí thực tập tại " + partner.getPartnerName() + " không được chấp nhận." + "<br />" + "");
+                                        message.setStatus("NEW");
+                                        message.setSendDate(new Date());
+                                        message.setSenderName("pdt");
+                                        message.setReceiverName(user.getUserName());
+                                        message.setMessageType(MessageType.Normal);
+                                        message.setLastUpdated(new Date());
+                                        message.setUser(student.getUser());
+                                        messageRepository.save(message);
+                                        simpMessagingTemplate.convertAndSend("/user/" + message.getReceiverName() + "/**", message);
                                     }
                                 } else {
                                     follow.setStatus("WAIT");
-                                    partner.setStatus("WAIT");
+                                    partner.setStatus(Status.WAIT_PARTNER.getValue());
                                     partnerRepository.save(partner);
                                 }
                             } else {
@@ -287,7 +282,7 @@ public class FollowService {
                                     partner1.setAddress(followDTO.getPartnerDTO().getAddress());
                                     partner1.setTaxCode(followDTO.getPartnerDTO().getTaxCode());
                                     partner1.setFieldWork(followDTO.getPartnerDTO().getFieldWork());
-                                    partner1.setStatus("WAIT");
+                                    partner1.setStatus(Status.WAIT_PARTNER.getValue());
                                     partnerRepository.save(partner1);
                                     Follow follow = new Follow();
                                     follow.setInternship(internship);
@@ -334,6 +329,7 @@ public class FollowService {
     }
 
     public void unfollow(int postId, String token, FollowDTO followDTO) {
+        System.out.println(followDTO.getId());
         User user = userRepository.findByToken(token);
         int studentId = 0;
         if (user.getRole().equals(String.valueOf(Role.ADMIN))) {
@@ -374,8 +370,8 @@ public class FollowService {
                 Partner partner = follow.getPartner();
                 Internship internship = follow.getInternship();
                 followRepository.delete(follow);
-                if (partner.getStatus() != null) {
-                    if (partner.getStatus().equals("WAIT")) {
+                if (partner.getStatus() != Status.NOTHING.getValue()) {
+                    if (partner.getStatus() == Status.WAIT_PARTNER.getValue()) {
                         List<Follow> follows = partner.getFollows();
                         if (follows.isEmpty()) {
                             partnerRepository.delete(partner);

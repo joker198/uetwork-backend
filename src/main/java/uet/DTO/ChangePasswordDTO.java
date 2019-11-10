@@ -4,9 +4,9 @@ package uet.DTO;
  * Created by nhkha on 11/03/2017.
  */
 public class ChangePasswordDTO {
-    private String oldPassword;
-    private  String newPassword;
     private int userId;
+    private String oldPassword;
+    private String newPassword;
 
     public String getOldPassword() {
         return oldPassword;

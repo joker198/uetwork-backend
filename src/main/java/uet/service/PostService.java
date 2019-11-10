@@ -65,7 +65,9 @@ public class PostService {
             post.setRequiredNumber(postDTO.getRequiredNumber());
             post.setPartner(partner);
             post.setPostType(postDTO.getPostType());
-            post.setPartnerName(partner.getPartnerName());
+            if (partner != null) {
+                post.setPartnerName(partner.getPartnerName());
+            }
             if (user.getRole().equals(String.valueOf(Role.VIP_PARTNER)) || user.getRole().equals(String.valueOf(Role.ADMIN))) {
                 post.setStatus("A");
             } else if (Objects.equals(user.getRole(), String.valueOf(Role.NORMAL_PARTNER))) {

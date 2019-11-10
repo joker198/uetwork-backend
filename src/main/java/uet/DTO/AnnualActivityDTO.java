@@ -7,8 +7,6 @@ import java.util.Date;
  */
 public class AnnualActivityDTO {
     private int id;
-//    private Partner partner;
-
     private String activityName;
     private String funding;
     private String date;

@@ -1,19 +1,19 @@
 package uet.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Tu on 03-May-16.
  */
 @Entity
 @Table(name="Partner")
-public class Partner {
+public class Partner implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +31,7 @@ public class Partner {
     private Double averageRating;
     private Integer totalRating;
     private String description;
-    private String status;
+    private int status;
     private Date birthday;
     private String partnerType;
 
@@ -69,6 +69,10 @@ public class Partner {
     @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<PassInterview> passInterviews;
+
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<PartnerInternshipterm> partnerInternshipterms;
 
     public Partner(){}
 
@@ -260,11 +264,11 @@ public class Partner {
         this.description = description;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -283,6 +287,12 @@ public class Partner {
     public void setPartnerType(String partnerType) {
         this.partnerType = partnerType;
     }
+
+    public List<PartnerInternshipterm> getPartnerInternshipterms()
+    {
+        return this.partnerInternshipterms;
+    }
+
 }
 
 
