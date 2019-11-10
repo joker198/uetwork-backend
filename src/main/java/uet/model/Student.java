@@ -48,15 +48,12 @@ public class Student {
     @JsonIgnore
     private List<JobSkill> jobSkills;
 
-
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<PassInterview> passInterviews;
 
     @ManyToOne
     @JoinColumn(name="lecturers_id")
-//    @JsonIgnore
     private Lecturers lecturers;
 
     @ManyToOne
@@ -158,16 +155,19 @@ public class Student {
         this.infoBySchool = infoBySchool;
     }
 
+    public List<JobSkill> getJobSkills()
+    {
+        return jobSkills;
+    }
 
-    public List<JobSkill> getJobSkills() { return jobSkills; }
+    public void setJobSkills(List<JobSkill> jobSkills)
+    {
+        this.jobSkills = jobSkills;
+    }
 
-    public void setJobSkills(List<JobSkill> jobSkills) { this.jobSkills = jobSkills; }
-
-//    public List<Follow> getFollows() { return follows; }
-//
-//    public void setFollows(List<Follow> follows) { this.follows = follows; }
-
-    public void add(Student student) {
+    public void add(Student student)
+    {
+        //
     }
 
     public Lecturers getLecturers() {

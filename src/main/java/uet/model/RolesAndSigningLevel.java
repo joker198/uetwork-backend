@@ -1,7 +1,6 @@
 package uet.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,13 +13,6 @@ public class RolesAndSigningLevel {
     private String name;
     private String role;
     private String universityName;
-//    @OneToOne(mappedBy = "rolesAndSigningLevel",cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private RolesAndSigningLevel child;
-
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "parent")
-//    private RolesAndSigningLevel parent;
 
     @ManyToOne
     @JoinColumn(name="parent_id")
@@ -28,7 +20,6 @@ public class RolesAndSigningLevel {
     private RolesAndSigningLevel parent_id;
 
     @OneToMany(mappedBy = "parent_id", cascade = CascadeType.ALL)
-//    @JsonIgnore
     private List<RolesAndSigningLevel> child;
 
     @OneToOne(mappedBy = "rolesSigningLevel", cascade = CascadeType.ALL)

@@ -7,7 +7,6 @@ import uet.model.Nation;
 import uet.service.NationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -24,28 +23,51 @@ public class NationController {
         this.nationService = nationService;
     }
 
-    //create continent
+    /**
+     * Create Continent
+     *
+     * @param continentDTO
+     * @param request
+     * @return 
+     */
     @RequestMapping(value = "/continent/create", method = RequestMethod.POST)
     public Continent createContinent(@RequestBody ContinentDTO continentDTO, HttpServletRequest request){
         String token = request.getHeader("auth-token");
         return nationService.createContinent(continentDTO, token);
     }
 
-    //edit continent
+    /**
+     * Edit Continent
+     *
+     * @param continentDTO
+     * @param request 
+     */
     @RequestMapping(value = "continent/edit", method = RequestMethod.PUT)
     public void editContinent(@RequestBody ContinentDTO continentDTO, HttpServletRequest request){
         String token = request.getHeader("auth-token");
         nationService.editContinent(continentDTO, token);
     }
 
-    //delete continent
+    /**
+     * Delete Continent
+     *
+     * @param continentId
+     * @param request 
+     */
     @RequestMapping(value = "/continent/{continentId}/delete", method = RequestMethod.DELETE)
     public void deleteContinent(@PathVariable("continentId") int continentId, HttpServletRequest request){
         String token = request.getHeader("auth-token");
         nationService.deleteContinent(continentId, token);
     }
 
-    //create nation
+    /**
+     * Create Nation
+     *
+     * @param nationDTO
+     * @param continentId
+     * @param request
+     * @return 
+     */
     @RequestMapping(value = "/continent/{continentId}/nation/create", method = RequestMethod.POST)
     public Nation createNation(@RequestBody NationDTO nationDTO, @PathVariable("continentId") int continentId,
                              HttpServletRequest request){
@@ -53,30 +75,45 @@ public class NationController {
         return nationService.createNation(nationDTO, continentId, token);
     }
 
-    //edit nation
+    /**
+     * Edit Nation
+     *
+     * @param nationDTO
+     * @param request 
+     */
     @RequestMapping(value = "nation/edit", method = RequestMethod.PUT)
     public void editNation(@RequestBody NationDTO nationDTO, HttpServletRequest request){
         String token = request.getHeader("auth-token");
         nationService.editNation(nationDTO, token);
     }
 
-    //show all continent
+    /**
+     * Show All Continent
+     *
+     * @return 
+     */
     @RequestMapping(value = "/continent", method = RequestMethod.GET)
     public List<Continent> getAllContinent(){
         return nationService.getAllContinent();
     }
 
-    //show all nation of continent
-    // continent/{continentId}
-
-    //delele nation
+    /**
+     * Delete Nation
+     *
+     * @param nationId
+     * @param request 
+     */
     @RequestMapping(value = "/nation/{nationId}/delete", method = RequestMethod.DELETE)
     public void deleteNation(@PathVariable("nationId") int nationId, HttpServletRequest request){
         String token = request.getHeader("auth-token");
         nationService.deleteNation(nationId, token);
     }
 
-    //get all nation
+    /**
+     * Get All Nation
+     *
+     * @return 
+     */
     @RequestMapping(value = "/nation", method = RequestMethod.GET)
     public List<Nation> getAllNation(){
         return nationService.getAllNation();

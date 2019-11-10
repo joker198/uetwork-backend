@@ -8,7 +8,6 @@ import uet.model.AdminNotification;
 import uet.model.Role;
 import uet.service.AdminService;
 import uet.stereotype.RequiredRoles;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -22,34 +21,60 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    //get all notification
+    /**
+     * Get All Notification
+     *
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value="/notification/all/admin", method = RequestMethod.GET)
     public List<AdminNotification> getNotification() {
         return adminService.getNotification();
     }
 
-    //get new notification
+    /**
+     * Get New Notification
+     *
+     * @param status
+     * @return 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value="/notification/{status}/admin", method = RequestMethod.GET)
     public List<AdminNotification> getNewNotification(@PathVariable("status") String status) {
         return adminService.getNewNotification(status);
     }
 
-    //remove notification
+    /**
+     * Remove Notification
+     * 
+     * @param id 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value="/notification/{id}", method = RequestMethod.POST)
     public void removeNotification(@PathVariable("id") int id) {
         adminService.removeNotification(id);
     }
 
-    //write report
+    /**
+     * Write Report
+     *
+     * @param adminNotificationDTO
+     * @param request 
+     */
     @RequestMapping(value="/report", method = RequestMethod.PUT)
     public void removeNotification(@RequestBody AdminNotificationDTO adminNotificationDTO, HttpServletRequest request) {
         String token = request.getHeader("auth-token");
         adminService.writeReport(adminNotificationDTO, token);
     }
 
+    /**
+     * Export SQL Data
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value="data/export", method = RequestMethod.GET)
     public MessageDTO exportSqlData(HttpServletRequest request) throws IOException, InterruptedException {
@@ -57,14 +82,18 @@ public class AdminController {
         return adminService.exportSqlData(token);
     }
 
+    /**
+     * Get Files In Folder
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value="get/backupFile", method = RequestMethod.GET)
     public File[] getAllFileInFolder(HttpServletRequest request) throws IOException, InterruptedException {
         String token = request.getHeader("auth-token");
         return adminService.getAllFileInFolder();
     }
-
-    //get class
-//    @RequiredRoles(Role.ADMIN)
-//    @RequestMapping(value = )
 }

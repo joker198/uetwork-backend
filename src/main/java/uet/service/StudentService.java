@@ -26,25 +26,26 @@ import java.util.List;
 @Service
 public class StudentService {
 
-    final
-    UserRepository userRepository;
-
+    final UserRepository userRepository;
     private final StudentRepository studentRepository;
-    private final
-    PartnerRepository partnerRepository;
-    private final
-    PostRepository postRepository;
-    private final
-    InfoBySchoolRepository infoBySchoolRepository;
-    private  final  InternshipTermRepository internshipTermRepository;
-    private
-    FollowRepository followRepository;
+    private final PartnerRepository partnerRepository;
+    private final PostRepository postRepository;
+    private final InfoBySchoolRepository infoBySchoolRepository;
+    private final InternshipTermRepository internshipTermRepository;
+    private FollowRepository followRepository;
     private final InternshipRepository internshipRepository;
 
     @Autowired
-    public StudentService(UserRepository userRepository, StudentRepository studentRepository, PartnerRepository partnerRepository,
-                          PostRepository postRepository, InfoBySchoolRepository infoBySchoolRepository,
-                          InternshipTermRepository internshipTermRepository, FollowRepository followRepository1, InternshipRepository internshipRepository) {
+    public StudentService(
+        UserRepository userRepository,
+        StudentRepository studentRepository,
+        PartnerRepository partnerRepository,
+        PostRepository postRepository,
+        InfoBySchoolRepository infoBySchoolRepository,
+        InternshipTermRepository internshipTermRepository,
+        FollowRepository followRepository1,
+        InternshipRepository internshipRepository
+    ) {
         this.userRepository = userRepository;
         this.studentRepository = studentRepository;
         this.partnerRepository = partnerRepository;
@@ -55,8 +56,8 @@ public class StudentService {
         this.internshipRepository = internshipRepository;
     }
 
-    //Show all student information
-    public List<HashMap<String, String>> getAllInfo(String token) {
+    public List<HashMap<String, String>> getAllInfo(String token)
+    {
         List<InfoBySchool> allInfoBySchool = (List<InfoBySchool>) infoBySchoolRepository.findAll();
         List<HashMap<String, String>> listPartnerInfo = new ArrayList<HashMap<String, String>>();
         User checkUser = userRepository.findByToken(token);
@@ -102,13 +103,14 @@ public class StudentService {
     }
 
     // show all student
-    public Page<Student> getAllStudent(Pageable pageable) {
+    public Page<Student> getAllStudent(Pageable pageable)
+    {
         return studentRepository.findAllByOrderByIdDesc(pageable);
-
     }
 
     // show info of a student
-    public Student getStudentInfo(String token) {
+    public Student getStudentInfo(String token)
+    {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         if (student != null) {
@@ -116,12 +118,11 @@ public class StudentService {
         } else {
             throw new NullPointerException("No result");
         }
-
-
     }
 
     //edit info of a student
-    public Student editStudentInfo(StudentDTO studentDTO, String token) throws IOException {
+    public Student editStudentInfo(StudentDTO studentDTO, String token) throws IOException
+    {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         if (student != null) {
@@ -153,15 +154,14 @@ public class StudentService {
     }
 
     //change Avatar
-    public void changeAva(StudentDTO studentDTO, String token) throws IOException {
+    public void changeAva(StudentDTO studentDTO, String token) throws IOException
+    {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         String username = user.getUserName();
         Student studentInfo = studentRepository.findById(studentDTO.getId());
-        if(studentInfo.equals(student)){
-            //code đổi tên image thành student_id.jpg và save vào database
+        if (studentInfo.equals(student)) {
             String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + username + "/";
-//                String directoryName = pathname.concat(this.getClassName());
             String directoryName = "/users_data/" + username + "/";
             String fileName = username + "_avatar.jpg";
             File directory = new File(pathname);
@@ -180,36 +180,6 @@ public class StudentService {
         }
     }
 
-    //delete info of a student
-//    public void deleteStudentInfo(int id, String token) {
-//        User user = userRepository.findByToken(token);
-//        Student student = user.getStudent();
-//        Student studentinfo = studentRepository.findById(id);
-//        if (user.getRole() == Role.STUDENT) {
-//            if (student.equals(studentinfo)) {
-//                studentinfo.setFullName(null);
-//                studentinfo.setBirthday(null);
-//                studentinfo.setPhoneNumber(null);
-//                studentinfo.setAddress(null);
-//                studentinfo.setEmail(null);
-//                studentinfo.setSkype(null);
-//                studentinfo.setDesire(null);
-//                studentinfo.setAvatar(null);
-//            }
-//        } else {
-//            studentinfo.setFullName(null);
-//            studentinfo.setBirthday(null);
-//            studentinfo.setPhoneNumber(null);
-//            studentinfo.setAddress(null);
-//            studentinfo.setEmail(null);
-//            studentinfo.setSkype(null);
-//            studentinfo.setDesire(null);
-//            studentinfo.setAvatar(null);
-//        }
-//        studentRepository.save(studentinfo);
-//    }
-
-    //Show
     public Student findStudent(int studentId, String token) {
         User user = userRepository.findByToken(token);
         if (user.getRole().equals(String.valueOf(Role.STUDENT))) {
@@ -229,15 +199,6 @@ public class StudentService {
         }
     }
 
-//    //Create
-//    public Student createStudent(int userId, StudentDTO studentDTO) {
-//        User user = userRepository.findOne(userId);
-//        Student student = new Student();
-//        student.setStudentName(studentDTO.getStudentName());
-//        user.setStudent(student);
-//        return studentRepository.save(student);
-//    }
-
     //Student search partner
     public List<Partner> searchPartner(PartnerDTO partnerDTO) {
         List<Partner> allPartnerMatched = (List<Partner>) partnerRepository.findByPartnerNameContaining(partnerDTO.getPartnerName());
@@ -251,13 +212,14 @@ public class StudentService {
     }
 
     //Student search post by content
-    public List<Post> searchContent(PostDTO postDTO) {
+    public List<Post> searchContent(PostDTO postDTO)
+    {
         List<Post> allPostMatched = (List<Post>) postRepository.findByContentContaining(postDTO.getContent());
         return allPostMatched;
     }
 
-
-    public void deleteStudent(int studentId) {
+    public void deleteStudent(int studentId)
+    {
         Student student = studentRepository.findById(studentId);
         if(student != null){
             userRepository.delete(student.getUser());
@@ -266,7 +228,8 @@ public class StudentService {
         }
     }
 
-    public List<InfoBySchool> findStudentByStudentCode(InfoBySchoolDTO info) {
+    public List<InfoBySchool> findStudentByStudentCode(InfoBySchoolDTO info)
+    {
          List<InfoBySchool> listInfoBySchool = infoBySchoolRepository.findByStudentCodeContaining(info.getStudentCode());
          for(InfoBySchool infoBySchool : listInfoBySchool){
              infoBySchool.setStudent(infoBySchool.getStudent());
@@ -274,17 +237,8 @@ public class StudentService {
          return listInfoBySchool;
     }
 
-//    public List<Student> getAllStudentNoLecturers() {
-//        return studentRepository.findByLecturersIdIsNull();
-//    }
-
-//    public List<Student> getAllStudentByInternshipTermAndNOLecturers(){
-//        InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();
-//        int internshipTermId = internshipTerm.getId();
-//        return studentRepository.findByLecturersIdIsNullAndInternshipTermId(internshipTermId);
-//    }
-
-    public List<Internship> getStudentByInternshipTerm(int internshipTermId) {
+    public List<Internship> getStudentByInternshipTerm(int internshipTermId)
+    {
         InternshipTerm internshipTerm = internshipTermRepository.findById(internshipTermId);
         if(internshipTerm != null){
             return internshipTerm.getInternships();
@@ -293,39 +247,8 @@ public class StudentService {
         }
     }
 
-//    public List<Student> getStudentNoInternshipTerm(){
-//        return studentRepository.findByInternshipTermIdIsNull();
-//    }
-
-//    public StudentDTO getCountStudentNoFollow(){
-//        int count = 0;
-//        List<Student> listStudent = (List<Student>) studentRepository.findAll();
-//        for(Student student : listStudent){
-//            if(student.getFollows().isEmpty()){
-//                count++;
-//            }
-//        }
-//        StudentDTO studentDTO = new StudentDTO();
-//        studentDTO.setId(count);
-//        return studentDTO;
-//    }
-
-//    public void addAllStudentToInternshipTerm() {
-//        List<Follow> listStudent = (List<Follow>) followRepository.findAll();
-//        InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();
-//        for (Follow follow : listStudent){
-//            Student student = follow.getStudent();
-//            if(student.getInternshipTerm() == null){
-//                int internshipCount = internshipTerm.getInternshipCount() + 1;
-//                internshipTerm.setInternshipCount(internshipCount);
-//                student.setInternshipTerm(internshipTerm);
-//                internshipTermRepository.save(internshipTerm);
-//                studentRepository.save(student);
-//            }
-//        }
-//    }
-
-    public List<Internship> getStudentByLecturersId(String token) throws Exception {
+    public List<Internship> getStudentByLecturersId(String token) throws Exception
+    {
         User user = userRepository.findByToken(token);
         if (user != null) {
             if (user.getRole().equals(String.valueOf(Role.ADMIN))) {
@@ -341,7 +264,8 @@ public class StudentService {
         }
     }
 
-    public StudentDTO getStudentInformationByUserId(int userId) throws Exception {
+    public StudentDTO getStudentInformationByUserId(int userId) throws Exception
+    {
         User user = userRepository.findById(userId);
         if(user != null){
             if(user.getStudent() != null){

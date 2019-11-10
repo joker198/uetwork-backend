@@ -29,8 +29,6 @@ public interface MessageRepository extends CrudRepository<Message, Integer>, Pag
     Message findByIdAndMessageType(int id, MessageType messageType);
     Page<Message> findByUserIdOrderByIdDesc(int userId, Pageable pageable);
     Message findByMessageTypeAndMessageId (MessageType messageType, int id);
-
-
     String updateUserId = "update message m set m.user_id = null where m.user_id = :userId";
 
     @Modifying

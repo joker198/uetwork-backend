@@ -22,25 +22,13 @@ import java.util.List;
  */
 @Service
 public class PartnerService {
-    final
-    StudentRepository studentRepository;
-    private final
-    NationRepository nationRepository;
-
-    private
-    PartnerRepository partnerRepository;
-
-    private final
-    PartnerContactRepository partnerContactRepository;
-
-    private
-    UserRepository userRepository;
-
-    private final
-    ActivityLogRepository activityLogRepository;
-
-
-        private PostRepository postRepository;
+    final StudentRepository studentRepository;
+    private final NationRepository nationRepository;
+    private PartnerRepository partnerRepository;
+    private final PartnerContactRepository partnerContactRepository;
+    private UserRepository userRepository;
+    private final ActivityLogRepository activityLogRepository;
+    private PostRepository postRepository;
     private FollowRepository followRepository;
     private MessageRepository messageRepository;
     private FollowService followService;
@@ -51,16 +39,23 @@ public class PartnerService {
     private final PartnerType partnerType;
 
     @Autowired
-    public PartnerService(NationRepository nationRepository,
-                          PartnerContactRepository partnerContactRepository, UserRepository userRepository,
-                          ActivityLogRepository activityLogRepository,
-                          PartnerRepository partnerRepository, StudentRepository studentRepository,
-                          AnnualActivityRepository annualActivityRepository,
-                          PostRepository postRepository, PartnerType partnerType,
-                          FollowRepository followRepository,
-                          MessageRepository messageRepository,
-                          FollowService followService, InternshipTermRepository internshipTermRepository,
-                          SimpMessagingTemplate simpMessagingTemplate, InternshipRepository internshipRepository) {
+    public PartnerService(
+        NationRepository nationRepository,
+        PartnerContactRepository partnerContactRepository,
+        UserRepository userRepository,
+        ActivityLogRepository activityLogRepository,
+        PartnerRepository partnerRepository,
+        StudentRepository studentRepository,
+        AnnualActivityRepository annualActivityRepository,
+        PostRepository postRepository,
+        PartnerType partnerType,
+        FollowRepository followRepository,
+        MessageRepository messageRepository,
+        FollowService followService,
+        InternshipTermRepository internshipTermRepository,
+        SimpMessagingTemplate simpMessagingTemplate,
+        InternshipRepository internshipRepository
+    ) {
         this.userRepository = userRepository;
         this.partnerRepository = partnerRepository;
         this.studentRepository = studentRepository;
@@ -69,7 +64,6 @@ public class PartnerService {
         this.partnerContactRepository = partnerContactRepository;
         this.userRepository = userRepository;
         this.activityLogRepository = activityLogRepository;
-//        this.annualActivityRepository = annualActivityRepository;
         this.postRepository = postRepository;
         this.followRepository = followRepository;
         this.messageRepository = messageRepository;
@@ -81,25 +75,22 @@ public class PartnerService {
     }
 
     //show list all partner
-    public List<Partner> getPartners() {
+    public List<Partner> getPartners()
+    {
         List<Partner> allPartners = (List<Partner>) partnerRepository.findAll();
         return allPartners;
     }
 
-    //show a partner
-//    public Partner showPartner(int partnerId){
-//        Partner partner = partnerRepository.findOne(partnerId);
-//        return partner;
-//    }
-
     //partner search students
-    public List<Student> searchStudent(StudentDTO studentDTO) {
+    public List<Student> searchStudent(StudentDTO studentDTO)
+    {
         List<Student> allStudentMatched = (List<Student>) studentRepository.findByFullNameContaining(studentDTO.getFullName());
         return allStudentMatched;
     }
 
     //edit  of a partner
-    public Partner editInfo(int partnerId, PartnerDTO partnerDTO, String token) {
+    public Partner editInfo(int partnerId, PartnerDTO partnerDTO, String token)
+    {
         User user = userRepository.findByToken(token);
         if (user.getRole().equals(String.valueOf(Role.ADMIN))) {
             Partner partner = partnerRepository.findOne(partnerId);
@@ -165,18 +156,16 @@ public class PartnerService {
     }
 
     //change Logo
-    public void changeLogo(PartnerDTO partnerDTO, String token) throws IOException, IOException {
+    public void changeLogo(PartnerDTO partnerDTO, String token) throws IOException, IOException
+    {
         User user = userRepository.findByToken(token);
         Partner partner = user.getPartner();
         String username = user.getUserName();
-//        Partner partner = partner.getPartner();
-        //code đổi tên image thành partner_id.jpg và save vào database
         String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + username;
         File directory = new File(pathname);
         if (!directory.exists()) {
             directory.mkdir();
         }
-//        directory.delete();
         pathname = "../ " + GlobalConfig.sourceAddress + "/app/users_data/" + username + "/logo/";
         String directoryName = "/users_data/" + username + "/logo/";
         String fileName = username + "_logo.jpg";
@@ -194,7 +183,8 @@ public class PartnerService {
     }
 
     //get partner vip logo
-    public List<HashMap<String, String>> getPartnerViplogo() {
+    public List<HashMap<String, String>> getPartnerViplogo()
+    {
         List<HashMap<String, String>> listPartner = new ArrayList<HashMap<String, String>>();
         List<User> Users = (List<User>) userRepository.findByRoleAndStatus(String.valueOf(Role.VIP_PARTNER), "A");
         for (User user : Users) {
@@ -208,7 +198,8 @@ public class PartnerService {
         return listPartner;
     }
 
-    public List<HashMap<String, String>> getPartnerIdAndPartnerName(String string) {
+    public List<HashMap<String, String>> getPartnerIdAndPartnerName(String string)
+    {
         List<HashMap<String, String>> listNameAndId = new ArrayList<HashMap<String, String>>();
         List<Partner> listPartner = (List<Partner>) partnerRepository.findAll();
         if (string.equals("true")) {
@@ -260,17 +251,18 @@ public class PartnerService {
     }
 
 
-    public List<Partner> getOtherPartner() {
-//        return partnerRepository.findByUserIsNull();
+    public List<Partner> getOtherPartner()
+    {
         return partnerRepository.findByPartnerType(partnerType.getOtherType());
     }
 
-    public List<Partner> getFitPartner() {
-//        return partnerRepository.findByUserIsNotNull();
+    public List<Partner> getFitPartner()
+    {
         return partnerRepository.findByPartnerType(partnerType.getFitType());
     }
 
-    public Partner createPartner(PartnerDTO partnerDTO, String token) throws Exception {
+    public Partner createPartner(PartnerDTO partnerDTO, String token) throws Exception
+    {
         Nation nation = nationRepository.findOne(partnerDTO.getNationId());
         if (nation != null) {
             Partner partner1 = partnerRepository.findByPartnerName(partnerDTO.getPartnerName());
@@ -292,7 +284,6 @@ public class PartnerService {
                         partnerContactRepository.save(partnerContact);
                     }
                 }
-
                 User user = userRepository.findByToken(token);
                 if (user.getRole().equals(String.valueOf(Role.UNIT))) {
                     ActivityLog activityLog = new ActivityLog(user);
@@ -308,13 +299,13 @@ public class PartnerService {
             } else {
                 throw new Exception("Tên đối tác đã tồn tại");
             }
-
         } else {
             throw new Exception("Không tìm thấy Quốc gia!");
         }
     }
 
-    public void deletePartner(int partnerId, String token) {
+    public void deletePartner(int partnerId, String token)
+    {
         Partner partner = partnerRepository.findById(partnerId);
         if (partner != null) {
             partnerRepository.delete(partner);
@@ -333,8 +324,8 @@ public class PartnerService {
         }
     }
 
-
-    public Partner editPartnerInfo(PartnerDTO partnerInfoDTO, String token) {
+    public Partner editPartnerInfo(PartnerDTO partnerInfoDTO, String token)
+    {
         Partner partner = partnerRepository.findById(partnerInfoDTO.getPartnerId());
         if (partner != null) {
             partner.setPartnerName(partnerInfoDTO.getPartnerName());
@@ -352,8 +343,6 @@ public class PartnerService {
                 Nation nation = nationRepository.findOne(partnerInfoDTO.getNationId());
                 if (nation != null) {
                     partner.setNation(nation);
-//                    nation.set
-
                     partnerRepository.save(partner);
                 } else {
                     throw new NullPointerException("Không tìm thấy Quóc gia! " + partnerInfoDTO.getNationId());
@@ -376,14 +365,14 @@ public class PartnerService {
         }
     }
 
-    public PartnerContact createPartnerContact(int partnerId, PartnerContactDTO partnerContactDTO, String token) {
+    public PartnerContact createPartnerContact(int partnerId, PartnerContactDTO partnerContactDTO, String token)
+    {
         Partner partner = partnerRepository.findById(partnerId);
         if (partner != null) {
             PartnerContact partnerContact = new PartnerContact(partnerContactDTO.getContactName(),
                     partnerContactDTO.getPhone(), partnerContactDTO.getEmail(), partnerContactDTO.getSkype(),
                     partnerContactDTO.getAbout(), partner);
             partnerContactRepository.save(partnerContact);
-//            partnerRepository.save(partner);
             User user = userRepository.findByToken(token);
             if (user.getRole().equals(String.valueOf(Role.UNIT))) {
                 ActivityLog activityLog = new ActivityLog(user);
@@ -400,7 +389,8 @@ public class PartnerService {
         }
     }
 
-    public void editPartnerContact(PartnerContactDTO partnerContactDTO, String token) {
+    public void editPartnerContact(PartnerContactDTO partnerContactDTO, String token)
+    {
         PartnerContact partnerContact = partnerContactRepository.findById(partnerContactDTO.getId());
         if (partnerContact != null) {
             partnerContact.setContactName(partnerContactDTO.getContactName());
@@ -429,29 +419,14 @@ public class PartnerService {
         User user = userRepository.findByToken(token);
         for (PartnerDTO partnerDTO : listpartnerDTO) {
             Partner partner = partnerRepository.findById(partnerDTO.getId());
-//            partnerRepository.delete(partner);
             List<Follow> follow = followRepository.findByPartnerIdAndInternshipTerm(partner.getId(), internshipTerm.getId());
-//        ApplicationContext context =
-//                new ClassPathXmlApplicationContext("Spring-Mail.xml");
-//        SendMail mm = (SendMail) context.getBean("sendMail");
             for (Follow follow1 : follow) {
                 Internship internship = follow1.getInternship();
                 Student student = internship.getStudent();
-//                if(internship.getInternshipTerm() == null){
-//                    int internshipCount = internshipTerm.getInternshipCount() + 1;
-//                    internshipTerm.setInternshipCount(internshipCount);
-//                    internship.setInternshipTerm(internshipTerm);
-//                    internshipTermRepository.save(internshipTerm);
-//                    internshipRepository.save(internship);
-//                }
                 if (partnerDTO.getStatus() == null) {
                     follow1.setInternshipTerm(internshipTerm.getId());
                     follow1.setStatus("PASS");
                     followRepository.save(follow1);
-                    //pass interview không cần thiết, nhưng đã lỡ làm rồi nên lười sửa
-//                    internshipService.createPassinterviewLink(student.getId(), partner.getId());
-
-
                     Message message = new Message();
                     message.setTitle("Thông báo xác nhận thông tin thực tập");
                     message.setContent("Đăng kí thực tập tại " + partner.getPartnerName() + " thành công." + "<br /></a>");
@@ -469,7 +444,6 @@ public class PartnerService {
                     follow1.setInternshipTerm(internshipTerm.getId());
                     follow1.setStatus("FAIL");
                     followRepository.save(follow1);
-
                     Message message = new Message();
                     message.setTitle("Thông báo về việc đăng ký công ty thực tập");
                     message.setContent("Đăng kí thực tập tại " + partner.getPartnerName() + " không được chấp nhận. Bạn có thể đăng ký công ty khác hoặc đăng ký thực tập tại đối tác của Khoa.");
@@ -482,14 +456,6 @@ public class PartnerService {
                     message.setLastUpdated(new Date());
                     messageRepository.save(message);
                     simpMessagingTemplate.convertAndSend("/user/" + message.getReceiverName() + "/**", message);
-//                    System.out.print("\n\n\nsdfsdf sdf sdf ");
-//                    follow1.setStatus("FAIL");
-//                    GlobalConfig.mailMessages.sendMail("carbc@vnu.edu.vn",
-//                            student.getEmail(),
-//                            message.getTitle(),
-//                            message.getContent());
-//                    follow1.setStatus("Not Accepted!");
-//                    followRepository.save(follow1);
                 }
             }
             if(partnerDTO.getStatus() != null){
@@ -504,7 +470,8 @@ public class PartnerService {
         }
     }
 
-    public void deletePartnerContact(int contactId, String token) {
+    public void deletePartnerContact(int contactId, String token)
+    {
         PartnerContact partnerContact = partnerContactRepository.findById(contactId);
         if (partnerContact != null) {
             if (partnerContact.getContract().isEmpty()) {
@@ -527,27 +494,33 @@ public class PartnerService {
         }
     }
 
-    public List<Partner> showAllPartner() {
+    public List<Partner> showAllPartner()
+    {
         return (List<Partner>) partnerRepository.findAll();
     }
 
-    public Partner showPartner(int partnerId) {
+    public Partner showPartner(int partnerId)
+    {
         return partnerRepository.findById(partnerId);
     }
 
-    public List<PartnerContact> showAllPartnerContact(int partnerId) {
+    public List<PartnerContact> showAllPartnerContact(int partnerId)
+    {
         return partnerRepository.findById(partnerId).getPartnerContacts();
     }
 
-    public List<PartnerDTO> getPartnerAndId() {
+    public List<PartnerDTO> getPartnerAndId()
+    {
         return partnerRepository.findPartnerNameAndId();
     }
 
-    public List<Partner> getAllWaitPartner() {
+    public List<Partner> getAllWaitPartner()
+    {
         return partnerRepository.findByStatus("WAIT");
     }
 
-    public Partner findPartnerByContactId(int partnerContactId) throws Exception {
+    public Partner findPartnerByContactId(int partnerContactId) throws Exception
+    {
         PartnerContact partnerContact = partnerContactRepository.findById(partnerContactId);
         if(partnerContact != null){
             return partnerContact.getPartner();
@@ -556,7 +529,8 @@ public class PartnerService {
         }
     }
 
-    public Partner findPartnerByPostId(int postId) throws Exception {
+    public Partner findPartnerByPostId(int postId) throws Exception
+    {
         Post post = postRepository.findById(postId);
         if(post != null){
             return post.getPartner();
@@ -565,15 +539,18 @@ public class PartnerService {
         }
     }
 
-    public List<PartnerDTO> getPartnerNameAndIdOfOtherPartner() {
+    public List<PartnerDTO> getPartnerNameAndIdOfOtherPartner()
+    {
         return partnerRepository.findPartnerNameAndIdOfOther();
     }
 
-    public List<PartnerDTO> getPartnerNameAndIdOfFitPartner() {
+    public List<PartnerDTO> getPartnerNameAndIdOfFitPartner()
+    {
         return partnerRepository.findPartnerNameAndIdOfFit();
     }
 
-    public void resetStatusPartnerType(){
+    public void resetStatusPartnerType()
+    {
         List<Partner> partners = partnerRepository.findByPartnerType(partnerType.getOtherType());
         for(Partner partner : partners){
             partner.setStatus(null);

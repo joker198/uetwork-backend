@@ -16,7 +16,6 @@ import uet.repository.UserRepository;
 import uet.service.MessageService;
 import uet.stereotype.NoAuthentication;
 import uet.stereotype.RequiredRoles;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
@@ -38,33 +37,57 @@ public class MessageController {
         this.userRepository = userRepository;
     }
 
-    //create pass interview message to student
+    /**
+     * Create Pass Interview Message To Student
+     *
+     * @param listMessageDTO
+     * @param request 
+     */
     @RequestMapping(value = "message/passInterview/create", method = RequestMethod.POST)
     public void createMessage(@RequestBody List<MessageDTO> listMessageDTO, HttpServletRequest request){
         String token= request.getHeader("auth-token");
         messageService.createPassInterviewMessage(listMessageDTO, token);
     }
 
-    //fail interview message
+    /**
+     * Fail Interview Message
+     *
+     * @param listMessageDTO
+     * @param request 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "message/failInterview/create", method = RequestMethod.POST)
     public void createFailInterview(@RequestBody List<MessageDTO> listMessageDTO, HttpServletRequest request){
         String token= request.getHeader("auth-token");
         messageService.createFailInterview(listMessageDTO, token);
     }
-    // create message
+
+    /**
+     * Create Message
+     *
+     * @param messageDTO
+     * @param request
+     * @return
+     * @throws IOException 
+     */
     @RequestMapping(value = "message/create", method = RequestMethod.POST)
     public Message writeMessage(@RequestBody MessageDTO messageDTO, HttpServletRequest request) throws IOException {
         String token= request.getHeader("auth-token");
         Message message = messageService.writeMessage(messageDTO, token);
         User user = userRepository.findByUserName(message.getReceiverName());
         int userId = user.getId();
-//        message.getMessages().add(message.getMessage());
         simpMessagingTemplate.convertAndSend("/user/" + message.getReceiverName() + "/**", message);
         return message;
     }
 
-    //get message
+    /**
+     * Get Message
+     *
+     * @param request
+     * @param pageable
+     * @param lastUpdated
+     * @return 
+     */
     @RequestMapping(value = "message", method = RequestMethod.GET)
     public Page<Message> getMessage(HttpServletRequest request, Pageable pageable, @RequestParam(value = "lastUpdated",
             required = false) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Date lastUpdated){
@@ -72,65 +95,87 @@ public class MessageController {
         return messageService.getMessage(token, pageable, lastUpdated);
     }
 
-    //get message from sender
-//    @RequestMapping(value = "message/sender/")
-
+    /**
+     * Get Parent Message
+     *
+     * @param messageId
+     * @param request
+     * @return 
+     */
     @RequestMapping(value = "message/parent/{messageId}", method = RequestMethod.GET)
     public Message getParentMessage(@PathVariable("messageId") int messageId, HttpServletRequest request){
         String token= request.getHeader("auth-token");
         return messageService.getParentMessage(messageId, token);
     }
 
-    //get one message
+    /**
+     * Get One Message
+     *
+     * @param messageId
+     * @param request
+     * @return 
+     */
     @RequestMapping(value = "message/messageId/{messageId}", method = RequestMethod.GET)
     public Message getOneMessage(@PathVariable("messageId") int messageId, HttpServletRequest request){
         String token= request.getHeader("auth-token");
         return messageService.getOneMessage(messageId, token);
     }
 
-    //get new Message
+    /**
+     * Get New Message
+     *
+     * @param request
+     * @param pageable
+     * @return 
+     */
     @RequestMapping(value = "message/new", method = RequestMethod.GET)
     public List<Message> getNewMessage(HttpServletRequest request, Pageable pageable){
         String token= request.getHeader("auth-token");
         return messageService.getNewMessage(token, pageable);
     }
 
-    //mark message as seen
+    /**
+     * Mark Message As Seen
+     *
+     * @param messageId
+     * @param request 
+     */
     @RequestMapping(value = "message/{messageId}/seen", method = RequestMethod.PUT)
     public void markMessageAsSeen(@PathVariable("messageId") int messageId, HttpServletRequest request){
         String token= request.getHeader("auth-token");
         messageService.markMessageAsSeen(messageId, token);
     }
 
-    //get meeage by type
-//    @RequestMapping(value = "message/{messageType}", method = RequestMethod.GET)
-//    public List<Message> getPassInterviewMessage(HttpServletRequest request,
-//                                                 @PathVariable("messageType")MessageType messageType){
-//        String token= request.getHeader("auth-token");
-//        return messageService.getPassInterviewMessage(token, messageType);
-//    }
-
-    //create message for all student
+    /**
+     * Create Message For All Student
+     *
+     * @param messageDTO 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "message/notification/create", method = RequestMethod.POST)
     public void createNotificationMessage(@RequestBody MessageDTO messageDTO){
         messageService.createNotificationMessage(messageDTO);
     }
 
-    //get notification message
+    /**
+     * Get Notification Message
+     *
+     * @return 
+     */
     @NoAuthentication
     @RequestMapping(value = "message/notification", method = RequestMethod.GET)
     public List<Message> getNotificationMessage(){
         return messageService.getNotificationMessage();
     }
 
-    //delete notification message
+    /**
+     * Delete Notification Message
+     *
+     * @param messageId 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "message/notification/delete/{messageId}", method = RequestMethod.DELETE)
     public void deleteNotificationMessage(@PathVariable("messageId") int messageId){
         messageService.deleteNotificationMessage(messageId);
     }
-
-    //get
-
 }

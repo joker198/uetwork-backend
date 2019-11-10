@@ -18,24 +18,18 @@ public class UetMan {
     private String uetManName;
     private String about;
 
-//    @OneToMany(mappedBy = "uetMan")
-//    @JsonIgnore
-//    private List<Contract> contract;
-
-
     @ManyToOne
     @JoinColumn(name="roles_signing_level_id")
-//    @JsonIgnore
     private RolesAndSigningLevel rolesSigningLevel;
 
     @ManyToMany(mappedBy = "uetMan")
     @JsonIgnore
     private List<Contract> contract;
 
-    public UetMan(){
-
+    public UetMan()
+    {
+        //
     }
-
 
     public int getId() {
         return id;
@@ -51,7 +45,6 @@ public class UetMan {
     public void setUetManName(String uetManName) {
         this.uetManName = uetManName;
     }
-
 
     public List<Contract> getContract() {
         return contract;

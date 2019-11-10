@@ -7,7 +7,6 @@ import uet.model.InternshipTerm;
 import uet.model.Role;
 import uet.service.InternshipTermService;
 import uet.stereotype.RequiredRoles;
-
 import java.util.List;
 
 /**
@@ -23,38 +22,47 @@ public class InternshipTermController {
         this.internshipTermService = internshipTermService;
     }
 
-    //create internship term
+    /**
+     * Create Internship Term
+     *
+     * @param internshipTermDTO 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "internshipTerm/create", method = RequestMethod.POST)
     public void createInternShipTerm(@RequestBody InternshipTermDTO internshipTermDTO){
         internshipTermService.createInternshipTerm(internshipTermDTO);
     }
 
-    //delete internship term
+    /**
+     * Delete Internship Term
+     *
+     * @param internshipTermId 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "internshipTerm/{internshipTermId}/delete", method = RequestMethod.DELETE)
     public void deleteInternshipTerm(@PathVariable("internshipTermId") int internshipTermId){
         internshipTermService.deleteInternshipTerm(internshipTermId);
     }
 
-    //edit internship term
+    /**
+     * Edit Internship Term
+     *
+     * @param internshipTermDTO 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "internshipTerm/edit", method = RequestMethod.PUT)
     public void editInternshipTerm(@RequestBody InternshipTermDTO internshipTermDTO){
         internshipTermService.editInternshipTerm(internshipTermDTO);
     }
 
-    //get all internshipTerm
+    /**
+     * Get All Internship Term
+     *
+     * @return 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "internshipTerm", method = RequestMethod.GET)
     public List<InternshipTerm> getAllInternshipTerm(){
         return internshipTermService.getAllInternshipTerm();
     }
-
-    //get one internship term
-//    @RequiredRoles(Role.ADMIN)
-//    @RequestMapping(value = "internshipTerm/{internshipTermId}", method = RequestMethod.GET)
-//    public List<InternshipTerm> getInternshipTerm(@PathVariable("internshipTermId") int internshipTermId){
-//        return internshipTermService.getInternshipTerm(internshipTermId);
-//    }
 }

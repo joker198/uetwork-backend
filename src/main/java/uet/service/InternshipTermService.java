@@ -17,12 +17,16 @@ public class InternshipTermService {
     private final PartnerService partnerService;
 
     @Autowired
-    public InternshipTermService(InternshipTermRepository internshipTermRepository, PartnerService partnerService) {
+    public InternshipTermService(
+        InternshipTermRepository internshipTermRepository,
+        PartnerService partnerService
+    ) {
         this.internshipTermRepository = internshipTermRepository;
         this.partnerService = partnerService;
     }
 
-    public void createInternshipTerm(InternshipTermDTO internshipTermDTO) {
+    public void createInternshipTerm(InternshipTermDTO internshipTermDTO)
+    {
         List<InternshipTerm> internshipTerm2 = internshipTermRepository.findByYear(internshipTermDTO.getYear());
         if(internshipTerm2.isEmpty()){
             InternshipTerm internshipTerm = new InternshipTerm(internshipTermDTO.getYear(), 1,
@@ -36,13 +40,11 @@ public class InternshipTermService {
                     0, 0, internshipTermDTO.getStartDate(), internshipTermDTO.getEndDate(), internshipTermDTO.getExpiredDate());
             partnerService.resetStatusPartnerType();
             internshipTermRepository.save(internshipTerm);
-
         }
-
-
     }
 
-    public void deleteInternshipTerm(int internshipTermId) {
+    public void deleteInternshipTerm(int internshipTermId)
+    {
         InternshipTerm internshipTerm = internshipTermRepository.findById(internshipTermId);
         if (internshipTerm.getPosts().isEmpty()) {
             internshipTermRepository.delete(internshipTerm);
@@ -51,7 +53,8 @@ public class InternshipTermService {
         }
     }
 
-    public void editInternshipTerm(InternshipTermDTO internshipTermDTO) {
+    public void editInternshipTerm(InternshipTermDTO internshipTermDTO)
+    {
         InternshipTerm internshipTerm = internshipTermRepository.findById(internshipTermDTO.getId());
         if (internshipTerm != null) {
             internshipTerm.setStartDate(internshipTermDTO.getStartDate());
@@ -63,10 +66,8 @@ public class InternshipTermService {
         }
     }
 
-    public List<InternshipTerm> getAllInternshipTerm() {
+    public List<InternshipTerm> getAllInternshipTerm()
+    {
         return (List<InternshipTerm>) internshipTermRepository.findAll();
     }
-
-//    public List<InternshipTerm> getInternshipTerm(int internshipTermId) {
-//    }
 }

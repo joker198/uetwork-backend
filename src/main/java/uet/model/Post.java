@@ -52,7 +52,6 @@ public class Post {
     private Integer requiredNumber;
     private Date expiryTime; // ngay het han cua bai dang
     private Date startDate; // ngay bat dau thuc tap
-//    private Date endDate; //ngay ket thuc
     private String durationTime; // thoi gian dien ra cua dot thuc tap
     private String partnerName;
     @Enumerated(EnumType.STRING)
@@ -82,9 +81,15 @@ public class Post {
         this.partner = partner;
     }
 
-    public String getContent() { return content; }
+    public String getContent()
+    {
+        return content;
+    }
 
-    public void setContent(String content) { this.content = content; }
+    public void setContent(String content)
+    {
+        this.content = content;
+    }
 
     private Date datePost;
 
@@ -100,7 +105,10 @@ public class Post {
         return describePost;
     }
 
-    public void setDescribePost(String describePost) { this.describePost = describePost; }
+    public void setDescribePost(String describePost)
+    {
+        this.describePost = describePost;
+    }
 
     public String getImage() {
         return image;
@@ -155,14 +163,6 @@ public class Post {
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
-
-//    public Date getEndDate() {
-//        return endDate;
-//    }
-//
-//    public void setEndDate(Date endDate) {
-//        this.endDate = endDate;
-//    }
 
     public String getDurationTime() {
         return durationTime;

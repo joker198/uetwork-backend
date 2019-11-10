@@ -27,70 +27,86 @@ public class ActivityLog {
     private String status;
     private int contractId;
 
-    public ActivityLog(){
-
+    public ActivityLog()
+    {
+        //
     }
 
-    public ActivityLog(User user){
+    public ActivityLog(User user)
+    {
         this.user = user;
         this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getAcvtivity() {
+    public String getAcvtivity()
+    {
         return acvtivity;
     }
 
-    public void setAcvtivity(String acvtivity) {
+    public void setAcvtivity(String acvtivity)
+    {
         this.acvtivity = acvtivity;
     }
 
 
-    public User getUser() {
+    public User getUser()
+    {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(User user)
+    {
         this.user = user;
     }
 
-    public String getActivityType() {
+    public String getActivityType()
+    {
         return activityType;
     }
 
-    public void setActivityType(String activityType) {
+    public void setActivityType(String activityType)
+    {
         this.activityType = activityType;
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         this.status = status;
     }
 
-    public Timestamp getTimestamp() {
+    public Timestamp getTimestamp()
+    {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(Timestamp timestamp)
+    {
         this.timestamp = timestamp;
     }
 
-    public int getContractId() {
+    public int getContractId()
+    {
         return contractId;
     }
 
-    public void setContractId(int contractId) {
+    public void setContractId(int contractId)
+    {
         this.contractId = contractId;
     }
 }

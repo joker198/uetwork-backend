@@ -8,7 +8,8 @@ import javax.persistence.*;
  * Created by nhkha on 13/04/2017.
  */
 @Entity
-public class CooperateActivity {
+public class CooperateActivity
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -20,11 +21,6 @@ public class CooperateActivity {
     @JsonIgnore
     private Contract contract;
 
-//    @ManyToOne
-//    @JoinColumn(name = "partner_id")
-//    @JsonIgnore
-//    private Partner partner;
-
     @OneToOne(mappedBy = "cooperateActivity",cascade = CascadeType.ALL)
     private CooperateActivityDetail cooperateActivityDetail;
 
@@ -32,11 +28,12 @@ public class CooperateActivity {
 
     }
 
-    public CooperateActivity(String cooperateActivity,
-//                             Partner partner,
-                             Contract contract, CooperateActivityDetail cooperateActivityDetail){
+    public CooperateActivity(
+        String cooperateActivity,
+        Contract contract,
+        CooperateActivityDetail cooperateActivityDetail
+    ) {
         this.cooperateActivity = cooperateActivity;
-//        this.partner = partner;
         this.contract = contract;
         this.cooperateActivity = cooperateActivity;
     }
@@ -74,12 +71,4 @@ public class CooperateActivity {
     public void setCooperateActivityDetail(CooperateActivityDetail cooperateActivityDetail) {
         this.cooperateActivityDetail = cooperateActivityDetail;
     }
-
-//    public Partner getPartner() {
-//        return partner;
-//    }
-//
-//    public void setPartner(Partner partner) {
-//        this.partner = partner;
-//    }
 }

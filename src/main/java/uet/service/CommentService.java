@@ -25,7 +25,8 @@ public class CommentService {
     StudentRepository studentRepository;
 
     //show all comments
-    public List<HashMap<String, String>> showAllComment(){
+    public List<HashMap<String, String>> showAllComment()
+    {
         List<Comment> allComment = (List<Comment>) commentRepository.findAll();
         List<HashMap<String, String>> listComment = new ArrayList<HashMap<String, String>>();
         for (Comment comment : allComment){
@@ -42,13 +43,15 @@ public class CommentService {
     }
 
     //show all comment of a partner
-    public List<Comment> showAllCommentOfOnePartner(int id){
+    public List<Comment> showAllCommentOfOnePartner(int id)
+    {
         Partner partner = partnerRepository.findOne(id);
         return partner.getComments();
     }
 
     //write a comment
-    public Comment writeComment(int partnerId, CommentDTO commentDTO, String token){
+    public Comment writeComment(int partnerId, CommentDTO commentDTO, String token)
+    {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         Partner partner = partnerRepository.findById(partnerId);
@@ -84,19 +87,22 @@ public class CommentService {
     }
 
     //show 5 top comment to homepage
-    public List<Comment> showTopComment(){
+    public List<Comment> showTopComment()
+    {
         List<Comment> topComment = (List<Comment>) commentRepository.findByFilterNotLike(0);
         return topComment;
     }
 
     //admin change filter value
-    public Comment changeFilterValue(int commentId, CommentDTO commentDTO){
+    public Comment changeFilterValue(int commentId, CommentDTO commentDTO)
+    {
         Comment comment = commentRepository.findOne(commentId);
         comment.setFilter(commentDTO.getFilter());
         return commentRepository.save(comment);
     }
 
-    public Comment checkComment(int studentId) {
+    public Comment checkComment(int studentId)
+    {
         Student student = studentRepository.findById(studentId);
         return student.getComment();
     }

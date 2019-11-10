@@ -42,21 +42,6 @@ public class InfoBySchoolService {
     //show info of a student
     public InfoBySchool getInfo(int infoId, String token){
         return infoBySchoolRepository.findById(infoId);
-//        User user = userRepository.findByToken(token);
-//        if ( user.getRole() == Role.STUDENT ) {
-//            Student student = user.getStudent();
-//            InfoBySchool info = infoBySchoolRepository.findOne(infoId);
-//            if (student.getInfoBySchool().equals(info)) {
-//                return info;
-//            }
-//            else {
-//                throw new NullPointerException("No result.");
-//            }
-//        }
-//        else {
-//            InfoBySchool info = infoBySchoolRepository.findOne(infoId);
-//            return info;
-//        }
     }
 
     //edit info of a student
@@ -125,7 +110,6 @@ public class InfoBySchoolService {
                 } else if(infoBySchoolDTO.getStudentClass().equals("N")){
                     InfoBySchool infoBySchool = student.getInfoBySchool();
                     infoBySchool.setStudentClass("CN");
-//                    infoBySchool.setMajor(studentClass.getClassName());
                     infoBySchool.setGrade(infoBySchoolDTO.getGrade());
                     infoBySchoolRepository.save(infoBySchool);
                 } else {

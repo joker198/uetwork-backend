@@ -23,28 +23,30 @@ import java.util.List;
  * Created by nhkha on 14/05/2017.
  */
 @Service
-public class LecturersService {
-    private final
-    LecturersRepository lecturersRepository;
-    final
-    UserRepository userRepository;
-    private final
-    FacultyRepository facultyRepository;
-    private final
-    StudentRepository studentRepository;
-    private final
-    MessageService messageService;
+public class LecturersService
+{
+    private final LecturersRepository lecturersRepository;
+    final UserRepository userRepository;
+    private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
+    private final MessageService messageService;
     private final InternshipTermRepository internshipTermRepository;
-    private
-    InfoBySchoolRepository infoBySchoolRepository;
+    private InfoBySchoolRepository infoBySchoolRepository;
     private final MessageRepository messageRepository;
     private final InternshipRepository internshipRepository;
 
     @Autowired
-
-    public LecturersService(LecturersRepository lecturersRepository, UserRepository userRepository,
-                            FacultyRepository facultyRepository, StudentRepository studentRepository,
-                            MessageService messageService, InternshipTermRepository internshipTermRepository1, InfoBySchoolRepository infoBySchoolRepository, MessageRepository messageRepository, InternshipRepository internshipRepository) {
+    public LecturersService(
+        LecturersRepository lecturersRepository,
+        UserRepository userRepository,
+        FacultyRepository facultyRepository,
+        StudentRepository studentRepository,
+        MessageService messageService,
+        InternshipTermRepository internshipTermRepository1,
+        InfoBySchoolRepository infoBySchoolRepository,
+        MessageRepository messageRepository,
+        InternshipRepository internshipRepository
+    ) {
         this.lecturersRepository = lecturersRepository;
         this.userRepository = userRepository;
         this.facultyRepository = facultyRepository;
@@ -56,11 +58,13 @@ public class LecturersService {
         this.internshipRepository = internshipRepository;
     }
 
-    public Lecturers getInfoLecturers(int lecturersId) {
+    public Lecturers getInfoLecturers(int lecturersId)
+    {
         return lecturersRepository.findById(lecturersId);
     }
 
-    public void editInfoLecturers(LecturersDTO lecturersDTO, String token) {
+    public void editInfoLecturers(LecturersDTO lecturersDTO, String token)
+    {
         Lecturers lecturers = lecturersRepository.findById(lecturersDTO.getId());
         User user = userRepository.findByToken(token);
         if (user.getRole().equals(String.valueOf(Role.ADMIN)) || user.getLecturers() == lecturers) {
@@ -74,7 +78,6 @@ public class LecturersService {
         } else {
             throw new NullPointerException("Lecturers did not match!");
         }
-
     }
 
     public void changeAva(LecturersDTO lecturersDTO, String token) throws IOException {
@@ -82,9 +85,7 @@ public class LecturersService {
         Lecturers lecturers = lecturersRepository.findById(lecturersDTO.getId());
         String username = user.getUserName();
         if (lecturers.equals(user.getLecturers())) {
-            //code đổi tên image thành student_id.jpg và save vào database
             String pathname = GlobalConfig.sourceAddress + "/app/users_data/" + username + "/";
-//                String directoryName = pathname.concat(this.getClassName());
             String directoryName = "/users_data/" + username + "/";
             String fileName = username + "_avatar.jpg";
             File directory = new File(pathname);
@@ -103,11 +104,13 @@ public class LecturersService {
         }
     }
 
-    public List<Lecturers> getAllLecturers() {
+    public List<Lecturers> getAllLecturers()
+    {
         return (List<Lecturers>) lecturersRepository.findAll();
     }
 
-    public List<Lecturers> getLecturersByFaculty(int facultyId) {
+    public List<Lecturers> getLecturersByFaculty(int facultyId)
+    {
         Faculty faculty = facultyRepository.findById(facultyId);
         if (faculty != null) {
             return faculty.getLecturers();
@@ -116,7 +119,8 @@ public class LecturersService {
         }
     }
 
-    public List<HashMap<String, String>> getLecturersNameAndId() {
+    public List<HashMap<String, String>> getLecturersNameAndId()
+    {
         List<HashMap<String, String>> listNameAndId = new ArrayList<HashMap<String, String>>();
         List<Lecturers> listPartner = (List<Lecturers>) lecturersRepository.findAll();
         for (Lecturers lecturers : listPartner) {
@@ -128,7 +132,8 @@ public class LecturersService {
         return listNameAndId;
     }
 
-    public void editLecturersStudent(StudentDTO studentDTO, String token) throws Exception {
+    public void editLecturersStudent(StudentDTO studentDTO, String token) throws Exception
+    {
         if (studentDTO.getLecturersId() != 0 && studentDTO.getInternId() != 0) {
             Lecturers lecturers = lecturersRepository.findById(studentDTO.getLecturersId());
             Internship internship = internshipRepository.findById(studentDTO.getInternId());
@@ -162,7 +167,8 @@ public class LecturersService {
         }
     }
 
-    public void addLecturersForStudent(List<StudentDTO> studentList, int lecturersId, String token) throws IOException {
+    public void addLecturersForStudent(List<StudentDTO> studentList, int lecturersId, String token) throws IOException
+    {
         User user = userRepository.findByToken(token);
         Lecturers lecturers = lecturersRepository.findById(lecturersId);
         if (lecturers != null) {
@@ -190,15 +196,6 @@ public class LecturersService {
                             messageService.writeMessage(messageDTO, token);
                         }
                     }
-//                    MessageDTO messageDTO = new MessageDTO();
-//                    messageDTO.setTitle("Giảng viên hướng dẫn");
-//                    messageDTO.setContent("Giảng viên hướng dẫn của bạn là: " + fullName + "<br />" +
-//                            "Liên hệ của giảng viên: <br />" +
-//                            " + Số điện thoại: " + phone + ".<br />" +
-//                            " + Email VNU: " + email + "." +
-//                            " + Email: " + lecturers.getEmail() + ".");
-//                    messageDTO.setReceiverName(internship.getStudent().getUser().getUserName());
-//                    messageService.writeMessage(messageDTO, token);
                 }
             }
         } else {
@@ -207,17 +204,12 @@ public class LecturersService {
     }
 
     @Transactional
-    public void deleteLecturers(int lecturersId) {
+    public void deleteLecturers(int lecturersId)
+    {
         Lecturers lecturers = lecturersRepository.findById(lecturersId);
         if (lecturers != null) {
             if (lecturers.getInternships().isEmpty()) {
-//                User user = lecturers.getUser();
-//                userRepository.d
-//                  lecturers.setUser(null);
-//                  lecturersRepository.save(lecturers);
                 messageRepository.updateUserId(lecturers.getUser().getId());
-//                  lecturersRepository.delete(lecturers);
-//                messageRepository.delete(lecturers.getUser().getMessages());
                 userRepository.delete(lecturers.getUser());
             } else {
                 throw new NullPointerException("Không thẻ xóa giảng viên");
@@ -227,7 +219,8 @@ public class LecturersService {
         }
     }
 
-    public void removeLecturersOfStudent(int internId, String token) throws Exception {
+    public void removeLecturersOfStudent(int internId, String token) throws Exception
+    {
         Internship internship = internshipRepository.findById(internId);
         if (internship != null) {
             if (internship.getLecturers() != null) {
@@ -241,7 +234,8 @@ public class LecturersService {
         }
     }
 
-    public List<StudentDTO> checkLecturersForStudentExcel(List<StudentDTO> studentDTOs, String token) {
+    public List<StudentDTO> checkLecturersForStudentExcel(List<StudentDTO> studentDTOs, String token)
+    {
         for (StudentDTO studentDTO : studentDTOs) {
             InfoBySchool infoBySchool = infoBySchoolRepository.findByEmailvnu(studentDTO.getEmail());
             if (infoBySchool == null) {
@@ -250,13 +244,13 @@ public class LecturersService {
             Lecturers lecturers = lecturersRepository.findByEmailVNU(studentDTO.getLecturersEmail());
             if (lecturers == null) {
                 studentDTO.setLecturersEmail("nf");
-//
             }
         }
         return studentDTOs;
     }
 
-    public void LecturersAssignmentExcel(List<StudentDTO> studentDTOs, String token) throws IOException {
+    public void LecturersAssignmentExcel(List<StudentDTO> studentDTOs, String token) throws IOException
+    {
         InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();
         for (StudentDTO studentDTO : studentDTOs) {
             InfoBySchool infoBySchool = infoBySchoolRepository.findByEmailvnu(studentDTO.getEmail());
@@ -270,46 +264,18 @@ public class LecturersService {
                 Internship internship = internshipRepository.findByStudentIdAndInternshipTerm(student.getId(), internshipTerm);
                 if (internship == null) {
                     internship = new Internship();
-//                    internship.setStartDate(internshipTerm.getStartDate());
                 }
                 internship.setStudent(student);
                 internship.setLecturers(lecturers);
                 internship.setInternshipTerm(internshipTerm);
                 internshipRepository.save(internship);
-//                student.setLecturers(lecturers);
                 studentRepository.save(student);
-//                MessageDTO messageDTO = new MessageDTO();
-//                messageDTO.setTitle("Giảng viên hướng dẫn");
-//                messageDTO.setContent("Giảng viên hướng dẫn của bạn là: " + fullName + "<br />" +
-//                        "Liên hệ của giảng viên: <br />" +
-//                        " + Số điện thoại: " + phone + ".<br />" +
-//                        " + Email: " + email + ".");
-//                messageDTO.setReceiverName(student.getUser().getUserName());
-//                messageService.writeMessage(messageDTO, token);
             }
         }
     }
 
-    //get lecturer name of student
-//    public Lecturers getLecturersNameOfStudent(String token) throws Exception {
-//        User user = userRepository.findByToken(token);
-//        if(user != null){
-//            if(user.getStudent() != null){
-////                System.out.print(user.getStudent().getLecturers().getFullName());
-//                Lecturers lecturers = user.getStudent().getLecturers();
-//                lecturers.setEmail(lecturers.getUser().getUserName());
-//                lecturers.setSubject(user.getStudent().getFullName());
-//                return lecturers;
-//            } else {
-//                throw new Exception("You dont have permission!");
-//            }
-//        } else {
-//            throw new Exception("You dont have permission!");
-//        }
-//    }
-
-    //submit noti lecturers
-    public void submitLecturers(String token) throws Exception {
+    public void submitLecturers(String token) throws Exception
+    {
         User user = userRepository.findByToken(token);
         if (user != null) {
             InternshipTerm internshipTerm = internshipTermRepository.findTopByOrderByIdDesc();

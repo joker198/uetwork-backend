@@ -9,7 +9,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="Comment")
-public class Comment {
+public class Comment
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -26,51 +27,63 @@ public class Comment {
     @JsonIgnore
     private Partner partner;
 
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    public Student getStudent() {
+    public Student getStudent()
+    {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(Student student)
+    {
         this.student = student;
     }
 
-    public Integer getRating() {
+    public Integer getRating()
+    {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Integer rating)
+    {
         this.rating = rating;
     }
 
-    public String getContent() {
+    public String getContent()
+    {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(String content)
+    {
         this.content = content;
     }
 
-    public Partner getPartner() {
+    public Partner getPartner()
+    {
         return partner;
     }
 
-    public void setPartner(Partner partner) {
+    public void setPartner(Partner partner)
+    {
         this.partner = partner;
     }
 
-    public Integer getFilter() {
+    public Integer getFilter()
+    {
         return filter;
     }
 
-    public void setFilter(Integer filter) {
+    public void setFilter(Integer filter)
+    {
         this.filter = filter;
     }
 }

@@ -11,7 +11,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "continent")
-public class Continent {
+public class Continent
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -21,37 +22,44 @@ public class Continent {
     @JsonIgnore
     private List<Nation> nation;
 
-    public Continent(){
-
+    public Continent()
+    {
+        //
     }
 
-    public Continent(String continentName){
+    public Continent(String continentName)
+    {
         this.continentName = continentName;
     }
 
-
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getContinentName() {
+    public String getContinentName()
+    {
         return continentName;
     }
 
-    public void setContinentName(String continentName) {
+    public void setContinentName(String continentName)
+    {
         this.continentName = continentName;
     }
 
 
-    public List<Nation> getNation() {
+    public List<Nation> getNation()
+    {
         return nation;
     }
 
-    public void setNation(List<Nation> nation) {
+    public void setNation(List<Nation> nation)
+    {
         this.nation = nation;
     }
 }

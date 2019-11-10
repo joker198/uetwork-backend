@@ -11,9 +11,6 @@ import uet.stereotype.SendMail;
 
 @Configuration
 public class GlobalConfig  extends WebMvcConfigurerAdapter {
-//    private static ApplicationContext context =
-//            new ClassPathXmlApplicationContext("Spring-Mail.xml");
-//    public static SendMail mailMessages = (SendMail) context.getBean("sendMail");
     public static String sourceAddress = "../" + "users_data";
 
     public static String dbName = "qly_sv";

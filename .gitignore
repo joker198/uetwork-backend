@@ -12,3 +12,5 @@ Qly_SV.iml
 qly-sv.iml
 UET.iml
 log-login-admin.txt
+src/resources/application.properties
+/bin/

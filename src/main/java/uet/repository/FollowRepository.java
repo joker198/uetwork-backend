@@ -16,8 +16,6 @@ import java.util.List;
  */
 @Repository
 public interface FollowRepository extends CrudRepository<Follow,Integer>, PagingAndSortingRepository<Follow, Integer> {
-//    @Query(value="SELECT f.id, f.partner_id, f.partner_name, f.post_id FROM follow f", nativeQuery = true)
-//    List<Follow> getAll();
     List<Follow> findByPostId(int postId);
     List<Follow> findByInternshipId(int internId);
     List<Follow> findByStudentId(int id);
@@ -41,7 +39,4 @@ public interface FollowRepository extends CrudRepository<Follow,Integer>, Paging
     Follow findByInternshipIdAndPostIdAndPostTitle(int internship, int postId, String postTitle);
     List<Follow> findByStatusAndInternshipTerm(String s, int i);
     Follow findById(int id);
-
 }
-
-

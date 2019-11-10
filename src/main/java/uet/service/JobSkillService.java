@@ -12,33 +12,37 @@ import java.util.List;
  * Created by fgv on 7/8/2016.
  */
 @Service
-public class JobSkillService {
+public class JobSkillService
+{
     private final JobSkillRepository jobSkillRepository;
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public JobSkillService(JobSkillRepository jobSkillRepository, StudentRepository studentRepository, UserRepository userRepository) {
+    public JobSkillService(
+        JobSkillRepository jobSkillRepository,
+        StudentRepository studentRepository,
+        UserRepository userRepository
+    ) {
         this.jobSkillRepository = jobSkillRepository;
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
     }
 
-    //show list jobskill
-    public List<JobSkill> getJobSkills(){
+    public List<JobSkill> getJobSkills()
+    {
         List<JobSkill> getAll = (List<JobSkill>) jobSkillRepository.findAll();
         return getAll;
     }
 
-    //show list jobskill cua 1 student
-    public List<JobSkill> getallInStudent(int studentId){
+    public List<JobSkill> getallInStudent(int studentId)
+    {
         Student student = studentRepository.findById(studentId);
         return student.getJobSkills();
-
     }
 
-    //create jobskill
-    public JobSkill createJs(int studentId,JobSkillDTO jobSkillDTO,String token){
+    public JobSkill createJs(int studentId,JobSkillDTO jobSkillDTO,String token)
+    {
         User user = userRepository.findByToken(token);
         Student student = studentRepository.findById(studentId);
         if(user.getStudent().equals(student)) {
@@ -54,22 +58,20 @@ public class JobSkillService {
             jobSkill.setStudent(student);
             student.getJobSkills().add(jobSkill);
             return jobSkillRepository.save(jobSkill);
-
         }
         else {
             throw new NullPointerException("User doesn't match with Student");
         }
     }
 
-
-    //show 1 jobskill
-    public JobSkill showJobSkill( int id){
+    public JobSkill showJobSkill(int id)
+    {
         JobSkill  jobSkill = jobSkillRepository.findById(id);
         return jobSkill;
     }
 
-    //Edit a Jobskill by id
-    public JobSkill ChangeJsById(int id, JobSkillDTO jobSkillDTO,String token){
+    public JobSkill ChangeJsById(int id, JobSkillDTO jobSkillDTO, String token)
+    {
         User user = userRepository.findByToken(token);
         JobSkill jobSkill = jobSkillRepository.findById(id);
         Student student = studentRepository.findByJobSkillsId(id);
@@ -84,12 +86,12 @@ public class JobSkillService {
             return jobSkillRepository.save(jobSkill);
         }
         else {
-                throw new NullPointerException("User doesn't match with Student");
+            throw new NullPointerException("User doesn't match with Student");
         }
     }
 
-    //Delete a jobskill by id
-    public void deleteJobSkill(int id,String token){
+    public void deleteJobSkill(int id,String token)
+    {
         User user = userRepository.findByToken(token);
         JobSkill jobSkill = jobSkillRepository.findById(id);
         Student student = studentRepository.findByJobSkillsId(id);

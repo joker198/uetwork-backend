@@ -41,7 +41,15 @@ public class InternshipTerm {
 
     public InternshipTerm(){}
 
-    public InternshipTerm(String year, int term, int postCount, int internshipCount, String startDate, String endDate, String expiredDate){
+    public InternshipTerm(
+        String year,
+        int term,
+        int postCount,
+        int internshipCount,
+        String startDate,
+        String endDate,
+        String expiredDate
+    ) {
         this.year = year;
         this.term = term;
         this.postCount = postCount;
@@ -92,14 +100,6 @@ public class InternshipTerm {
     public void setPostCount(int postCount) {
         this.postCount = postCount;
     }
-
-//    public List<Internship> getInternships() {
-//        return internships;
-//    }
-//
-//    public void setInternships(List<Internship> internships) {
-//        this.internships = internships;
-//    }
 
     public int getInternshipCount() {
         return internshipCount;

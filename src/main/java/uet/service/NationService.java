@@ -15,18 +15,12 @@ import java.util.List;
  * Created by nhkha on 25/03/2017.
  */
 @Service
-public class NationService {
-    private final
-    ContinentRepository continentRepository;
-
-    private final
-    NationRepository nationRepository;
-
-    private final
-    UserRepository userRepository;
-
-    private final
-    ActivityLogRepository activityLogRepository;
+public class NationService
+{
+    private final ContinentRepository continentRepository;
+    private final NationRepository nationRepository;
+    private final UserRepository userRepository;
+    private final ActivityLogRepository activityLogRepository;
 
     @Autowired
     public NationService(ContinentRepository continentRepository, NationRepository nationRepository, UserRepository userRepository, ActivityLogRepository activityLogRepository) {
@@ -35,7 +29,8 @@ public class NationService {
         this.userRepository = userRepository;
         this.activityLogRepository = activityLogRepository;
     }
-    public Continent createContinent(ContinentDTO continentDTO, String token) {
+    public Continent createContinent(ContinentDTO continentDTO, String token)
+    {
         Continent continent = continentRepository.findByContinentName(continentDTO.getContinentName());
         if(continent == null){
             Continent newContinent = new Continent();
@@ -56,40 +51,38 @@ public class NationService {
         }
     }
 
-    public Nation createNation(NationDTO nationDTO, int continentId, String token){
-//        if(user.getRole().equals(Role.ADMIN))
+    public Nation createNation(NationDTO nationDTO, int continentId, String token)
+    {
         Continent continent = continentRepository.findOne(continentId);
         if(continent == null){
             throw new NullPointerException("Châu lục không tồn tại");
-        } else{
-//            List<Nation> setNation = new ArrayList<Nation>();
-//            add(new Book("Book B1", categoryB));
-//            for(NationDTO nationDTO: listNationDTO){
-                if(nationRepository.findByNationName(nationDTO.getNationName()) == null){
-                    Nation nation = new Nation(nationDTO.getNationName(), continent);
-                    User user = userRepository.findByToken(token);
-                    if(user.getRole().equals(Role.UNIT)){
-                        ActivityLog activityLog = new ActivityLog(user);
-                        userRepository.save(user);
-                        activityLog.setActivityType("createNation");
-                        activityLog.setAcvtivity(user.getUnitName().getUnitName() + " tạo thêm Quốc gia " +
-                                nationDTO.getNationName() + " vào lúc " + activityLog.getTimestamp());
-                        activityLog.setStatus("NEW");
-                        activityLogRepository.save(activityLog);
-                    }
-                    return nationRepository.save(nation);
-                } else{
-                    throw new NullPointerException("Quốc gia đã tồn tại!");
+        } else {
+            if(nationRepository.findByNationName(nationDTO.getNationName()) == null){
+                Nation nation = new Nation(nationDTO.getNationName(), continent);
+                User user = userRepository.findByToken(token);
+                if(user.getRole().equals(Role.UNIT)){
+                    ActivityLog activityLog = new ActivityLog(user);
+                    userRepository.save(user);
+                    activityLog.setActivityType("createNation");
+                    activityLog.setAcvtivity(user.getUnitName().getUnitName() + " tạo thêm Quốc gia " +
+                            nationDTO.getNationName() + " vào lúc " + activityLog.getTimestamp());
+                    activityLog.setStatus("NEW");
+                    activityLogRepository.save(activityLog);
                 }
+                return nationRepository.save(nation);
+            } else{
+                throw new NullPointerException("Quốc gia đã tồn tại!");
+            }
         }
     }
 
-    public List<Continent> getAllContinent(){
-//        List<User> allUsers = (List<User>)
+    public List<Continent> getAllContinent()
+    {
         return (List<Continent>) continentRepository.findAll();
     }
 
-    public void deleteNation(int nationId, String token) {
+    public void deleteNation(int nationId, String token)
+    {
         Nation nation = nationRepository.findById(nationId);
         if(nation != null){
             if (nation.getPartner().isEmpty()) {
@@ -113,28 +106,29 @@ public class NationService {
     }
 
     public void editNation(NationDTO nationDTO, String token) {
-                Nation nation = nationRepository.findOne(nationDTO.getId());
-                if (nation != null) {
-                    if (nationDTO.getNationName() != null) {
-                        nation.setNationName(nationDTO.getNationName());
-                        nationRepository.save(nation);
-                        User user = userRepository.findByToken(token);
-                        if(user.getRole().equals(Role.UNIT)){
-                            ActivityLog activityLog = new ActivityLog(user);
-                            userRepository.save(user);
-                            activityLog.setActivityType("editNation");
-                            activityLog.setAcvtivity(user.getUnitName().getUnitName() + " sửa tên Quốc gia: " +
-                                    nation.getNationName() + " thành: " + nationDTO.getNationName() + " vào lúc " + activityLog.getTimestamp());
-                            activityLog.setStatus("NEW");
-                            activityLogRepository.save(activityLog);
-                        }
-                    }
+        Nation nation = nationRepository.findOne(nationDTO.getId());
+        if (nation != null) {
+            if (nationDTO.getNationName() != null) {
+                nation.setNationName(nationDTO.getNationName());
+                nationRepository.save(nation);
+                User user = userRepository.findByToken(token);
+                if(user.getRole().equals(Role.UNIT)){
+                    ActivityLog activityLog = new ActivityLog(user);
+                    userRepository.save(user);
+                    activityLog.setActivityType("editNation");
+                    activityLog.setAcvtivity(user.getUnitName().getUnitName() + " sửa tên Quốc gia: " +
+                            nation.getNationName() + " thành: " + nationDTO.getNationName() + " vào lúc " + activityLog.getTimestamp());
+                    activityLog.setStatus("NEW");
+                    activityLogRepository.save(activityLog);
+                }
+            }
         } else {
             throw new NullPointerException("Có lỗi khi xảy ra, hãy thử lại reload trang và thử lại!");
         }
     }
 
-    public void editContinent(ContinentDTO continentDTO, String token) {
+    public void editContinent(ContinentDTO continentDTO, String token)
+    {
         Continent continent = continentRepository.findOne(continentDTO.getId());
         if (continent != null) {
             if (continentDTO.getContinentName() != null) {
@@ -158,7 +152,8 @@ public class NationService {
         }
     }
 
-    public void deleteContinent(int continentId, String token) {
+    public void deleteContinent(int continentId, String token)
+    {
         Continent continent = continentRepository.findOne(continentId);
         if(continent != null){
             if (continent.getNation().isEmpty()) {
@@ -181,7 +176,8 @@ public class NationService {
         }
     }
 
-    public List<Nation> getAllNation() {
+    public List<Nation> getAllNation()
+    {
         return (List<Nation>) nationRepository.findAll();
     }
 }

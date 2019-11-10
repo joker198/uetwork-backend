@@ -7,7 +7,6 @@ import uet.model.Faculty;
 import uet.model.Role;
 import uet.service.FacultyService;
 import uet.stereotype.RequiredRoles;
-
 import java.util.List;
 
 /**
@@ -23,27 +22,43 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
-    //get all faculty
+    /**
+     * Get All Faculty
+     *
+     * @return 
+     */
     @RequestMapping(value = "faculty", method = RequestMethod.GET)
     public List<Faculty> getAllFaculty(){
         return facultyService.getAllFaculty();
     }
 
-    //create faculty
+    /**
+     * Create Faculty
+     *
+     * @param facultyDTO 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "faculty/create", method = RequestMethod.POST)
     public void createFaculty(@RequestBody FacultyDTO facultyDTO){
         facultyService.createFaculty(facultyDTO);
     }
 
-    //edit faculty name
+    /**
+     * Edit Faculty Name
+     *
+     * @param facultyDTO 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "faculty/edit", method = RequestMethod.PUT)
     public void editFaculty(@RequestBody FacultyDTO facultyDTO){
         facultyService.editFaculty(facultyDTO);
     }
 
-    //delete faculty
+    /**
+     * Delete Faculty
+     *
+     * @param facultyId 
+     */
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value = "faculty/{facultyId}/delete", method = RequestMethod.PUT)
     public void editFaculty(@PathVariable("facultyId") int facultyId){

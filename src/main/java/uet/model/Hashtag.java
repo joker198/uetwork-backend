@@ -11,7 +11,8 @@ import java.util.List;
  */
 @Entity
 @Table(name="Hashtag")
-public class Hashtag {
+public class Hashtag
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -22,23 +23,33 @@ public class Hashtag {
     @JsonIgnore
     private List<Post> posts = new ArrayList<Post>();
 
-    public List<Post> getPosts() {
+    public List<Post> getPosts()
+    {
         return posts;
     }
 
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<Post> posts)
+    {
         this.posts = posts;
     }
 
-    public String getTag() {
+    public String getTag()
+    {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(String tag)
+    {
         this.tag = tag;
     }
 
-    public int getId() { return id;}
+    public int getId()
+    {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(int id)
+    {
+        this.id = id;
+    }
 }

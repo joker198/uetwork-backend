@@ -21,31 +21,26 @@ public class RolesAndSigningLevelService {
     private final RolesAndSigningLevelRepository rolesAndSigningLevelRepository;
 
     @Autowired
-    public RolesAndSigningLevelService(UserRepository userRepository, RolesAndSigningLevelRepository rolesAndSigningLevelRepository) {
+    public RolesAndSigningLevelService(
+        UserRepository userRepository,
+        RolesAndSigningLevelRepository rolesAndSigningLevelRepository
+    ) {
         this.userRepository = userRepository;
         this.rolesAndSigningLevelRepository = rolesAndSigningLevelRepository;
     }
 
-    public void createAccountForUniversity(UserDTO userDTO) throws Exception {
+    public void createAccountForUniversity(UserDTO userDTO) throws Exception
+    {
         if(userDTO.getUserName() != null && userDTO.getPassword() != null & userDTO.getRolesAndSigningLevel() != null){
             User user = userRepository.findByUserName(userDTO.getUserName());
             if(user == null){
                 RolesAndSigningLevel rolesAndSigningLevel = rolesAndSigningLevelRepository.findByName(String.valueOf(Role.VNU) + "-" + userDTO.getRolesAndSigningLevel());
-                if(rolesAndSigningLevel == null){
-                    // role của tk cấp trường con VNU
+                if (rolesAndSigningLevel == null) {
                     RolesAndSigningLevel rolesAndSigningLevel1 = new RolesAndSigningLevel();
                     rolesAndSigningLevel1.setName(String.valueOf(Role.VNU) + "-" + userDTO.getRolesAndSigningLevel());
                     rolesAndSigningLevel1.setRole(String.valueOf(Role.ADMIN_UNIT));
                     rolesAndSigningLevel1.setUniversityName(userDTO.getUniversityName());
                     rolesAndSigningLevelRepository.save(rolesAndSigningLevel1);
-
-                    //tạo role cho unit
-//                    RolesAndSigningLevel rolesAndSigningLevel2 = new RolesAndSigningLevel();
-//                    rolesAndSigningLevel2.setName("UNIT-" + userDTO.getRolesAndSigningLevel());
-//                    rolesAndSigningLevel2.setParent_id(rolesAndSigningLevel1);
-//                    rolesAndSigningLevel2.setRole(String.valueOf(Role.UNIT));
-//                    rolesAndSigningLevelRepository.save(rolesAndSigningLevel2);
-
                     User user1 = new User();
                     user1.setUserName(userDTO.getUserName());
                     user1.setPassword(userDTO.getPassword());
@@ -75,14 +70,16 @@ public class RolesAndSigningLevelService {
         }
     }
 
-    public List<RolesAndSigningLevel> getAllRolesAndSigningLevel() {
+    public List<RolesAndSigningLevel> getAllRolesAndSigningLevel()
+    {
         return (List<RolesAndSigningLevel>) rolesAndSigningLevelRepository.findByRole("ADMIN_UNIT");
     }
 
-    public void deleteRolesAndSigningLevel(String token, int rolesAndSigingLevelId, String forceDelete){
+    public void deleteRolesAndSigningLevel(String token, int rolesAndSigingLevelId, String forceDelete)
+    {
         User user = userRepository.findByToken(token);
         if(user != null){
-
+            //
         }
     }
 }

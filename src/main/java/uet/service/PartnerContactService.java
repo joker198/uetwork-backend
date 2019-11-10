@@ -23,27 +23,30 @@ public class PartnerContactService {
     private PartnerContactRepository partnerContactRepository;
 
     //show all partner contact
-    public List<PartnerContact> getpartnerContacts() {
+    public List<PartnerContact> getpartnerContacts()
+    {
         List<PartnerContact> allPartners = (List<PartnerContact>) partnerContactRepository.findAll();
         return allPartners;
     }
 
     //show list post of a partner
-    public List<PartnerContact> showAllContact(int partnerId) {
+    public List<PartnerContact> showAllContact(int partnerId)
+    {
         Partner partner = partnerRepository.findById(partnerId);
         return partner.getPartnerContacts();
     }
 
     //show a partner contact
-    public PartnerContact showContact(int partnerContactId) {
+    public PartnerContact showContact(int partnerContactId)
+    {
         PartnerContact partnerContact = partnerContactRepository.findOne(partnerContactId);
         return partnerContact;
     }
 
     //create a partner contact
-    public PartnerContact createContact(int partnerId, PartnerContactDTO partnerContactDTO, String token) {
+    public PartnerContact createContact(int partnerId, PartnerContactDTO partnerContactDTO, String token)
+    {
         User user = userRepository.findByToken(token);
-
         if (user.getRole().equals(String.valueOf(Role.ADMIN))) {
             Partner partner = partnerRepository.findOne(partnerId);
             PartnerContact partnerContact = new PartnerContact();
@@ -54,7 +57,6 @@ public class PartnerContactService {
             partnerContact.setSkype(partnerContactDTO.getSkype());
             partnerContact.setPhone(partnerContactDTO.getPhone());
             partnerContact.setAbout(partnerContactDTO.getAbout());
-//            partner.getPartnerContacts().add(partnerContact);
             return partnerContactRepository.save(partnerContact);
         } else {
             Partner partner = user.getPartner();
@@ -66,14 +68,14 @@ public class PartnerContactService {
             partnerContact.setSkype(partnerContactDTO.getSkype());
             partnerContact.setPhone(partnerContactDTO.getPhone());
             partnerContact.setAbout(partnerContactDTO.getAbout());
-//            partner.getPartnerContacts().add(partnerContact);
             return partnerContactRepository.save(partnerContact);
         }
 
     }
 
     //edit contact of a partner
-    public PartnerContact editContact(int partnerContactId, PartnerContactDTO partnerContactDTO, String token) {
+    public PartnerContact editContact(int partnerContactId, PartnerContactDTO partnerContactDTO, String token)
+    {
         User user = userRepository.findByToken(token);
         PartnerContact partnerContact = partnerContactRepository.findOne(partnerContactId);
         if(user.getRole().equals(Role.ADMIN)){
@@ -102,7 +104,8 @@ public class PartnerContactService {
     }
 
     //delete contact of a partner
-    public void deleteContact(int partnerContactId, String token) {
+    public void deleteContact(int partnerContactId, String token)
+    {
         User user = userRepository.findByToken(token);
         PartnerContact partnerContact = partnerContactRepository.findOne(partnerContactId);
         if (user.getRole().equals(String.valueOf(Role.ADMIN))) {

@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="CooperateActivityDetail")
-public class CooperateActivityDetail {
+public class CooperateActivityDetail
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -21,43 +22,53 @@ public class CooperateActivityDetail {
     @JsonIgnore
     private CooperateActivity cooperateActivity;
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getFunding() {
+    public String getFunding()
+    {
         return funding;
     }
 
-    public void setFunding(String funding) {
+    public void setFunding(String funding)
+    {
         this.funding = funding;
     }
 
-    public String getDate() {
+    public String getDate()
+    {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(String date)
+    {
         this.date = date;
     }
 
-    public String getContent() {
+    public String getContent()
+    {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(String content)
+    {
         this.content = content;
     }
 
-    public CooperateActivity getCooperateActivity() {
+    public CooperateActivity getCooperateActivity()
+    {
         return cooperateActivity;
     }
 
-    public void setCooperateActivity(CooperateActivity cooperateActivity) {
+    public void setCooperateActivity(CooperateActivity cooperateActivity)
+    {
         this.cooperateActivity = cooperateActivity;
     }
 
