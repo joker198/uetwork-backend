@@ -29,6 +29,10 @@ public class InternshipTerm {
     @JsonIgnore
     private List<Student> students;
 
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<PartnerInternshipterm> partnerInternshipterms;
+
     private String year;
     private int term;
     private String startDate;
@@ -163,5 +167,10 @@ public class InternshipTerm {
 
     public void setExpiredDate(String expiredDate) {
         this.expiredDate = expiredDate;
+    }
+
+    public List<PartnerInternshipterm> getPartnerInternshipterms()
+    {
+        return this.partnerInternshipterms;
     }
 }

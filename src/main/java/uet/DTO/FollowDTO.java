@@ -6,13 +6,13 @@ import uet.model.Partner;
  * Created by nhkha on 16/02/2017.
  */
 public class FollowDTO {
+    private Partner partner;
     private PartnerDTO partnerDTO;
     private int id;
     private int postId;
     private int studentId;
     private String postTitle;
     private String studentName;
-    private Partner partner;
     private String lecturersName;
     private String status;
 
@@ -35,7 +35,6 @@ public class FollowDTO {
     public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
-
 
     public int getPostId() {
         return postId;

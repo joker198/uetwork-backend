@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import uet.model.Role;
 import uet.model.User;
 
 import java.util.List;
@@ -27,5 +26,6 @@ public interface UserRepository extends CrudRepository<User, Integer>{
     List<User> findByIdGreaterThanAndRole(int id, String role);
     Page<User> findAllByOrderByIdDesc(Pageable pageable);
     List<User> findByUserNameContaining(String userName);
+    @Override
     List<User> findAll();
 }

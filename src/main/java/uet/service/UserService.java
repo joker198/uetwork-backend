@@ -265,7 +265,7 @@ public class UserService
                     partner.setAddress(partner1.getAddress());
                     partner.setTaxCode(partner1.getTaxCode());
                     partner.setFieldWork(partner1.getFieldWork());
-
+                    partner.setStatus(Status.WAIT_PARTNER.getValue());
                     partnerRepository.save(partner);
                 }
                 if (user.getRole().equals(String.valueOf(Role.ADMIN))) {

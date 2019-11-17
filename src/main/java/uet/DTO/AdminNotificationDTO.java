@@ -5,9 +5,9 @@ package uet.DTO;
  */
 public class AdminNotificationDTO {
     private int id;
-    private String issue;
-    private  int studentId;
+    private int studentId;
     private int partnetId;
+    private String issue;
     private String userName;
 
     public String getIssue() {

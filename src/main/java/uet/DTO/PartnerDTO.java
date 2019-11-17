@@ -12,16 +12,13 @@ import java.util.List;
  * Created by Tu on 27-Aug-16.
  */
 public class PartnerDTO {
-    private PartnerContactDTO partnerContactDTO;
-    private PostDTO postDTO;
-    private String logo;
     private Double averageRating;
     private Integer totalRating;
-    private PartnerContact partnerContact;
     private int id;
-    private Nation nation;
-    private List<PartnerContact> partnerContacts;
-    private List<Contract> contracts;
+    private int nationId;
+    private int partnerId;
+    private Date birthday;
+    private String logo;
     private String partnerName;
     private String taxCode;
     private String director;
@@ -32,12 +29,15 @@ public class PartnerDTO {
     private String email;
     private String description;
     private String fax;
-    private Partner partner;
-    private int nationId;
-    private int partnerId;
     private String status;
-    private Date birthday;
     private String partnerType;
+    private List<Contract> contracts;
+    private List<PartnerContact> partnerContacts;
+    private Nation nation;
+    private PostDTO postDTO;
+    private Partner partner;
+    private PartnerContact partnerContact;
+    private PartnerContactDTO partnerContactDTO;
 
     public PartnerDTO(){}
 

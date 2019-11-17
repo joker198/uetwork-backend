@@ -12,5 +12,6 @@ import java.util.List;
 @Repository
 public interface AnnualActivityRepository extends CrudRepository<AnnualActivity, Integer> {
     AnnualActivity findById(int id);
+    @Override
     List<AnnualActivity> findAll();
 }

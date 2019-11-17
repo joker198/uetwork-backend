@@ -276,6 +276,7 @@ public class PartnerService {
                 partner.setAddress(partnerDTO.getAddress());
                 partner.setWebsite(partnerDTO.getWebsite());
                 partner.setPhone(partnerDTO.getPhone());
+                partner.setStatus(Status.WAIT_PARTNER.getValue());
                 partnerRepository.save(partner);
                 if (partnerDTO.getPartnerContact() != null) {
                     if (!partnerDTO.getPartnerContact().getContactName().equals("")) {
@@ -460,11 +461,11 @@ public class PartnerService {
             }
             if(partnerDTO.getStatus() != null){
                 if(partnerDTO.getStatus().equals("false")){
-                    partner.setStatus("NOT_ACCEPTED");
+                    partner.setStatus(Status.NOT_ACCEPTED_PARTNER.getValue());
                     partnerRepository.save(partner);
                 }
             } else if(partnerDTO.getStatus() == null){
-                partner.setStatus("ACCEPTED");
+                partner.setStatus(Status.ACCEPTED_PARTNER.getValue());
                 partnerRepository.save(partner);
             }
         }
@@ -516,7 +517,7 @@ public class PartnerService {
 
     public List<Partner> getAllWaitPartner()
     {
-        return partnerRepository.findByStatus("WAIT");
+        return partnerRepository.findByStatus(Status.WAIT_PARTNER.getValue());
     }
 
     public Partner findPartnerByContactId(int partnerContactId) throws Exception
@@ -553,7 +554,7 @@ public class PartnerService {
     {
         List<Partner> partners = partnerRepository.findByPartnerType(partnerType.getOtherType());
         for(Partner partner : partners){
-            partner.setStatus(null);
+            partner.setStatus(Status.NOTHING.getValue());
             partnerRepository.save(partner);
         }
     }
