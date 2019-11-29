@@ -8,9 +8,9 @@ public enum Status
     NOT_ACCEPTED_PARTNER(3, "Not Accepted"),
     ACTIVE_USER(4, "Active"),
     UNACTIVE_USER(5, "Unactive"),
-    WAIT(6, "wait"),
-    FOLLOWED(6, "followed"),
-    SELECTED(8, "selected");
+    PIT_WAIT(6, "Wait"),
+    PIT_FOLLOWED(7, "Followed"),
+    PIT_SELECTED(8, "Selected");
     private final int value;
     private final String text;
     private Status(int value, String text) {

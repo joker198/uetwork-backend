@@ -52,6 +52,11 @@ public class InternshipTermService {
             throw new NullPointerException("Cannot delete this internship Term!");
         }
     }
+    
+    public InternshipTerm find(int id)
+    {
+        return internshipTermRepository.findById(id);
+    }
 
     public void editInternshipTerm(InternshipTermDTO internshipTermDTO)
     {
