@@ -1,5 +1,6 @@
 package uet.service;
 
+import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.DTO.InternshipTermDTO;
@@ -52,6 +53,11 @@ public class InternshipTermService {
             throw new NullPointerException("Cannot delete this internship Term!");
         }
     }
+    
+    public InternshipTerm find(int id)
+    {
+        return internshipTermRepository.findById(id);
+    }
 
     public void editInternshipTerm(InternshipTermDTO internshipTermDTO)
     {
@@ -69,5 +75,10 @@ public class InternshipTermService {
     public List<InternshipTerm> getAllInternshipTerm()
     {
         return (List<InternshipTerm>) internshipTermRepository.findAll();
+    }
+    
+    public List<InternshipTerm> getValidTerms()
+    {
+        return this.internshipTermRepository.findValids();
     }
 }

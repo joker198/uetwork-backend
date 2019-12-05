@@ -65,4 +65,15 @@ public class InternshipTermController {
     public List<InternshipTerm> getAllInternshipTerm(){
         return internshipTermService.getAllInternshipTerm();
     }
+    
+    /**
+     * Get All Internship Term
+     *
+     * @return 
+     */
+    @RequiredRoles(Role.ADMIN)
+    @RequestMapping(value = "/validTerms", method = RequestMethod.GET)
+    public List<InternshipTerm> getValidTerms(){
+        return internshipTermService.getValidTerms();
+    }
 }

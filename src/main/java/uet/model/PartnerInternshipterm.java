@@ -13,7 +13,7 @@ public class PartnerInternshipterm implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private int id;
-    private byte selected;
+    private byte status;
 
     @ManyToOne
     @JoinColumn(name = "internshipterm_id")
@@ -42,12 +42,12 @@ public class PartnerInternshipterm implements Serializable {
         return this.internshipTerm;
     }
 
-    public byte getSelected() {
-        return selected;
+    public byte getStatus() {
+        return status;
     }
 
-    public void setSelected(byte selected) {
-        this.selected = selected;
+    public void setStatus(byte status) {
+        this.status = status;
     }
 
     public int getId() {

@@ -519,6 +519,11 @@ public class PartnerService {
     {
         return partnerRepository.findByStatus(Status.WAIT_PARTNER.getValue());
     }
+    
+    public List<Partner> getAllAcceptedPartner()
+    {
+        return partnerRepository.findByStatus(Status.ACCEPTED_PARTNER.getValue());
+    }
 
     public Partner findPartnerByContactId(int partnerContactId) throws Exception
     {
