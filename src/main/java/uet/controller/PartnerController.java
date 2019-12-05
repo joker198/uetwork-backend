@@ -181,9 +181,20 @@ public class PartnerController {
      * @return 
      */
     @RequiredRoles(Role.ADMIN)
-    @RequestMapping(value = "partner/wait", method = RequestMethod.GET)
+    @RequestMapping(value = "/partner/wait", method = RequestMethod.GET)
     public List<Partner> getAllWaitPartner(){
         return partnerService.getAllWaitPartner();
+    }
+    
+    /**
+     * Get All Accepted Partner
+     *
+     * @return List<>
+     */
+    @RequiredRoles(Role.ADMIN)
+    @RequestMapping(value = "/partner/accepted", method = RequestMethod.GET)
+    public List<Partner> getAcceptedPartner(){
+        return partnerService.getAllAcceptedPartner();
     }
 
     /**

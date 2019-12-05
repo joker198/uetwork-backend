@@ -1,5 +1,6 @@
 package uet.service;
 
+import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.DTO.InternshipTermDTO;
@@ -74,5 +75,10 @@ public class InternshipTermService {
     public List<InternshipTerm> getAllInternshipTerm()
     {
         return (List<InternshipTerm>) internshipTermRepository.findAll();
+    }
+    
+    public List<InternshipTerm> getValidTerms()
+    {
+        return this.internshipTermRepository.findValids();
     }
 }

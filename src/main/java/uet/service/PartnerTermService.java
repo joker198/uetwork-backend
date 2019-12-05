@@ -1,89 +1,86 @@
 package uet.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import org.json.JSONArray;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
-import uet.repository.InternshipTermRepository;
-import uet.repository.PartnerRepository;
-import uet.model.PartnerInternshipterm;
-import uet.model.Status;
-import uet.model.InternshipTerm;
-import uet.model.Partner;
-import static uet.repository.PartnerRepository.FIND_PARTNER_ID;
+import uet.model.*;
+import uet.repository.*;
+import org.json.JSONArray;
+
 /**
- *
  * @author joker
  */
 @Service
-public class PartnerTermService {
-    private PartnerRepository partnerRepository;
-    private InternshipTermRepository internshipTermRepository;
-    private PartnerInternshipterm partnerInternshipterm;
+public class PartnerTermService
+{
+    private final PartnerRepository partnerRepository;
+    private final InternshipTermRepository internshipTermRepository;
+    private final PartnerInternshiptermRepository partnerInternshiptermRepository;
+
     @Autowired
-    private JdbcTemplate jdbcTemp;
-    private InternshipTerm internshipTerm;
-    private Partner partner;
-
-    public PartnerTermService()
-    {
-        //
-    }
-
-    public PartnerTermService(
+    public PartnerTermService (
         PartnerRepository partnerRepository,
         InternshipTermRepository internshipTermRepository,
-        PartnerInternshipterm partnerInternshipterm,
-        InternshipTerm internshipTerm,
-        Partner partner
+        PartnerInternshiptermRepository partnerInternshiptermRepository
     ) {
         this.partnerRepository = partnerRepository;
         this.internshipTermRepository = internshipTermRepository;
-        this.partnerInternshipterm = partnerInternshipterm;
-        this.internshipTerm = internshipTerm;
-        this.partner = partner;
+        this.partnerInternshiptermRepository = partnerInternshiptermRepository;
     }
     
     /**
      * Create PartnerInternshipterm
      * @param internshipTermId
      * @param partnerIds
+     * @return 
      */
-    public void create(int internshipTermId, JSONArray partnerIds)
+    public List<Partner> create(int internshipTermId, JSONArray partnerIds)
     {
-        System.out.println(internshipTermId);
-        Partner chosenPartner = this.findPartner(1);
-        System.out.println(chosenPartner.getId());
         InternshipTerm chosenTerm = internshipTermRepository.findById(internshipTermId);
-//        int id; 
-//        for (int i = 0; i < partnerIds.length(); i++) {
-//            id = partnerIds.getInt(i);
-//            Partner chosenPartner = this.partnerRepository.findById(id);
-//            PartnerInternshipterm partnerTerm = new PartnerInternshipterm(chosenTerm, chosenPartner);
-//            partnerTerm.setStatus((byte)Status.PIT_WAIT.getValue());
-//            this.insert(partnerTerm);
-//        }
+        int id; 
+        for (int i = 0; i < partnerIds.length(); i++) {
+            id = partnerIds.getInt(i);
+            Partner chosenPartner = partnerRepository.findById(id);
+            PartnerInternshipterm partnerTerm = new PartnerInternshipterm(chosenTerm, chosenPartner);
+            partnerTerm.setStatus((byte)Status.PIT_WAIT.getValue());
+            partnerInternshiptermRepository.save(partnerTerm);
+        }
+        return this.getWaitRecruitPartner(internshipTermId);
     }
     
-    private int insert(PartnerInternshipterm partnerTerm)
+    /**
+     * Get all Partner by termId
+     * @param termId
+     * @return List Partner
+     */
+    public List<Partner> getPartnerByTerm(int termId)
     {
-        String query = "insert into partner_internshipterm (internshipterm_id, partner_id, status) value(?, ?)";
-        return jdbcTemp.update(
-                query,
-                partnerTerm.getInternshipTerm().getId(),
-                partnerTerm.getPartner().getId(),
-                partnerTerm.getStatus()
-        );
+        List<Partner> partnerByterm = new ArrayList<>();
+        List<PartnerInternshipterm> partnerInternshipterm = partnerInternshiptermRepository.findByInternshipTermId(termId);
+        if (partnerInternshipterm != null) {
+            for (PartnerInternshipterm pit : partnerInternshipterm) {
+                Partner partner = pit.getPartner();
+                partnerByterm.add(partner);
+            }
+        }
+        return partnerByterm;
     }
     
-    // @Query(value = "SELECT p.id, p.partner_name FROM partner p", nativeQuery = true)
-    private Partner findPartner(int id)
+    public List<Partner> getWaitRecruitPartner(int termId)
     {
-        String query = "select * from partner where id = ?";
-        return (Partner) jdbcTemp.queryForObject(query, new Object[] { id }, new BeanPropertyRowMapper(Partner.class));
+        List<Partner> partners = this.partnerRepository.findAll();
+        List<PartnerInternshipterm> termPartners = this.partnerInternshiptermRepository.findByInternshipTermId(termId);
+        if (termPartners == null) {
+            return partners;
+        }
+        for(PartnerInternshipterm pit: termPartners) {
+            for (int i = 0; i < partners.size(); i++) {
+                if (partners.get(i).getId() == pit.getPartner().getId()) {
+                    partners.remove(i);
+                }
+            }
+        }
+        return partners;
     }
 }
