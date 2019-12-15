@@ -158,4 +158,15 @@ public class PostController {
     public List<Post> getAllPostByInternshipTerm(@PathVariable("internshipTermId") int internshipTermId) {
         return postService.getAllPostByInternshipTerm(internshipTermId);
     }
+    
+    /**
+     * Get Post By Internship Term
+     *
+     * @param internshipTermId
+     * @return 
+     */
+    @RequestMapping(value = "post/new/{internshipTermId}", method = RequestMethod.GET)
+    public List<Post> getNewPosts(@PathVariable("internshipTermId") int internshipTermId) {
+        return postService.getAllPostByInternshipTerm(internshipTermId);
+    }
 }

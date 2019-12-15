@@ -18,7 +18,7 @@ public interface InternshipTermRepository extends CrudRepository<InternshipTerm,
     InternshipTerm findTopByOrderByIdDesc();
     InternshipTerm findByTermAndYear(int term, String year);
     List<InternshipTerm> findByYear(String year);
-    String FIND_TERM_VALID = "SELECT * FROM internship_term WHERE end_date >= CURRENT_DATE";
+    String FIND_TERM_VALID = "SELECT * FROM internship_term WHERE end_date >= CURRENT_DATE order by year";
     @Query(value = FIND_TERM_VALID, nativeQuery = true)
     List<InternshipTerm> findValids();
 }

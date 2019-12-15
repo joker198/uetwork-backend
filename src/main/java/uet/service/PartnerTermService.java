@@ -1,7 +1,9 @@
 package uet.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.model.*;
@@ -38,7 +40,7 @@ public class PartnerTermService
     public List<Partner> create(int internshipTermId, JSONArray partnerIds)
     {
         InternshipTerm chosenTerm = internshipTermRepository.findById(internshipTermId);
-        int id; 
+        int id;
         for (int i = 0; i < partnerIds.length(); i++) {
             id = partnerIds.getInt(i);
             Partner chosenPartner = partnerRepository.findById(id);
@@ -69,7 +71,7 @@ public class PartnerTermService
     
     public List<Partner> getWaitRecruitPartner(int termId)
     {
-        List<Partner> partners = this.partnerRepository.findAll();
+        List<Partner> partners = this.partnerRepository.findByStatus((byte)Status.ACCEPTED_PARTNER.getValue());
         List<PartnerInternshipterm> termPartners = this.partnerInternshiptermRepository.findByInternshipTermId(termId);
         if (termPartners == null) {
             return partners;
@@ -82,5 +84,34 @@ public class PartnerTermService
             }
         }
         return partners;
+    }
+    
+    public Map<String, Object> getPartnersSelected(int termId)
+    {
+        HashMap<String, Object> partnerFollow = new HashMap<>();
+        List<Partner> partners = new ArrayList<>();
+        
+        List<PartnerInternshipterm> partnerInternshipterms = partnerInternshiptermRepository.findByInternshipTermId(termId);
+        for (PartnerInternshipterm partnerInternshipterm : partnerInternshipterms) {
+            partners.add(partnerInternshipterm.getPartner());
+        }
+        for (Partner partner : partners) {
+            List<Follow> follows = new ArrayList<>();
+            for (Post post : partner.getPost()) {
+                if (post.getInternshipTerm().getId() != termId) {
+                    continue;
+                }
+                List<Follow> postFollows = post.getFollows();
+                for(Follow follow : postFollows) {
+                    if (follow.getStatus().equals("SELECTED")) {
+                        follows.add(follow);
+                    }
+                }
+            }
+            if (follows.size() > 0) {
+                partnerFollow.put(partner.getId()+"_"+partner.getPartnerName(), follows);
+            }
+        }
+        return partnerFollow;
     }
 }

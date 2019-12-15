@@ -1,6 +1,8 @@
 package uet.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -69,6 +71,18 @@ public class PartnerTermController {
         List<Partner> listPartner = this.partnerTermService.getWaitRecruitPartner(termId);
         if (listPartner == null)
         {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        return listPartner;
+    }
+    
+    @RequiredRoles({Role.ADMIN})
+    @RequestMapping(value = "/pit/{termId}/selected", method = RequestMethod.GET)
+    public Map<String, Object> getPartnerSelected(@PathVariable("termId") int termId, HttpServletResponse response) {
+        Map<String, Object> listPartner = this.partnerTermService.getPartnersSelected(termId);
+        if (listPartner == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }

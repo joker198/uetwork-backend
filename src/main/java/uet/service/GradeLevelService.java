@@ -1,13 +1,15 @@
 package uet.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.springframework.stereotype.Service;
-import uet.model.GradeLevel;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
+import uet.model.*;
+import uet.repository.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * @author joker
@@ -15,32 +17,53 @@ import org.springframework.jdbc.core.RowMapper;
 @Service
 public class GradeLevelService
 {
-    private GradeLevel gradeLevel;
-    @Autowired
-    private JdbcTemplate jdbcTemp;
-    
-    public GradeLevelService()
-    {
-        //
-    }
-    
-    public GradeLevelService(GradeLevel gradeLevel) {
-        this.gradeLevel = gradeLevel;
-    }
+    private final UserRepository userRepository;
+    private final GradeLevelRepository gradeLevelRepository;
 
-    public List<GradeLevel> getAll()
+    @Autowired
+    public GradeLevelService (
+        UserRepository userRepository,
+        GradeLevelRepository gradeLevelRepository
+    ) {
+        this.userRepository = userRepository;
+        this.gradeLevelRepository = gradeLevelRepository;
+    }
+    
+    public List<GradeLevel> getAll(String token)
     {
-        List<GradeLevel> gradeLevels;
-        gradeLevels = jdbcTemp.query("select * from grade_level", new RowMapper<GradeLevel>() {
-            @Override
-            public GradeLevel mapRow(ResultSet rs, int i) throws SQLException {
-                GradeLevel gLevel = new GradeLevel();
-                gLevel.setId(rs.getInt("id"));
-                gLevel.setCode(rs.getString("code"));
-                gLevel.setShortName(rs.getString("short_name"));
-                return gLevel;
-            }
-        });
+        User user = userRepository.findByToken(token);
+        if (user == null) {
+            return null;
+        }
+        List<GradeLevel> gradeLevels = gradeLevelRepository.findAllOrderByShortNameDesc();
         return gradeLevels;
     }
+    
+    public GradeLevel create(String token, JSONObject params)
+    {
+        User user = userRepository.findByToken(token);
+        if (user == null) {
+            return null;
+        }
+        GradeLevel gradeLevel = new GradeLevel();
+        gradeLevel.setCode(params.getString("code"));
+        gradeLevel.setShortName(params.getString("short_name"));
+        gradeLevelRepository.save(gradeLevel);
+        return gradeLevel;
+    }
+
+    public boolean delete(String token, int gradeLevelId)
+    {
+        User user = userRepository.findByToken(token);
+        if (user == null) {
+            return false;
+        }
+        GradeLevel gradeLevel = gradeLevelRepository.findById(gradeLevelId);
+        if (gradeLevel == null) {
+            return false;
+        }
+        gradeLevelRepository.delete(gradeLevel);
+        return true;
+    }
 }
+

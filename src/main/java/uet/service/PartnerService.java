@@ -276,7 +276,7 @@ public class PartnerService {
                 partner.setAddress(partnerDTO.getAddress());
                 partner.setWebsite(partnerDTO.getWebsite());
                 partner.setPhone(partnerDTO.getPhone());
-                partner.setStatus(Status.WAIT_PARTNER.getValue());
+                partner.setStatus((byte)Status.WAIT_PARTNER.getValue());
                 partnerRepository.save(partner);
                 if (partnerDTO.getPartnerContact() != null) {
                     if (!partnerDTO.getPartnerContact().getContactName().equals("")) {
@@ -461,11 +461,11 @@ public class PartnerService {
             }
             if(partnerDTO.getStatus() != null){
                 if(partnerDTO.getStatus().equals("false")){
-                    partner.setStatus(Status.NOT_ACCEPTED_PARTNER.getValue());
+                    partner.setStatus((byte)Status.NOT_ACCEPTED_PARTNER.getValue());
                     partnerRepository.save(partner);
                 }
             } else if(partnerDTO.getStatus() == null){
-                partner.setStatus(Status.ACCEPTED_PARTNER.getValue());
+                partner.setStatus((byte)Status.ACCEPTED_PARTNER.getValue());
                 partnerRepository.save(partner);
             }
         }
@@ -517,12 +517,12 @@ public class PartnerService {
 
     public List<Partner> getAllWaitPartner()
     {
-        return partnerRepository.findByStatus(Status.WAIT_PARTNER.getValue());
+        return partnerRepository.findByStatus((byte)Status.WAIT_PARTNER.getValue());
     }
     
     public List<Partner> getAllAcceptedPartner()
     {
-        return partnerRepository.findByStatus(Status.ACCEPTED_PARTNER.getValue());
+        return partnerRepository.findByStatus((byte)Status.ACCEPTED_PARTNER.getValue());
     }
 
     public Partner findPartnerByContactId(int partnerContactId) throws Exception
@@ -559,7 +559,7 @@ public class PartnerService {
     {
         List<Partner> partners = partnerRepository.findByPartnerType(partnerType.getOtherType());
         for(Partner partner : partners){
-            partner.setStatus(Status.NOTHING.getValue());
+            partner.setStatus((byte)Status.NOTHING.getValue());
             partnerRepository.save(partner);
         }
     }

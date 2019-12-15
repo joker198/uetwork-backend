@@ -32,7 +32,7 @@ public interface PartnerRepository extends JpaRepository<Partner,Integer>, Pagin
     List<Partner> findByPartnerNameContaining(String partnerName);
     List<Partner> findByUserIsNull();
     List<Partner> findByUserIsNotNull();
-    List<Partner> findByStatus(int s);
+    List<Partner> findByStatus(byte status);
     List<Partner> findByPartnerType(String s);
     Partner findByPartnerName (String string);
 }

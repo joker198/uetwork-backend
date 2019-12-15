@@ -31,7 +31,7 @@ public class Partner implements Serializable {
     private Double averageRating;
     private Integer totalRating;
     private String description;
-    private int status;
+    private byte status;
     private Date birthday;
     private String partnerType;
 
@@ -264,11 +264,11 @@ public class Partner implements Serializable {
         this.description = description;
     }
 
-    public int getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 

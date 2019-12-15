@@ -125,12 +125,17 @@ public class FollowService {
                         follow.setPostTitle(String.valueOf(post.getPostType()));
                         follow.setStudentName(followDTO.getStudentName());
                         follow.setStatus("WAIT");
-                        Partner partner = post.getPartner();
-                        if (partner != null) {
-                            follow.setPartner(partner);
-                            follow.setPartnerId(partner.getId());
-                            follow.setPartnerName(partner.getPartnerName());
-                            follow.setInternshipTerm(internshipTermRepository.findTopByOrderByIdDesc().getId());
+                        if (post.getPostType().equals(PostType.Recruitment)) {
+                            Partner partner = post.getPartner();
+                            if (partner != null) {
+                                follow.setPartner(partner);
+                                follow.setPartnerId(partner.getId());
+                                follow.setPartnerName(partner.getPartnerName());
+                                follow.setInternshipTerm(post.getInternshipTerm().getId());
+                                followRepository.save(follow);
+                            }
+                        } else if (post.getPostType().equals(PostType.Research)) {
+                            follow.setInternshipTerm(post.getInternshipTerm().getId());
                             followRepository.save(follow);
                         }
                     } else {
@@ -145,6 +150,13 @@ public class FollowService {
         } else {
             throw new NullPointerException("Post not found");
         }
+    }
+    private boolean checkStudent(Student student) {
+        String studentClass = student.getInfoBySchool().getStudentClass();
+        if (!isBlank(student.getFullName()) && !isBlank(student.getEmail()) && !isBlank(student.getPhoneNumber())) {
+            student.getInfoBySchool().getStudentClass();
+        }
+        return true;
     }
 
     public void createFollowNew(int partnerId, String emailVNU, String token) throws Exception {
@@ -240,7 +252,7 @@ public class FollowService {
                                     }
                                 } else {
                                     follow.setStatus("WAIT");
-                                    partner.setStatus(Status.WAIT_PARTNER.getValue());
+                                    partner.setStatus((byte)Status.WAIT_PARTNER.getValue());
                                     partnerRepository.save(partner);
                                 }
                             } else {
@@ -282,7 +294,7 @@ public class FollowService {
                                     partner1.setAddress(followDTO.getPartnerDTO().getAddress());
                                     partner1.setTaxCode(followDTO.getPartnerDTO().getTaxCode());
                                     partner1.setFieldWork(followDTO.getPartnerDTO().getFieldWork());
-                                    partner1.setStatus(Status.WAIT_PARTNER.getValue());
+                                    partner1.setStatus((byte)Status.WAIT_PARTNER.getValue());
                                     partnerRepository.save(partner1);
                                     Follow follow = new Follow();
                                     follow.setInternship(internship);
@@ -516,5 +528,4 @@ public class FollowService {
             }
         }
     }
-
 }

@@ -268,23 +268,25 @@ public class PostService {
                 post.getHashtags().clear();
                 createHashtag(postId, hashtagDTOS);
             }
-            if (postDTO.getPartnerContactId() > 0) {
-                post.setPartnerContact(partnerContactRepository.findById(postDTO.getPartnerContactId()));
-            } else if(postDTO.getPartnerContactId() == 0){
-                if(postDTO.getPartnerContactDTO() != null){
-                    Partner partner = post.getPartner();
-                    PartnerContactDTO  partnerContactDTO = postDTO.getPartnerContactDTO();
-                    partnerRepository.save(partner);
-                    PartnerContact partnerContact = new PartnerContact();
-                    partnerContact.setPhone(partnerContactDTO.getPhone());
-                    partnerContact.setEmail(partnerContactDTO.getEmail());
-                    partnerContact.setContactName(partnerContactDTO.getContactName());
-                    partnerContact.setPartner(partner);
-                    partnerContactRepository.save(partnerContact);
-                    post.setPartnerContact(partnerContact);
+            if (postDTO.getPartnerContactId() != null) {
+                if (postDTO.getPartnerContactId() > 0) {
+                    post.setPartnerContact(partnerContactRepository.findById(postDTO.getPartnerContactId()));
+                } else if(postDTO.getPartnerContactId() == 0){
+                    if(postDTO.getPartnerContactDTO() != null){
+                        Partner partner = post.getPartner();
+                        PartnerContactDTO  partnerContactDTO = postDTO.getPartnerContactDTO();
+                        partnerRepository.save(partner);
+                        PartnerContact partnerContact = new PartnerContact();
+                        partnerContact.setPhone(partnerContactDTO.getPhone());
+                        partnerContact.setEmail(partnerContactDTO.getEmail());
+                        partnerContact.setContactName(partnerContactDTO.getContactName());
+                        partnerContact.setPartner(partner);
+                        partnerContactRepository.save(partnerContact);
+                        post.setPartnerContact(partnerContact);
+                    }
+                } else if(postDTO.getPartnerContactId() == -1){
+                    post.setPartnerContact(null);
                 }
-            } else if(postDTO.getPartnerContactId() == -1){
-                post.setPartnerContact(null);
             }
             if(postDTO.getExpiryTime() != null){
                 post.setExpiryTime(postDTO.getExpiryTime());
