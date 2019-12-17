@@ -71,6 +71,7 @@ public class PartnerTermService
     
     public List<Partner> getWaitRecruitPartner(int termId)
     {
+        // filter fit partner
         List<Partner> partners = this.partnerRepository.findByStatus((byte)Status.ACCEPTED_PARTNER.getValue());
         List<PartnerInternshipterm> termPartners = this.partnerInternshiptermRepository.findByInternshipTermId(termId);
         if (termPartners == null) {

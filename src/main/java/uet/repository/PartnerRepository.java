@@ -28,6 +28,7 @@ public interface PartnerRepository extends JpaRepository<Partner,Integer>, Pagin
     List<PartnerDTO> findPartnerNameAndIdOfFit();
 
     Partner findById(int id);
+    Partner findByUserId(int userId);
     Partner findByPartnerContactsId(int partnerContactId);
     List<Partner> findByPartnerNameContaining(String partnerName);
     List<Partner> findByUserIsNull();
@@ -36,6 +37,3 @@ public interface PartnerRepository extends JpaRepository<Partner,Integer>, Pagin
     List<Partner> findByPartnerType(String s);
     Partner findByPartnerName (String string);
 }
-
-
-

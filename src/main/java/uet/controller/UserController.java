@@ -192,6 +192,20 @@ public class UserController {
     }
 
     /**
+     * Edit User
+     *
+     * @param id
+     * @param request
+     * @return 
+     */
+    @RequiredRoles({Role.ADMIN})
+    @RequestMapping(value="user/{id}", method = RequestMethod.GET)
+    public Map<String, Object> show(@PathVariable("id") int id, HttpServletRequest request) {
+        String token = request.getHeader("auth-token");
+        return userService.show(id, token);
+    }
+
+    /**
      * Change Password
      *
      * @param changePasswordDTO

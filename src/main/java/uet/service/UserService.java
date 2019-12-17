@@ -376,6 +376,34 @@ public class UserService
         return userRepository.save(user);
     }
 
+    public Map<String , Object> show(int id, String token)
+    {
+        User currentUser = this.userRepository.findById(id);
+        if (currentUser == null) {
+            return null;
+        }
+        Map<String, Object> response = new HashMap<>();
+        switch(currentUser.getRole()) {
+            case "STUDENT":
+                Student student = this.studentRepository.findByUserId(currentUser.getId());
+                response.put("role", currentUser.getRole());
+                response.put("studentInfo", student);
+                response.put("internshipInfo", student.getFollows());
+                break;
+            case "LECTURERS":
+                Lecturers lecturer = this.lecturersRepository.findByUserId(currentUser.getId());
+                response.put("role", currentUser.getRole());
+                response.put("lecturerInfo", lecturer);
+                break;
+            case "VIP_PARTNER":
+                Partner partner = this.partnerRepository.findByUserId(currentUser.getId());
+                response.put("role", currentUser.getRole());
+                response.put("partnerInfo", partner);
+                break;
+        }
+        return response;
+    }
+
     public User changeUserStatus(int id)
     {
         User user = userRepository.findOne(id);
