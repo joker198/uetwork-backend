@@ -23,6 +23,8 @@ public interface StudentRepository extends CrudRepository<Student, Integer>, Pag
 
     Student findByInfoBySchoolId(int id);
 
+    Student findByUserId(int userId);
+
     List<Student> findByFullNameContaining(String studentName);
 
     Page<Student> findAllByOrderByIdDesc(Pageable pageable);

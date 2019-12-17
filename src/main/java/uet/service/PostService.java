@@ -91,7 +91,9 @@ public class PostService {
                         partnerContact.setContactName(partnerContactDTO.getContactName());
                         partnerContact.setEmail(partnerContactDTO.getEmail());
                         partnerContact.setPhone(partnerContactDTO.getPhone());
-                        partner.getPartnerContacts().add(partnerContact);
+                        if (partner != null && postDTO.getPostType() != PostType.Research) {
+                            partner.getPartnerContacts().add(partnerContact);
+                        }
                         partnerContactRepository.save(partnerContact);
                         post.setPartnerContact(partnerContact);
                     }

@@ -10,5 +10,6 @@ import uet.model.Lecturers;
 @Repository
 public interface LecturersRepository extends CrudRepository<Lecturers, Integer> {
     Lecturers findById(int id);
+    Lecturers findByUserId(int userId);
     Lecturers findByEmailVNU(String email);
 }
